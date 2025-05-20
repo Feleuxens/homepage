@@ -1,0 +1,120 @@
+---
+// Main layout component that will be used across all pages
+const { title } = Astro.props;
+import '../styles/global.css';
+
+// Dynamically compute the current year for copyright
+const currentYear = new Date().getFullYear();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="DevOps Professional & Pianist offering technical services and music performances" />
+    <title>{`${title} | Felix Grüb`}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- GSAP for animations (loaded from CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+      <div class="container mx-auto px-4 py-4">
+        <nav class="flex justify-between items-center">
+          <a href="/" class="font-serif text-2xl font-bold">Felix Grüb</a>
+
+          <!-- Desktop Navigation -->
+          <ul class="hidden md:flex space-x-8">
+            <li><a href="/" class="font-medium hover:text-primary transition">Home</a></li>
+            <li><a href="/tech-services" class="font-medium hover:text-primary transition">Tech Services</a></li>
+            <li><a href="/music" class="font-medium hover:text-primary transition">Music</a></li>
+            <li><a href="/about" class="font-medium hover:text-primary transition">About</a></li>
+            <li><a href="/portfolio" class="font-medium hover:text-primary transition">Portfolio</a></li>
+            <li><a href="/contact" class="font-medium hover:text-primary transition">Contact</a></li>
+          </ul>
+
+          <!-- Mobile menu button -->
+          <button class="md:hidden flex flex-col space-y-1.5" aria-label="Toggle menu" id="menuButton">
+            <span class="block w-6 h-0.5 bg-gray-800 transition-all"></span>
+            <span class="block w-6 h-0.5 bg-gray-800 transition-all"></span>
+            <span class="block w-6 h-0.5 bg-gray-800 transition-all"></span>
+          </button>
+        </nav>
+
+        <!-- Mobile Navigation Menu (Hidden by default) -->
+        <div class="md:hidden h-0 overflow-hidden transition-all duration-300" id="mobileMenu">
+          <ul class="py-4 space-y-4">
+            <li><a href="/" class="block py-2 font-medium hover:text-primary transition">Home</a></li>
+            <li><a href="/tech-services" class="block py-2 font-medium hover:text-primary transition">Tech Services</a></li>
+            <li><a href="/music" class="block py-2 font-medium hover:text-primary transition">Music</a></li>
+            <li><a href="/about" class="block py-2 font-medium hover:text-primary transition">About</a></li>
+            <li><a href="/portfolio" class="block py-2 font-medium hover:text-primary transition">Portfolio</a></li>
+            <li><a href="/contact" class="block py-2 font-medium hover:text-primary transition">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow">
+      <slot />
+    </main>
+
+    <footer class="bg-dark text-white">
+      <div class="container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="font-serif text-xl font-semibold mb-4">Felix Grüb</h3>
+            <p class="text-gray-300">DevOps Professional & Pianist</p>
+          </div>
+
+          <div>
+            <h3 class="font-serif text-xl font-semibold mb-4">Connect</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-300 hover:text-white transition">LinkedIn</a></li>
+              <li><a href="https://github.com/Feleuxens" class="text-gray-300 hover:text-white transition">GitHub</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition">Instagram</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-serif text-xl font-semibold mb-4">Contact</h3>
+            <p class="text-gray-300">me@feleuxens.de</p>
+            <p class="text-gray-300">+49 xxxxxxx</p>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-700 mt-10 pt-6 text-center">
+          <p class="text-gray-400 text-sm">&copy; {currentYear} Felix Grüb. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile menu toggle
+      document.addEventListener('DOMContentLoaded', () => {
+        const menuButton = document.getElementById('menuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuButton?.addEventListener('click', () => {
+          menuButton.classList.toggle('active');
+
+          if (mobileMenu?.classList.contains('h-0')) {
+            mobileMenu.classList.remove('h-0');
+            mobileMenu.classList.add('h-64');
+          } else {
+            mobileMenu?.classList.add('h-0');
+            mobileMenu?.classList.remove('h-64');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

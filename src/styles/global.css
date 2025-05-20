@@ -1,1 +1,80 @@
+/* src/styles/global.css */
 @import "tailwindcss";
+
+/* Define custom theme colors using the new CSS-based configuration */
+/*noinspection CssInvalidAtRule*/
+@theme {
+  --color-primary: #3a5db8;
+  --color-secondary: #5a287d;
+  --color-accent: #6c63ff;
+  --color-dark: #232b38;
+}
+
+/* Define custom fonts */
+/*noinspection CssInvalidAtRule*/
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+/*noinspection CssInvalidAtRule*/
+@theme {
+  @keyframes astroFadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+}
+
+/* Custom utilities */
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .btn {
+    @apply inline-block px-5 py-3 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-white focus:ring-primary/50;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary/50;
+  }
+  
+  .btn-dark {
+    @apply bg-dark hover:bg-dark/90 text-white focus:ring-dark/50;
+  }
+  
+  .section-title {
+    @apply font-serif text-3xl md:text-4xl font-bold mb-6 md:mb-10;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg;
+  }
+}
+
+/* Mobile menu button active state */
+#menuButton.active span:first-child {
+  @apply transform rotate-45 translate-y-2;
+}
+
+#menuButton.active span:nth-child(2) {
+  @apply opacity-0;
+}
+
+#menuButton.active span:last-child {
+  @apply transform -rotate-45 -translate-y-2;
+}
+
+/* Additional custom styles */
+html {
+  scroll-behavior: smooth;
+}
