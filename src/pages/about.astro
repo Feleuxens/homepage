@@ -78,73 +78,82 @@ function getEndYear(endYear) {
   return endYear === "present" ? currentYear : endYear;
 }
 
-// Get earliest and latest years
-const earliestYear = Math.min(...timeline.map(item => item.startYear));
-const earliestEndYear = Math.min(...timeline.map(item => getEndYear(item.endYear)));
-const latestYear = Math.max(...timeline.map(item => getEndYear(item.endYear)));
-const yearSpan = latestYear - earliestYear + 1;
-const endYearSpan = latestYear - earliestEndYear + 1;
+// Get timeline range from all years (both start and end)
+const allYears = timeline.flatMap(item => [item.startYear, getEndYear(item.endYear)]);
+const timelineStartYear = Math.min(...allYears);
+const timelineEndYear = Math.max(...allYears);
+
+// Fixed timeline height in pixels
+const TIMELINE_HEIGHT = 800;
+
+// Function to calculate position percentage for a given year
+function getYearPosition(year) {
+  const progress = (timelineEndYear - year) / (timelineEndYear - timelineStartYear);
+  return progress * 100;
+}
 
 // Function to position items based on end year with overlap prevention
 function positionTimelineItems(items) {
-  // First, sort by end year (descending)
+  // Sort by end year (descending)
   const sortedItems = [...items].sort((a, b) =>
-    getEndYear(a.endYear) - getEndYear(b.endYear)
+      getEndYear(b.endYear) - getEndYear(a.endYear)
   );
 
-  // Then position each item
-  const cardHeightPx = 120; // Estimated card height
-  const cardSpacingPx = 30; // Minimum gap between cards
-  const usedPositions = []; // Track used positions in pixels
+  const cardHeightPercent = 15; // Card height as percentage of timeline
+  const cardSpacingPercent = 2; // Minimum gap as percentage
+  const usedPositions = [];
 
   sortedItems.forEach(item => {
-    // Get position based on end year in pixel units
-    const endYearPos = ((getEndYear(item.endYear) - earliestYear) / yearSpan) * 550; // 700px is roughly the desired total height
-    let position = endYearPos;
+    // Get the exact position that matches year markers
+    const endYear = getEndYear(item.endYear);
+    let position = getYearPosition(endYear);
 
-    // Check for overlaps
+    // Check for overlaps and adjust card position if needed
     let hasOverlap = true;
-    while (hasOverlap) {
+    let attempts = 0;
+
+    while (hasOverlap && attempts < 10) {
       hasOverlap = false;
+      attempts++;
 
       for (const usedPos of usedPositions) {
-        const minSpace = cardHeightPx + cardSpacingPx;
-        if (Math.abs(position - usedPos) < minSpace) {
-          // Found an overlap, shift this item down
-          position = usedPos + minSpace;
+        if (Math.abs(position - usedPos) < (cardHeightPercent + cardSpacingPercent)) {
+          // Overlap detected, move card down
+          position = usedPos + cardHeightPercent + cardSpacingPercent;
           hasOverlap = true;
+          break;
         }
       }
     }
 
-    // Store the pixel position
-    item.positionPx = position;
+    // Store both the year-aligned position (for dot) and adjusted position (for card)
+    item.dotPosition = getYearPosition(endYear);
+    item.cardPosition = position;
     usedPositions.push(position);
   });
 
-  // Calculate total height needed
-  const maxPosition = Math.max(...usedPositions) + cardHeightPx + 50; // +50px padding
-
-  // Convert positions to percentages based on total height
-  sortedItems.forEach(item => {
-    item.position = 100 - (item.positionPx / maxPosition) * 100;
-  });
-
-  return {
-    items: sortedItems,
-    totalHeight: maxPosition
-  };
+  return sortedItems;
 }
 
 // Separate and position tech and music items
 const techItems = timeline.filter(item => item.type === "tech");
 const musicItems = timeline.filter(item => item.type === "music");
 
-const techResult = positionTimelineItems(techItems);
-const musicResult = positionTimelineItems(musicItems);
+const positionedTechItems = positionTimelineItems(techItems);
+const positionedMusicItems = positionTimelineItems(musicItems);
 
-// Calculate final timeline height
-const timelineHeight = Math.max(techResult.totalHeight, musicResult.totalHeight);
+// Generate year markers
+const yearMarkers = [];
+for (let year = timelineEndYear; year >= timelineStartYear; year--) {
+  yearMarkers.push({
+    year,
+    position: getYearPosition(year)
+  });
+}
+
+// Track which years have dots for each side
+const techDotYears = new Set(techItems.map(item => getEndYear(item.endYear)));
+const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
 ---
 
 <MainLayout title="About Me">
@@ -156,9 +165,9 @@ const timelineHeight = Math.max(techResult.totalHeight, musicResult.totalHeight)
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="about-image">
           <img
-            src="/images/about-me-large.jpg"
-            alt="Your Name"
-            class="rounded-lg shadow-xl w-full"
+              src="/images/about-me-large.jpg"
+              alt="Your Name"
+              class="rounded-lg shadow-xl w-full"
           />
         </div>
 
@@ -194,18 +203,18 @@ const timelineHeight = Math.max(techResult.totalHeight, musicResult.totalHeight)
 
           <div class="space-y-6">
             {technicalSkills.map(skill => (
-              <div class="skill-item">
-                <div class="flex justify-between mb-2">
-                  <span class="font-medium">{skill.name}</span>
-                  <span class="text-gray-500">{skill.level}%</span>
+                <div class="skill-item">
+                  <div class="flex justify-between mb-2">
+                    <span class="font-medium">{skill.name}</span>
+                    <span class="text-gray-500">{skill.level}%</span>
+                  </div>
+                  <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                        class="skill-progress bg-primary h-full rounded-full"
+                        data-level={skill.level}
+                    ></div>
+                  </div>
                 </div>
-                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    class="skill-progress bg-primary h-full rounded-full"
-                    data-level={skill.level}
-                  ></div>
-                </div>
-              </div>
             ))}
           </div>
         </div>
@@ -216,18 +225,18 @@ const timelineHeight = Math.max(techResult.totalHeight, musicResult.totalHeight)
 
           <div class="space-y-6">
             {musicalSkills.map(skill => (
-              <div class="skill-item">
-                <div class="flex justify-between mb-2">
-                  <span class="font-medium">{skill.name}</span>
-                  <span class="text-gray-500">{skill.level}%</span>
+                <div class="skill-item">
+                  <div class="flex justify-between mb-2">
+                    <span class="font-medium">{skill.name}</span>
+                    <span class="text-gray-500">{skill.level}%</span>
+                  </div>
+                  <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                        class="skill-progress bg-secondary h-full rounded-full"
+                        data-level={skill.level}
+                    ></div>
+                  </div>
                 </div>
-                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    class="skill-progress bg-secondary h-full rounded-full"
-                    data-level={skill.level}
-                  ></div>
-                </div>
-              </div>
             ))}
           </div>
         </div>
@@ -240,103 +249,112 @@ const timelineHeight = Math.max(techResult.totalHeight, musicResult.totalHeight)
     <div class="container mx-auto px-4">
       <h2 class="text-3xl md:text-4xl font-serif font-bold text-center mb-12">My Journey</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <!-- Column Headers -->
-        <div class="text-center">
-          <div class="inline-block px-4 py-2 bg-primary text-white rounded-lg font-medium">
-            Technology Career
-          </div>
-        </div>
-        <div class="text-center">
-          <div class="inline-block px-4 py-2 bg-secondary text-white rounded-lg font-medium">
-            Music Career
-          </div>
-        </div>
-      </div>
-
       <!-- Timeline -->
       <div class="relative">
         <!-- Center line -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gray-300" style={`height: ${timelineHeight}px;`}></div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gray-300" style={`height: calc(${TIMELINE_HEIGHT}px + 25px);`}></div>
 
-        <!-- Year markers - only major years -->
+        <!-- Year markers -->
         <div class="hidden md:block">
-          {Array.from({ length: endYearSpan }).map((_, i) => {
-            const year = latestYear - i;
-            return (
-              <div class="absolute left-1/2 transform -translate-x-16 flex items-center"
-                  style={`top: ${((latestYear - year) / yearSpan) * 100}%;`}>
-                <div class="text-xs font-medium text-gray-500">{year}</div>
-                <div class="w-4 h-px bg-gray-300 ml-1"></div>
+          {yearMarkers.map(({ year, position }) => (
+              <div class="absolute left-1/2 transform -translate-x-20 flex items-center"
+                   style={`top: calc(${position}%);`}>
+                <div class="text-sm font-medium text-gray-600">{year}</div>
+                <div class="w-6 h-px bg-gray-400 ml-2"></div>
               </div>
-            )
-          })}
+          ))}
         </div>
 
         <!-- Timeline items container -->
-        <div class="relative" style={`height: ${timelineHeight}px;`}>
+        <div class="relative" style={`height: ${TIMELINE_HEIGHT}px;`}>
+          <!-- Dots for unique years on tech side -->
+          {Array.from(techDotYears).map(year => (
+              <div class="absolute right-1/2 transform translate-x-0.5 w-4 h-4 rounded-full bg-primary border-2 border-white shadow-md hidden md:block z-20"
+                   style={`top: calc(${getYearPosition(year)}% + 1px); margin-right: -6px;`}></div>
+          ))}
+
+          <!-- Dots for unique years on music side -->
+          {Array.from(musicDotYears).map(year => (
+              <div class="absolute left-1/2 transform -translate-x-0.5 w-4 h-4 rounded-full bg-secondary border-2 border-white shadow-md hidden md:block z-20"
+                   style={`top: calc(${getYearPosition(year)}% + 1px); margin-left: -6px;`}></div>
+          ))}
+
           <!-- Tech Items (Left) -->
-          {techResult.items.map(item => (
-            <div class="absolute left-0 md:w-[calc(50%-20px)] w-full" style={`top: ${item.position}%;`}>
-              <div class="relative pr-8 md:pr-12">
-                <!-- Timeline connector -->
-                <div class="absolute right-0 top-8 h-0.5 w-8 bg-primary/60 hidden md:block"></div>
+          {positionedTechItems.map(item => (
+              <div class="absolute left-0 md:w-[calc(50%-30px)] w-full timeline-item tech-item" style={`top: ${item.cardPosition}%;`}>
+                <div class="relative pr-8 md:pr-16">
+                  <!-- Connector line to the shared dot -->
+                  {item.dotPosition !== item.cardPosition && (
+                      <>
+                        <!-- Vertical connector from card to dot level -->
+                        <div class="absolute right-[7px] bg-primary/40 w-0.5 hidden md:block"
+                             style={`
+                           top: 40px;
+                           height: calc(${Math.abs(item.dotPosition - item.cardPosition)}% * ${TIMELINE_HEIGHT}px / 100 - 8px);
+                           ${item.dotPosition < item.cardPosition ? `transform: translateY(calc(${item.dotPosition - item.cardPosition}% * ${TIMELINE_HEIGHT}px / 100 + 8px));` : ''}
+                         `}></div>
+                      </>
+                  )}
 
-                <!-- End year dot -->
-                <div class="absolute right-0 top-8 w-4 h-4 rounded-full bg-primary hidden md:block"></div>
+                  <!-- Card -->
+                  <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-primary hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-center mb-3">
+                      <div class="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
+                        {item.startYear} - {item.endYear}
+                      </div>
 
-                <!-- Card -->
-                <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-primary">
-                  <div class="flex justify-between items-center mb-3">
-                    <div class="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
-                      {item.startYear} - {item.endYear}
-                    </div>
-
-                    {item.endYear === "present" && (
-                      <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                      {item.endYear === "present" && (
+                          <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
                         Current
                       </span>
-                    )}
-                  </div>
+                      )}
+                    </div>
 
-                  <h3 class="text-xl font-serif font-semibold">{item.title}</h3>
-                  <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>
-                  <p class="text-gray-700 mt-2">{item.description}</p>
+                    <h3 class="text-xl font-serif font-semibold">{item.title}</h3>
+                    {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
+                    {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
+                  </div>
                 </div>
               </div>
-            </div>
           ))}
 
           <!-- Music Items (Right) -->
-          {musicResult.items.map(item => (
-            <div class="absolute right-0 md:w-[calc(50%-20px)] w-full" style={`top: ${item.position}%;`}>
-              <div class="relative pl-8 md:pl-12">
-                <!-- Timeline connector -->
-                <div class="absolute left-0 top-8 h-0.5 w-8 bg-secondary/60 hidden md:block"></div>
+          {positionedMusicItems.map(item => (
+              <div class="absolute right-0 md:w-[calc(50%-30px)] w-full timeline-item music-item" style={`top: ${item.cardPosition}%;`}>
+                <div class="relative pl-8 md:pl-16">
+                  <!-- Connector line to the shared dot -->
+                  {item.dotPosition !== item.cardPosition && (
+                      <>
+                        <!-- Vertical connector from card to dot level -->
+                        <div class="absolute left-[7px] bg-secondary/40 w-0.5 hidden md:block"
+                             style={`
+                           top: 40px;
+                           height: calc(${Math.abs(item.dotPosition - item.cardPosition)}% * ${TIMELINE_HEIGHT}px / 100 - 8px);
+                           ${item.dotPosition < item.cardPosition ? `transform: translateY(calc(${item.dotPosition - item.cardPosition}% * ${TIMELINE_HEIGHT}px / 100 + 8px));` : ''}
+                         `}></div>
+                      </>
+                  )}
 
-                <!-- End year dot -->
-                <div class="absolute left-0 top-8 w-4 h-4 rounded-full bg-secondary hidden md:block"></div>
+                  <!-- Card -->
+                  <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-secondary hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-center mb-3">
+                      <div class="px-3 py-1 text-sm font-medium bg-secondary/10 text-secondary rounded-full">
+                        {item.startYear} - {item.endYear}
+                      </div>
 
-                <!-- Card -->
-                <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-secondary">
-                  <div class="flex justify-between items-center mb-3">
-                    <div class="px-3 py-1 text-sm font-medium bg-secondary/10 text-secondary rounded-full">
-                      {item.startYear} - {item.endYear}
-                    </div>
-
-                    {item.endYear === "present" && (
-                      <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                      {item.endYear === "present" && (
+                          <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
                         Current
                       </span>
-                    )}
-                  </div>
+                      )}
+                    </div>
 
-                  <h3 class="text-xl font-serif font-semibold">{item.title}</h3>
-                  <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>
-                  <p class="text-gray-700 mt-2">{item.description}</p>
+                    <h3 class="text-xl font-serif font-semibold">{item.title}</h3>
+                    {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
+                    {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
+                  </div>
                 </div>
               </div>
-            </div>
           ))}
         </div>
       </div>
@@ -404,6 +422,9 @@ const timelineHeight = Math.max(techResult.totalHeight, musicResult.totalHeight)
   </section>
 
   <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger} from "gsap/ScrollTrigger";
+
     document.addEventListener('DOMContentLoaded', () => {
       // Register GSAP plugins
       gsap.registerPlugin(ScrollTrigger);
