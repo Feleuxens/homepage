@@ -1,0 +1,705 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Datenschutzerlärung / Privacy Notice">
+    <section class="py-20 bg-white">
+        <div class="container max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-8 text-center">Datenschutzerklärung /<br>Privacy Notice</h1>
+
+            <!-- Language Tabs -->
+            <div class="mb-12">
+                <div class="flex justify-center">
+                    <div class="inline-flex bg-gray-100 rounded-lg p-1">
+                        <button
+                                class="tab-button active px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2"
+                                data-tab="german"
+                                id="german-tab"
+                        >
+                            <span class="text-lg">🇩🇪</span>
+                            <span>Deutsch</span>
+                        </button>
+                        <button
+                                class="tab-button px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2"
+                                data-tab="english"
+                                id="english-tab"
+                        >
+                            <span class="text-lg">🇬🇧</span>
+                            <span>English</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- German Content -->
+            <div class="tab-content active" id="german-content">
+                <div class="prose prose-lg max-w-none">
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Allgemeine Hinweise</h2>
+                        <div class="legal-content">
+                            <p>
+                                Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren
+                                personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Persenenbezogene
+                                Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.
+                                Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem
+                                Text aufgeführten Datenschutzerklärung.
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen
+                                Kontaktdaten können Sie dem Abschnitt "Hinweis zur Verantworlichen Stelle" in dieser
+                                Datenschutzerklärung oder dem Impressum entnehmen.
+                            </p>
+                            <p>
+                                Die verwendeten Begriffe sind nicht geschlechtsspezifisch.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Verantwortlicher</h2>
+                        <div class="legal-content">
+                            <p>
+                                <strong>Felix Grüb</strong><br>
+                                <strong>Mail:</strong> me@feleuxens.de
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Umfang der Verarbeitung personenbezogener Daten</h2>
+                        <div class="legal-content">
+                            <p>
+                                Wir verarbeiten personenbezogene Daten unserer Nutzer grundsätzlich nur, soweit dies
+                                zur Bereitstellung einer funktionsfähigen Website sowie unserer Inhalte und Leistungen
+                                erforderlich ist. Die Verarbeitung personenbezogener Daten unserer Nutzer erfolgt
+                                regelmäßig nur nach Einwilligung des Nutzers. Eine Ausnahme gilt in solchen Fällen, in
+                                denen eine vorherige Einholung einer Einwilligung aus tatsächlichen Gründen nicht
+                                möglich ist und die Verarbeitung der Daten durch gesetzliche Vorschriften gestattet ist.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Rechtsgrundlage für die Verarbeitung personenbezogener Daten</h2>
+                        <div class="legal-content">
+                            <p>
+                                Soweit wir für Verarbeitungsvorgänge personenbezogener Daten eine Einwilligung der
+                                betroffenen Person einholen, dient Art. 6 Abs. 1 lit. a EU-Datenschutzgrundverordnung
+                                (DSGVO) als Rechtsgrundlage. Bei der Verarbeitung von personenbezogenen Daten, die zur
+                                Erfüllung eines Vertrages, dessen Vertragspartei die betroffene Person ist,
+                                erforderlich ist, dient Art. 6 Abs. 1 lit. b DSGVO als Rechtsgrundlage. Dies gilt auch
+                                für Verarbeitungsvorgänge, die zur Durchführung vorvertraglicher Maßnahmen erforderlich
+                                sind. Soweit eine Verarbeitung personenbezogener Daten zur Erfüllung einer rechtlichen
+                                Verpflichtung erforderlich ist, der unser Unternehmen unterliegt, dient Art. 6 Abs. 1
+                                lit. c DSGVO als Rechtsgrundlage. Für den Fall, dass lebenswichtige Interessen der
+                                betroffenen Person oder einer anderen natürlichen Person eine Verarbeitung
+                                personenbezogener Daten erforderlich machen, dient Art. 6 Abs. 1 lit. d DSGVO als
+                                Rechtsgrundlage. Ist die Verarbeitung zur Wahrung eines berechtigten Interesses unseres
+                                Unternehmens oder eines Dritten erforderlich und überwiegen die Interessen, Grundrechte
+                                und Grundfreiheiten des Betroffenen das erstgenannte Interesse nicht, so dient Art. 6
+                                Abs. 1 lit. f DSGVO als Rechtsgrundlage für die Verarbeitung.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Datenlöschung und Speicherdauer</h2>
+                        <div class="legal-content">
+                            <p>
+                                Die personenbezogenen Daten der betroffenen Person werden gelöscht oder gesperrt,
+                                sobald der Zweck der Speicherung entfällt. Eine Speicherung kann darüber hinaus
+                                erfolgen, wenn dies durch den europäischen oder nationalen Gesetzgeber in
+                                unionsrechtlichen Verordnungen, Gesetzen oder sonstigen Vorschriften, denen der
+                                Verantwortliche unterliegt, vorgesehen wurde. Eine Sperrung oder Löschung der Daten
+                                erfolgt auch dann, wenn eine durch die genannten Normen vorgeschriebene Speicherfrist
+                                abläuft, es sei denn, dass eine Erforderlichkeit zur weiteren Speicherung der Daten
+                                für einen Vertragsabschluss oder eine Vertragserfüllung besteht.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Betroffenenrechte</h2>
+                        <div class="legal-content">
+                            <p>
+                                Sie haben als betroffene Person, das Recht auf Auskunft, das Recht auf Berichtigung
+                                oder Löschung, das Recht auf Einschränkung der Verarbeitung und das Recht auf
+                                Widerspruch gegen die Verarbeitung Ihrer Daten. Sofern Sie uns eine Einwilligung
+                                erteilt haben, können Sie diese jederzeit mit Wirkung für die Zukunft widerrufen.
+                            </p>
+                            <p>
+                                Bitte richten Sie Ihren Widerspruch [oder Widerruf] formlos an folgende Adresse:
+                                <br>
+                                s.o.
+                            </p>
+                            <p>
+                                Darüber hinaus haben Sie das Recht auf Datenübertragbarkeit. Sie haben weiter das
+                                Recht, sich bei einer Aufsichtsbehörde über die Verarbeitung zu beschweren. Eine Liste
+                                der entsprechenden Behörden finden Sie unter:
+                                <a class="legal-link" href="https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html">https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html</a>.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Bereitstellung der Website</h2>
+                        <div class="legal-content">
+                            <p>
+                                Die Bereitstellung und Speicherung von Daten erfolgt auf dedizierter Hardware
+                                bei folgendem Anbieter:
+                            </p>
+                            <strong>Hetzner</strong>
+                            <p>
+                                Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen (nachfolgend Hetzner).
+                            </p>
+                            <p>
+                                Details entnehmen Sie der Datenschutzerklärung von Hetzner:<br>
+                                <a class="legal-link" href="https://www.hetzner.com/de/legal/privacy-policy/">https://www.hetzner.com/de/legal/privacy-policy/</a>
+                            </p>
+                            <p>
+                                Die Verwendung von Hetzner erfolgt auf Grundlage von Art. 6. Abs.1 lit. f DSGVO.
+                                Berechtigtes Interesse: Zuverlässige Darstellung der Website.
+                            </p>
+                            <p>
+                                Für die Nutzung des oben genannten Dienstes haben wir eine Vertrag über
+                                Auftragsverarbeitung (AVV) abgeschlossen. Dies ist ein datenschutzrechtlich
+                                vorgeschriebener Vertrag, der der garantiert, dass er die personenbezogenen Daten
+                                unserer Website-Besucher nur nach unseren Anweisungen und in Übereinstimmung mit der
+                                DSGVO verarbeitet.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Eingesetze Sicherheitsmaßnahmen</h2>
+                        <strong>SSL- bzw. TLS-Verschlüsselung</strong>
+                        <p>
+                            Die Seite nutzt zum Schutz der Übertragung der Inhalte SSL- bzw. TLS-Verschlüsselung.
+                            Das erkennen sie daran, dass die Adresszeile des Browsers mit "https://" beginnt.
+                            Insbesondere wird automatisch von unverschlüsselter zu verschlüsselter Verbindung gewechselt.
+                            Dadurch können keine Daten von Dritten mitgelesen werden.
+                        </p><br>
+                        <strong>Festplattenverschlüsselung</strong>
+                        <p>
+                            Sämtliche Daten werden auf verschlüsselten Datenträgern gespeichert. Das schützt ihre Daten
+                            vor unberechtigtem entfernen und auslesen der Datenträgern, auch wenn aufgrund eines
+                            Defektes die Daten nicht mehr gelöscht werden können.
+                        </p>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Datenerfassung auf dieser Website</h2>
+                        <strong>Log-Dateien</strong>
+                        <p>
+                            Der Zugriff auf diese Website with automatisch in sogenannten Log-Dateien protokolliert.<br>
+                            Das umfasst:
+                            <ul>
+                                <li>Uhrzeit</li>
+                                <li>IP-Adresse</li>
+                                <li>User-Agent (Browsertyp, Browserversion und Betriebssystem)</li>
+                            </ul>
+                        </p><br>
+                        <p>
+                            Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.
+                        </p><br>
+                        <p>
+                            Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
+                            Berechtigtes Interesse: Technisch fehlerfreie Darstellung, Analyse von Problemen und
+                            abwenden von Angriffen.
+                        </p><br>
+                        <strong>Kontaktformular und Anfragen per E-Mail/Telefon</strong>
+                        <p>
+                            Bei der Kontaktaufnahme mit uns (Kontaktformular, E-Mail, Telefon, o.a.) sowie im Rahmen
+                            bestehender Geschäftsbeziehungen werden die Angaben der anfragenden Personen verarbeitet,
+                            soweit dies zwecks Bearbeitung der Anfrage oder eines Auftrags erforderlich ist. Diese
+                            Daten werden nicht ohne Ihre Einwilligung weitergegeben. Die Daten verbleiben bis Sie uns
+                            zur Löschung auffordern, ihr Einwilligung zur Speicherung widerrufen oder der Zweck der
+                            Datenspeicherung entfällt. Gesetzliche Bestimmungen wie Aufbewahrungsfristen bleiben davon
+                            unberührt. Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. a und b DSGVO.
+                        </p><br>
+                        <strong>Analytics</strong>
+                        <p>
+                            Zur Analyse des Nutzerverhaltens kommen Open-Source Programme wie Plausible zum Einsatz.
+                            Anders als bei Google Analytics oder ähnliches verlassen aber keine Daten den Server, da
+                            die entsprechende Software auf der gleichen Hardware betrieben wird. Außerdem werden werden
+                            weder Cookies noch Device Fingerprints genutzt. Daher ist keine Einwilligung nötig und die
+                            Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
+                        </p>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Plugins und Tools</h2>
+                        <strong>YouTube mit erweitertem Datenschutz</strong>
+                        <p>
+                            Auf dieser Website werden u.U. Videos eingebunden, die auf Servern von YouTube gespeichert
+                            sind. Das Einbinden erfolgt dabei mit der "youtube-nocookie" Komponente, bei der lt.
+                            YouTube keine Cookies gesetzt werden und nicht zur Personalisierung des Surfens auf YouTube
+                            eingesetzt werden. Es können aber sog. Local Storage Elemente im Browser des Nutzers
+                            gespeichert werden, die ählich wie Cookies personenbezogene Daten beinhalten und zur
+                            Wiedererkennung eingesetzt werden können. Details zum erweitereten Datenschutzmodus finden
+                            Sie hier:<br>
+                            <a class="legal-link" href="https://support.google.com/youtube/answer/171780">https://support.google.com/youtube/answer/171780</a>
+                        </p><br>
+                        <p>
+                            Die Nutzung von YouTube erfolgt nach Art. 6 Abs. 1 lit. f DSGVO unter dem berechtigtem
+                            Interesse der ansprechenden Darstellung unseres Online-Angebots.
+                        </p><br>
+                        <p>
+                            Das Unternehmen ist zertifiziert nach dem "EU-US Data Privacy Framework" (DPF) und verpflichtet
+                            sich, die europäischen Datenschutzstandards einzuhalten. Weitere Information finden Sie hier:<br>
+                            <a class="legal-link" href="https://www.dataprivacyframework.gov/participant/5780">https://www.dataprivacyframework.gov/participant/5780</a>
+                        </p><br>
+                        <strong>Google Fonts</strong>
+                        <p>
+                            Auf dieser Website werden u.U. Schriftarten von Google Fonts eingebunden. Diese werden dabei
+                            ausschließlich von dem lokalen Server geladen. Eine Verbindung zu Servern von Google findet
+                            dabei nicht statt.
+                        </p><br>
+                        <p>
+                            Weitere Informationen finden Sie hier:<br>
+                            <a class="legal-link" href="https://developers.google.com/fonts/faq">https://developers.google.com/fonts/faq</a>
+                        </p><br>
+                        <strong>Font Awesome</strong>
+                        <p>
+                            Auf dieser Website werden u.U. Schriftarten von Font Awesome eingebunden. Diese werden dabei
+                            ausschließlich von dem lokalen Server geladen. Eine Verbindung zu Servern von Fonticons, Inc.
+                            findet dabei nicht statt.
+                        </p><br>
+                        <p>
+                            Weitere Informationen finden Sie hier:<br>
+                            <a class="legal-link" href="https://fontawesome.com/privacy">https://fontawesome.com/privacy</a>
+                        </p><br>
+                        <strong>Instagram</strong>
+                        <p>
+                            Auf dieser Website werden u.U. Inhalte wie Bilder oder Videos von Instagram eingebunden.
+                            Dies geschieht nur nach ausdrücklicher Einwilligung des Nutzers auf Grundlage von Art. 6
+                            Abs. 1 lit. a. Ist dies der Fall, wird eine direkte Verbindung zwischen Ihrem Endgerät und
+                            Servern von Instagram hergestellt. Dadurch erhält Meta Informationen über den Besuch dieser
+                            Website durch Sie. Sollten Sie in einen Instagram Account eingeloggt sein, so kann Meta
+                            eventuell Ihren Website-Besuch Ihrem Benutzerkonto zuordnen.
+                        </p><br>
+                        <p>
+                            Weitere Informationen finden Sie hier:<br>
+                            <a class="legal-link" href="https://privacycenter.instagram.com/policy/">https://privacycenter.instagram.com/policy/</a><br>
+                            Das Unternehmen ist zertifiziert nach dem "EU-US Data Privacy Framework" (DPF) und verpflichtet
+                            sich, die europäischen Datenschutzstandards einzuhalten. Weitere Information finden Sie hier:<br>
+                            <a class="legal-link" href="https://www.dataprivacyframework.gov/participant/4452">https://www.dataprivacyframework.gov/participant/4452</a>
+                        </p>
+                    </section>
+                </div>
+            </div>
+
+            <!-- English Content -->
+            <div class="tab-content" id="english-content">
+                <div class="prose prose-lg max-w-none">
+                    <section class="legal-section">
+                        <h2 class="legal-heading">General information</h2>
+                        <div class="legal-content">
+                            <p>
+                                The following information provides a simple overview of what happens to your personal
+                                data when you visit this website. Personal data is any data that can be used to identify
+                                you personally. Detailed information on the subject of data protection can be found in
+                                our data protection declaration listed below this text.
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                Data processing on this website is carried out by the website operator. You can find
+                                the operator's contact details in the ‘Controller’ section of this
+                                privacy policy or in the legal notice.
+                            </p>
+                            <p>
+                                The terms used are not gender-specific.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Controller</h2>
+                        <div class="legal-content">
+                            <p>
+                                <strong>Felix Grüb</strong><br>
+                                <strong>Mail:</strong> me@feleuxens.de
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Scope of the processing of personal data</h2>
+                        <div class="legal-content">
+                            <p>
+                                We only process our users' personal data to the extent necessary to provide a
+                                functional website and our content and services. The processing of our users' personal
+                                data only takes place regularly with the user's consent. An exception applies in cases
+                                where prior consent cannot be obtained for factual reasons and the processing of the
+                                data is permitted by law.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Legal basis for the processing of personal data</h2>
+                        <div class="legal-content">
+                            <p>
+                                Insofar as we obtain the consent of the data subject for the processing of personal
+                                data, Art. 6 para. 1 lit. a EU General Data Protection Regulation (GDPR) serves as the
+                                legal basis. When processing personal data that is necessary for the fulfilment of a
+                                contract to which the data subject is a party, Art. 6 para. 1 lit. b GDPR serves as the
+                                legal basis. This also applies to processing operations that are necessary for the
+                                performance of pre-contractual measures. Insofar as the processing of personal data is
+                                necessary to fulfil a legal obligation to which our company is subject, Art. 6 para. 1
+                                lit. c GDPR serves as the legal basis. In the event that vital interests of the data
+                                subject or another natural person require the processing of personal data, Art. 6 para.
+                                1 lit. d GDPR serves as the legal basis. If the processing is necessary to safeguard a
+                                legitimate interest of our company or a third party and if the interests, fundamental
+                                rights and freedoms of the data subject do not outweigh the first-mentioned interest,
+                                Art. 6 para. 1 lit. f GDPR serves as the legal basis for the processing.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Data erasure and storage duration</h2>
+                        <div class="legal-content">
+                            <p>
+                                The personal data of the data subject will be erased or blocked as soon as the purpose
+                                of storage no longer applies. Data may also be stored if this has been provided for by
+                                the European or national legislator in EU regulations, laws or other provisions to
+                                which the controller is subject. The data will also be blocked or erased if a storage
+                                period prescribed by the aforementioned standards expires, unless there is a need for
+                                further storage of the data for the conclusion or fulfilment of a contract.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Rights of data subjects</h2>
+                        <div class="legal-content">
+                            <p>
+                                As a user, you have the right to information, the right to rectification or
+                                erasure, the right to restriction of processing and the right to object to the
+                                processing of your data. If you have given us your consent, you can revoke it at any
+                                time with effect for the future.
+                            </p>
+                            <p>
+                                Please send your objection [or cancellation] informally to the following address:
+                                see above.
+                                <br>
+                                s.o.
+                            </p>
+                            <p>
+                                You also have the right to data portability. You also have the right to complain to a
+                                supervisory authority about the processing. You can find a list of the relevant
+                                authorities:
+                                <a class="legal-link" href="https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html">https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html</a>.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Provision of the website</h2>
+                        <div class="legal-content">
+                            <p>
+                                The provision and storage of data takes place on dedicated hardware with the
+                                following provider:
+                            </p>
+                            <strong>Hetzner</strong>
+                            <p>
+                                Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen (referred to as Hetzner).
+                            </p>
+                            <p>
+                                Details can be found in Hetzner's privacy policy:<br>
+                                <a class="legal-link" href="https://www.hetzner.com/legal/privacy-policy/">https://www.hetzner.com/legal/privacy-policy/</a>
+                            </p>
+                            <p>
+                                The use of Hetzner is based on Art. 6 para. 1 lit. f GDPR. Legitimate interest:
+                                Reliable presentation of the website.
+                            </p>
+                            <p>
+                                We have concluded an order processing contract (AVV) for the use of the above-mentioned
+                                service. This is a contract required by data protection law, which guarantees that it
+                                will only process the personal data of our website visitors in accordance with our
+                                instructions and in compliance with the GDPR.
+
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Security measures used</h2>
+                        <strong>SSL and TLS encryption</strong>
+                        <p>
+                            This site uses SSL or TLS encryption to protect the transmission of content. You can
+                            recognise this by the fact that the address line of the browser begins with ‘https://’.
+                            In particular, the system automatically switches from an unencrypted to an encrypted
+                            connection. This means that no data can be read by third parties.
+                        </p><br>
+                        <strong>Hard drive encryption</strong>
+                        <p>
+                            All data is stored on encrypted data carriers. This protects your data from unauthorised
+                            removal and reading of the data carriers, even if the data can no longer be deleted due
+                            to a defect.
+                        </p>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Data collection on this website</h2>
+                        <strong>Log files</strong>
+                        <p>
+                            Access to this website is automatically recorded in so-called log files.<br>
+                            This includes
+                            <ul>
+                                <li>Time</li>
+                                <li>IP address</li>
+                                <li>User-Agent (browser tpye, browser version und operating system)</li>
+                            </ul>
+                        </p><br>
+                        <p>
+                            This data is not merged with other data sources.
+                        </p><br>
+                        <p>
+                            This data is collected on the basis of Art. 6 para. 1 lit. f GDPR.
+                            Legitimate interest: Error-free display, analysis of problems and prevention of attacks.
+                        </p><br>
+                        <strong>Contact form and enquiries by e-mail/telephone</strong>
+                        <p>
+                            When contacting us (contact form, e-mail, telephone, etc.) and in the context of existing
+                            business relationships, the details of the enquiring persons are processed insofar as this
+                            is necessary for the purpose of processing the enquiry or an order. This data will not be
+                            passed on without your consent. The data will remain until you ask us to delete it, revoke
+                            your consent to storage or the purpose of the data storage no longer applies. Legal
+                            provisions such as retention periods remain unaffected. Processing is carried out on the
+                            basis of Art. 6 para. 1 lit. a and b GDPR.
+                        </p><br>
+                        <strong>Analytics</strong>
+                        <p>
+                            Open source programs such as Plausible are used to analyse user behaviour. Unlike Google
+                            Analytics or similar programmes, however, no data leaves the server as the corresponding
+                            software is operated on the same hardware. Furthermore, neither cookies nor device
+                            fingerprints are used. Therefore, no consent is required and the processing is carried out
+                            on the basis of Art. 6 para. 1 lit. f GDPR.
+                        </p>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Plugins und Tools</h2>
+                        <strong>YouTube with extended data protection</strong>
+                        <p>
+                            This website may include videos that are stored on YouTube servers. These are integrated
+                            using the ‘youtube-nocookie’ component, which, according to YouTube, does not set any
+                            cookies and is not used to personalise surfing on YouTube. However, so-called local storage
+                            elements can be stored in the user's browser, which contain personal data similar to
+                            cookies and can be used to recognise the user. Details on the extended data protection
+                            mode can be found here:<br>
+                            <a class="legal-link" href="https://support.google.com/youtube/answer/171780">https://support.google.com/youtube/answer/171780</a>
+                        </p><br>
+                        <p>
+                            YouTube is used in accordance with Art. 6 para. 1 lit. f GDPR under the legitimate
+                            interest of the appealing presentation of our online offer.
+                        </p><br>
+                        <p>
+                            The company is certified according to the ‘EU-US Data Privacy Framework’ (DPF) and is
+                            committed to complying with European data protection standards. Further information
+                            can be found here:<br>
+                            <a class="legal-link" href="https://www.dataprivacyframework.gov/participant/5780">https://www.dataprivacyframework.gov/participant/5780</a>
+                        </p><br>
+                        <strong>Google Fonts</strong>
+                        <p>
+                            Fonts from Google Fonts may be integrated on this website. These are loaded exclusively
+                            from the local server. There is no connection to Google servers.
+                        </p><br>
+                        <p>
+                            Further information can be found here:<br>
+                            <a class="legal-link" href="https://developers.google.com/fonts/faq">https://developers.google.com/fonts/faq</a>
+                        </p><br>
+                        <strong>Font Awesome</strong>
+                        <p>
+                            Fonts from Font Awesome may be integrated on this website. These are loaded exclusively
+                            from the local server. There is no connection to the servers of Fonticons, Inc.
+
+                        </p><br>
+                        <p>
+                            Further information can be found here:<br>
+                            <a class="legal-link" href="https://fontawesome.com/privacy">https://fontawesome.com/privacy</a>
+                        </p><br>
+                        <strong>Instagram</strong>
+                        <p>
+                            Content such as images or videos from Instagram may be integrated on this website. This is
+                            only done with the express consent of the user on the basis of Art. 6 para. 1 lit. a. If
+                            this is the case, a direct connection is established between your device and Instagram's
+                            servers. As a result, Instagram receives information about your visit to this website. If
+                            you are logged into an Instagram account, Meta may be able to associate your website visit
+                            with your user account.
+                        </p><br>
+                        <p>
+                            You can find more information here:<br>
+                            <a class="legal-link" href="https://privacycenter.instagram.com/policy/">https://privacycenter.instagram.com/policy/</a><br>
+                            The company is certified according to the ‘EU-US Data Privacy Framework’ (DPF) and is
+                            committed to complying with European data protection standards. Further information can
+                            be found here:<br>
+                            <a class="legal-link" href="https://www.dataprivacyframework.gov/participant/4452">https://www.dataprivacyframework.gov/participant/4452</a>
+                        </p>
+                    </section>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 pt-8 border-t border-gray-200">
+                <p class="text-sm text-gray-500">
+          <span class="german-only">Stand: 25.05.2025 |
+            <a href="/impressum" class="legal-link">Impressum</a>
+          </span>
+                    <span class="english-only hidden">Last updated: May 25, 2025 |
+            <a href="/impressum" class="legal-link">Imprint</a>
+          </span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        @reference "tailwindcss";
+        @reference "../styles/global.css";
+        /* Tab Styles */
+        .tab-button {
+            @apply text-gray-600 hover:text-gray-800;
+        }
+
+        .tab-button.active {
+            @apply bg-white text-primary shadow-sm;
+        }
+
+        .tab-content {
+            @apply opacity-0 invisible max-h-0 overflow-hidden transition-all duration-300;
+        }
+
+        .tab-content.active {
+            @apply opacity-100 visible max-h-none;
+        }
+
+        /* Legal Content Styles */
+        .legal-section {
+            @apply mb-8 pb-6 border-b border-gray-100 last:border-b-0;
+        }
+
+        .legal-heading {
+            @apply text-2xl font-serif font-semibold mb-4 text-gray-800;
+        }
+
+        .legal-content {
+            @apply text-gray-700 leading-relaxed;
+        }
+
+        .legal-content p {
+            @apply mb-3 last:mb-0;
+        }
+
+        .legal-link {
+            @apply text-primary hover:text-primary/80 underline transition-colors duration-200;
+        }
+
+        .prose {
+            @apply text-gray-700;
+        }
+
+        .prose strong {
+            @apply text-gray-900 font-semibold;
+        }
+
+        /* Language-specific content visibility */
+        .german-only {
+            @apply block;
+        }
+
+        .english-only {
+            @apply hidden;
+        }
+
+        /* When English tab is active */
+        .english-active .german-only {
+            @apply hidden;
+        }
+
+        .english-active .english-only {
+            @apply block;
+        }
+
+        /* Smooth tab content transitions */
+        .tab-content {
+            transform: translateY(10px);
+        }
+
+        .tab-content.active {
+            transform: translateY(0);
+        }
+
+        /* Mobile responsive tabs */
+        @media (max-width: 640px) {
+            .tab-button {
+                @apply px-4 py-2 text-sm;
+            }
+
+            .tab-button span:first-child {
+                @apply text-base;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const body = document.body;
+
+            // Function to switch tabs
+            function switchTab(targetTab) {
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button and corresponding content
+                document.querySelector(`[data-tab="${targetTab}"]`).classList.add('active');
+                document.getElementById(`${targetTab}-content`).classList.add('active');
+
+                // Update body class for language-specific content
+                if (targetTab === 'english') {
+                    body.classList.add('english-active');
+                } else {
+                    body.classList.remove('english-active');
+                }
+
+                // Store preference
+                localStorage.setItem('preferred-impressum-language', targetTab);
+            }
+
+            // Add click event listeners to tab buttons
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    switchTab(targetTab);
+                });
+            });
+
+            // Load saved preference or default to german
+            const savedLanguage = localStorage.getItem('preferred-impressum-language') || 'german';
+            switchTab(savedLanguage);
+
+            // Keyboard navigation for accessibility
+            tabButtons.forEach((button, index) => {
+                button.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        const nextIndex = e.key === 'ArrowRight' ?
+                            (index + 1) % tabButtons.length :
+                            (index - 1 + tabButtons.length) % tabButtons.length;
+
+                        tabButtons[nextIndex].focus();
+                        const targetTab = tabButtons[nextIndex].getAttribute('data-tab');
+                        switchTab(targetTab);
+                    }
+                });
+            });
+        });
+    </script>
+</MainLayout>

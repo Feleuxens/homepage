@@ -1,0 +1,381 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Impressum / Imprint">
+    <section class="py-20 bg-white">
+        <div class="container max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-8 text-center">Impressum / Imprint</h1>
+
+            <!-- Language Tabs -->
+            <div class="mb-12">
+                <div class="flex justify-center">
+                    <div class="inline-flex bg-gray-100 rounded-lg p-1">
+                        <button
+                                class="tab-button active px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2"
+                                data-tab="german"
+                                id="german-tab"
+                        >
+                            <span class="text-lg">🇩🇪</span>
+                            <span>Deutsch</span>
+                        </button>
+                        <button
+                                class="tab-button px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2"
+                                data-tab="english"
+                                id="english-tab"
+                        >
+                            <span class="text-lg">🇬🇧</span>
+                            <span>English</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- German Content -->
+            <div class="tab-content active" id="german-content">
+                <div class="text-sm text-gray-500 text-center mb-12">Angaben gemäß § 5 TMG</div>
+
+                <div class="prose prose-lg max-w-none">
+                    <section class="legal-section">
+                        <div class="legal-content">
+                            <p><strong>Felix Grüb</strong></p>
+                            <p>Sielminger Hauptstraße 69/2<br>
+                                70794 Filderstadt<br>
+                                Deutschland</p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Kontakt</h2>
+                        <div class="legal-content">
+                            <p><strong>E-Mail:</strong> me@feleuxens.de<br>
+                                <strong>Telefon:</strong> +491789056536</p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Umsatzsteuer-ID</h2>
+                        <div class="legal-content">
+                            <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br>
+                                DE363736506</p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">EU-Streitschlichtung</h2>
+                        <div class="legal-content">
+                            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
+                                <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" class="legal-link">
+                                    https://ec.europa.eu/consumers/odr/
+                                </a></p>
+                            <p>Die E-Mail-Adresse finden Sie oben im Impressum.</p>
+                        </div>
+                    </section>
+
+                    <!-- Haftungsausschluss -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Haftung für Inhalte und Links</h2>
+                        <div class="legal-content">
+                            <p>Als Diensteanbieter sind wir gemäß
+                                § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen
+                                verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht
+                                verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder
+                                nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+                                Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den
+                                allgemeinen Gesetzen bleiben hiervon unberührt.</p>
+                            <p>Unser Angebot enthält links zu externen Webseiten Dritter, auf deren Inhalte wir keinen
+                            Einfluss haben. Für diesen Inhalt können wir keine Gewähr übernehmen. Für solche Inhalte
+                            ist stets der jeweilige Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren
+                            keine Rechtswidrigen Inhalte erkennbar. Bei Bekanntwerden etwaiger Rechtsverletzungen
+                            werden wir derartige Links umgehend entfernen.</p>
+                        </div>
+                    </section>
+
+                    <!-- Urheberrecht -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Urheberrecht</h2>
+                        <div class="legal-content">
+                            <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen
+                                dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art
+                                der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen
+                                Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+                            <p>Downloads und Kopien dieser Seite sind nur für den privaten und nicht kommerziellen
+                                Gebrauch erlaubt. Sind die Inhalte auf unserer Webseite nicht von uns erstellt wurden,
+                                sind die Urheberrechte Dritter zu beachten. Die Inhalte Dritter werden als solche
+                                kenntlich gemacht. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam
+                                werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen
+                                werden wir derartige Inhalte unverzüglich entfernen.</p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Sonstiges</h2>
+                        <div class="legal-content">
+                            <p>Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte
+                                zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien
+                                wird hiermit ausdrücklich widersprochen. Die Betreiber der Seite behalten sich ausdrücklich
+                                rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen,
+                                etwa durch Spam-Mails, vor.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- English Content -->
+            <div class="tab-content" id="english-content">
+                <div class="text-sm text-gray-500 text-center mb-12">Legal Notice</div>
+
+                <div class="prose prose-lg max-w-none">
+                    <!-- Service Provider Information -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Content provider</h2>
+                        <div class="legal-content">
+                            <p><strong>Felix Grüb</strong></p>
+                            <p>Sielminger Hauptstraße 69/2<br>
+                                70794 Filderstadt<br>
+                                Germany</p>
+                        </div>
+                    </section>
+
+                    <!-- Contact -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Contact</h2>
+                        <div class="legal-content">
+                            <p><strong>E-Mail:</strong> me@feleuxens.de<br>
+                                <strong>Phone:</strong> +491789056536</p>
+                        </div>
+                    </section>
+
+                    <!-- VAT ID -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">VAT Identification Number</h2>
+                        <div class="legal-content">
+                            <p>VAT identification number according to § 27 a Value Added Tax Act:<br>
+                                DE363736506</p>
+                        </div>
+                    </section>
+
+                    <!-- EU Dispute Resolution -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">EU Dispute Resolution</h2>
+                        <div class="legal-content">
+                            <p>The European Commission provides a platform for online dispute resolution (ODR):
+                                <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" class="legal-link">
+                                    https://ec.europa.eu/consumers/odr/
+                                </a></p>
+                            <p>You can find our email address in the imprint above.</p>
+                        </div>
+                    </section>
+
+                    <!-- Liability for Contents -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Liability for Contents and Links</h2>
+                        <div class="legal-content">
+                            <p>As a service provider, we are responsible for our own content on these pages in
+                                accordance with § 7 para. 1 TMG (Telemediengesetz – Tele Media Act by German law) and
+                                general laws. According to §§ 8 to 10 TMG, however, we as a service provider are not
+                                obliged to monitor transmitted or stored third-party information or to investigate
+                                circumstances that indicate illegal activity. Obligations to remove or block the use of
+                                information in accordance with general legislation remain unaffected by this.
+                            </p>
+                            <p>
+                                Our website contains links to external third-party websites over whose content we have
+                                no influence. We cannot accept any liability for this content. The respective provider
+                                is always responsible for such content. At the time of linking, no illegal content was
+                                recognizable. If we become aware of any legal infringements, we will remove such
+                                links immediately.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Copyright -->
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Copyright</h2>
+                        <div class="legal-content">
+                            <p>The content and works created by the site operators on these pages are subject to
+                                German copyright law. Duplication, processing, distribution and any kind of
+                                exploitation outside the limits of copyright law require the written consent of
+                                the respective author or creator.
+                            </p>
+                            <p>
+                                Downloads and copies of this site are only permitted for private and non-commercial
+                                use. If the content on our website was not created by us, the copyrights of third
+                                parties must be observed. Third-party content is identified as such. Should you
+                                nevertheless become aware of a copyright infringement, please inform us accordingly.
+                                If we become aware of any infringements, we will remove such content immediately.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="legal-section">
+                        <h2 class="legal-heading">Other</h2>
+                        <div class="legal-content">
+                            <p>
+                                We hereby expressly prohibit the use of contact data published within the scope of the
+                                imprint obligation by third parties for sending unsolicited advertising and information
+                                material. The operators of the site expressly reserve the right to take legal action in
+                                the event of the unsolicited sending of advertising information, such as spam e-mails.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 pt-8 border-t border-gray-200">
+                <p class="text-sm text-gray-500">
+          <span class="german-only">Stand: 25.05.2025 |
+            <a href="/privacy" class="">Datenschutzerklärung</a>
+          </span>
+                    <span class="english-only hidden">Last updated: May 25, 2025 |
+            <a href="/privacy" class="legal-link">Privacy Policy</a>
+          </span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        @reference "tailwindcss";
+        @reference "../styles/global.css";
+        /* Tab Styles */
+        .tab-button {
+            @apply text-gray-600 hover:text-gray-800;
+        }
+
+        .tab-button.active {
+            @apply bg-white text-primary shadow-sm;
+        }
+
+        .tab-content {
+            @apply opacity-0 invisible max-h-0 overflow-hidden transition-all duration-300;
+        }
+
+        .tab-content.active {
+            @apply opacity-100 visible max-h-none;
+        }
+
+        /* Legal Content Styles */
+        .legal-section {
+            @apply mb-8 pb-6 border-b border-gray-100 last:border-b-0;
+        }
+
+        .legal-heading {
+            @apply text-2xl mb-4 text-gray-800;
+        }
+
+        .legal-content {
+            @apply text-gray-700 leading-relaxed;
+        }
+
+        .legal-content p {
+            @apply mb-3 last:mb-0;
+        }
+
+        .legal-link {
+            @apply text-primary hover:text-primary/80 underline transition-colors duration-200;
+        }
+
+        .prose {
+            @apply text-gray-700;
+        }
+
+        .prose strong {
+            @apply text-gray-900 font-semibold;
+        }
+
+        /* Language-specific content visibility */
+        .german-only {
+            @apply block;
+        }
+
+        .english-only {
+            @apply hidden;
+        }
+
+        /* When English tab is active */
+        .english-active .german-only {
+            @apply hidden;
+        }
+
+        .english-active .english-only {
+            @apply block;
+        }
+
+        /* Smooth tab content transitions */
+        .tab-content {
+            transform: translateY(10px);
+        }
+
+        .tab-content.active {
+            transform: translateY(0);
+        }
+
+        /* Mobile responsive tabs */
+        @media (max-width: 640px) {
+            .tab-button {
+                @apply px-4 py-2 text-sm;
+            }
+
+            .tab-button span:first-child {
+                @apply text-base;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const body = document.body;
+
+            // Function to switch tabs
+            function switchTab(targetTab) {
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button and corresponding content
+                document.querySelector(`[data-tab="${targetTab}"]`).classList.add('active');
+                document.getElementById(`${targetTab}-content`).classList.add('active');
+
+                // Update body class for language-specific content
+                if (targetTab === 'english') {
+                    body.classList.add('english-active');
+                } else {
+                    body.classList.remove('english-active');
+                }
+
+                // Store preference
+                localStorage.setItem('preferred-impressum-language', targetTab);
+            }
+
+            // Add click event listeners to tab buttons
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    switchTab(targetTab);
+                });
+            });
+
+            // Load saved preference or default to german
+            const savedLanguage = localStorage.getItem('preferred-impressum-language') || 'german';
+            switchTab(savedLanguage);
+
+            // Keyboard navigation for accessibility
+            tabButtons.forEach((button, index) => {
+                button.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        const nextIndex = e.key === 'ArrowRight' ?
+                            (index + 1) % tabButtons.length :
+                            (index - 1 + tabButtons.length) % tabButtons.length;
+
+                        tabButtons[nextIndex].focus();
+                        const targetTab = tabButtons[nextIndex].getAttribute('data-tab');
+                        switchTab(targetTab);
+                    }
+                });
+            });
+        });
+    </script>
+</MainLayout>
