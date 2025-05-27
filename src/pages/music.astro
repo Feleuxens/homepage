@@ -1,0 +1,324 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+
+// Musical services
+const services = [
+    {
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a6.364 6.364 0 004.597 0c1.84-.588 3.403.826 3.403 2.68v8.64c0 1.854-1.563 3.268-3.403 2.68A6.364 6.364 0 0012 17a6.364 6.364 0 00-4.597 0C5.563 17.588 4 16.174 4 14.32V5.68c0-1.854 1.563-3.268 3.403-2.68A6.364 6.364 0 0012 3z"/>
+    </svg>`,
+        title: "Wedding Ceremonies",
+        description: "Create the perfect atmosphere for your special day with elegant piano music during ceremonies and receptions.",
+        features: ["Processional & Recessional", "Cocktail Hour Entertainment", "Reception Background Music", "Custom Song Requests"]
+    },
+    {
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+    </svg>`,
+        title: "Memorial Services",
+        description: "Provide comfort and solace through thoughtful musical selections for memorial and funeral services.",
+        features: ["Traditional Hymns", "Contemporary Favorites", "Personalized Selections", "Sensitive Performance"]
+    },
+    {
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/>
+      <polyline points="9,9 9,15"/>
+      <polyline points="12,7 12,17"/>
+      <polyline points="15,11 15,13"/>
+    </svg>`,
+        title: "Musical Arrangements",
+        description: "Custom piano arrangements and adaptations of your favorite songs, tailored for specific occasions or skill levels.",
+        features: [
+            "Popular Songs for Piano",
+            "Classical Adaptations",
+            "Lead Sheets & Chord Charts"
+        ]
+    },
+    {
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>`,
+        title: "Score Transcription",
+        description: "Professional transcription services to convert your handwritten musical scores into clean, digital sheet music.",
+        features: [
+            "Handwritten to Digital Conversion",
+            "Professional Music Notation",
+            "Multiple Format Options (PDF, MusicXML)",
+            "Free Revisions After Completion"
+        ]
+    }
+];
+
+// Repertoire categories
+const repertoire = [
+    {
+        category: "Classical",
+        pieces: ["Chopin - Nocturne Nr. 20 in C# minor", "Rachmaninoff - Prelude in C# minor", "Rachmaninoff - Prelude in G# minor", "Schubert - 4 Impromptus, Op 90.: Nr. 2 in E♭ Major"]
+    },
+    {
+        category: "Wedding Favorites",
+        pieces: ["Pachelbel - Canon in D", "Bart Howard - Fly me to the moon (Arr. Dietmar Steinhauer)", "Elton John - Can You Feel the Love Tonight"]
+    },
+    {
+        category: "Contemporary",
+        pieces: ["Consuelo Velázquez - Bésame mucho", "Ludovico Einaudi - Nuvole bianche", "Ludovico Einaudi - Fuori dalla notte", "Yiruma - River flows in you", "Eric Clapton - Tears in Heaven"]
+    },
+    {
+        category: "Soundtracks",
+        pieces: ["Romantic Flight (How to Train Your Dragon)", "Now we are free (Gladiator)", "Tennessee (Pearl Harbor)", "No Time to Die (James Bond)"]
+    }
+];
+
+// Testimonials
+//{
+//    name: "Sarah & Michael",
+//    event: "Wedding",
+//    text: "The piano music made our wedding ceremony absolutely magical. Every note was perfect and our guests are still talking about how beautiful it was.",
+//    rating: 5
+//}
+const testimonials: {name: string, event: string, text: string, rating: number} = [];
+---
+
+<MainLayout title="Music Services">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-secondary/10 to-secondary/5 py-20">
+        <div class="container">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 opacity-0" id="hero-title">
+                    Piano Performances
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-700 mb-8 opacity-0" id="hero-subtitle">
+                    Elegant piano music for weddings, memorials, corporate events, and private occasions
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0" id="hero-buttons">
+                    <a href="/contact" class="btn bg-secondary hover:bg-secondary/90 text-white">Book Performance</a>
+                    <a href="/portfolio" class="btn bg-transparent border-2 border-secondary text-secondary hover:bg-secondary hover:text-white">Listen to Samples</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-20 bg-white">
+        <div class="container">
+            <h2 class="section-title text-center">Performance Services</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                {services.map(service => (
+                        <div class="service-card card p-8 hover:shadow-xl transition-all duration-300">
+                            <div class="w-16 h-16 mb-6 text-secondary" set:html={service.icon}></div>
+
+                            <h3 class="text-2xl font-serif font-semibold mb-4">{service.title}</h3>
+                            <p class="text-gray-600 mb-6">{service.description}</p>
+
+                            <ul class="space-y-2">
+                                {service.features.map(feature => (
+                                        <li class="flex items-center text-gray-700">
+                                            <svg class="w-4 h-4 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            {feature}
+                                        </li>
+                                ))}
+                            </ul>
+                        </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Repertoire Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container">
+            <h2 class="section-title text-center">Musical Repertoire</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+                {repertoire.map(category => (
+                        <div class="repertoire-card bg-white rounded-lg p-6 shadow-md">
+                            <h3 class="text-xl font-serif font-semibold mb-4 text-secondary">{category.category}</h3>
+                            <ul class="space-y-2">
+                                {category.pieces.map(piece => (
+                                        <li class="text-gray-700 text-sm">{piece}</li>
+                                ))}
+                            </ul>
+                        </div>
+                ))}
+            </div>
+
+            <div class="text-center mt-12">
+                <p class="text-gray-600 mb-6">Can't find what you're looking for? I'm happy to learn new pieces for your special event.</p>
+                <a href="/contact" class="btn bg-secondary hover:bg-secondary/90 text-white">Request Custom Repertoire</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <!--<section class="py-20 bg-white">
+        <div class="container">
+            <h2 class="section-title text-center">What Clients Say</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                {testimonials.map(testimonial => (
+                        <div class="testimonial-card bg-gray-50 rounded-lg p-6">
+                            <div class="flex mb-4">
+                                {Array.from({length: testimonial.rating}).map(() => (
+                                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                ))}
+                            </div>
+                            <p class="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
+                            <div>
+                                <p class="font-semibold text-gray-800">{testimonial.name}</p>
+                                <p class="text-sm text-gray-500">{testimonial.event}</p>
+                            </div>
+                        </div>
+                ))}
+            </div>
+        </div>
+    </section>-->
+
+    <!-- Booking Information -->
+    <section class="py-20 bg-gray-50">
+        <div class="container">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-center">Booking Information</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                    <div class="bg-white rounded-lg p-8">
+                        <h3 class="text-2xl font-serif font-semibold mb-6 text-secondary">What's Included</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Pre-event consultation
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Custom playlist creation
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Professional attire
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Flexible timing adjustments
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-8">
+                        <h3 class="text-2xl font-serif font-semibold mb-6 text-secondary">Booking Process</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-sm font-bold mr-4 mt-1">1</div>
+                                <div>
+                                    <h4 class="font-semibold">Initial Consultation</h4>
+                                    <p class="text-gray-600 text-sm">Discuss your event details and musical preferences</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-sm font-bold mr-4 mt-1">2</div>
+                                <div>
+                                    <h4 class="font-semibold">Proposal & Contract</h4>
+                                    <p class="text-gray-600 text-sm">Receive detailed proposal and performance agreement</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-sm font-bold mr-4 mt-1">3</div>
+                                <div>
+                                    <h4 class="font-semibold">Final Preparation</h4>
+                                    <p class="text-gray-600 text-sm">Finalize details and prepare your custom repertoire</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-sm font-bold mr-4 mt-1">4</div>
+                                <div>
+                                    <h4 class="font-semibold">Performance Day</h4>
+                                    <p class="text-gray-600 text-sm">Professional, punctual performance for your event</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-secondary text-white">
+        <div class="container text-center">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">Ready to Add Music to Your Event?</h2>
+            <p class="text-xl mb-10 max-w-2xl mx-auto text-white/90">
+                Let's discuss how beautiful piano music can enhance your special occasion and create lasting memories.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/contact" class="btn bg-white text-secondary hover:bg-gray-100">Book Your Event</a>
+                <a href="/about" class="btn bg-transparent border-2 border-white text-white hover:bg-white/10">Learn About My Background</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register GSAP plugins
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero animations
+            gsap.to('#hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' });
+            gsap.to('#hero-subtitle', { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' });
+            gsap.to('#hero-buttons', { opacity: 1, y: 0, duration: 1, delay: 0.6, ease: 'power3.out' });
+
+            // Service cards animation
+            gsap.from('.service-card', {
+                scrollTrigger: {
+                    trigger: '.service-card',
+                    start: 'top 80%',
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: 'power2.out'
+            });
+
+            // Repertoire cards animation
+            gsap.from('.repertoire-card', {
+                scrollTrigger: {
+                    trigger: '.repertoire-card',
+                    start: 'top 80%',
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.15,
+                ease: 'power2.out'
+            });
+
+            // Testimonial cards animation
+            gsap.from('.testimonial-card', {
+                scrollTrigger: {
+                    trigger: '.testimonial-card',
+                    start: 'top 80%',
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.2,
+                ease: 'power2.out'
+            });
+        });
+    </script>
+</MainLayout>

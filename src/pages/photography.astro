@@ -1,0 +1,320 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+
+// Photography categories for portfolio showcase
+const portfolioCategories = [
+    {
+        title: "Landscapes",
+        image: "/images/photography/landscapes-sample.jpg",
+        description: "Capturing the beauty of natural environments and scenic vistas"
+    },
+    {
+        title: "Street Photography",
+        image: "/images/photography/street-sample.jpg",
+        description: "Candid moments and urban life through an artistic lens"
+    },
+    {
+        title: "Portraits",
+        image: "/images/photography/portraits-sample.jpg",
+        description: "Personal and environmental portraits that tell a story"
+    },
+    {
+        title: "Architecture",
+        image: "/images/photography/architecture-sample.jpg",
+        description: "Exploring lines, forms, and the interaction of light with structures"
+    },
+    {
+        title: "Events",
+        image: "/images/photography/events-sample.jpg",
+        description: "Documenting special moments and celebrations"
+    },
+    {
+        title: "Abstract",
+        image: "/images/photography/abstract-sample.jpg",
+        description: "Creative compositions focusing on color, texture, and form"
+    }
+];
+
+// Photography approach/style
+const approach = [
+    {
+        title: "Natural Light",
+        description: "I prefer working with available light to create authentic, warm imagery that feels genuine and unforced."
+    },
+    {
+        title: "Documentary Style",
+        description: "My approach focuses on capturing real moments and genuine emotions as they naturally unfold."
+    },
+    {
+        title: "Artistic Vision",
+        description: "I see photography as a way to share perspectives and find beauty in both ordinary and extraordinary moments."
+    },
+    {
+        title: "Personal Connection",
+        description: "Every photo tells a story, and I strive to create images that resonate on a personal level."
+    }
+];
+
+// Equipment (simplified, less commercial)
+const equipment = [
+    "Canon EOS R7",
+    "DJI Mavic Air 2",
+    "Google Pixel 8 Pro"
+];
+
+const software = [
+    "Affinity Photo",
+    "Affinity Designer",
+    "Affinity Publisher",
+    "BlackMagic Davinci Resolve"
+]
+---
+
+<MainLayout title="Photography Portfolio">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-accent/10 to-accent/5 py-20">
+        <div class="container">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 opacity-0" id="hero-title">
+                    Photography Portfolio
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-700 mb-8 opacity-0" id="hero-subtitle">
+                    Exploring the world through my lens - a personal collection of moments, places, and perspectives
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0" id="hero-buttons">
+                    <a href="#gallery" class="btn bg-accent hover:bg-accent/90 text-white">View Gallery</a>
+                    <a href="#about-photography" class="btn bg-transparent border-2 border-accent text-accent hover:bg-accent hover:text-white">About My Photography</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Gallery -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="container">
+            <h2 class="section-title text-center">Visual Stories</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+                Each collection represents a different way of seeing the world. Click through to explore the stories behind these images.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                {portfolioCategories.map(category => (
+                        <div class="portfolio-category group cursor-pointer">
+                            <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden mb-4">
+                                <img
+                                        src={category.image}
+                                        alt={category.title}
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                />
+                            </div>
+                            <div class="text-center">
+                                <h3 class="text-xl font-serif font-semibold mb-2 group-hover:text-accent transition-colors">{category.title}</h3>
+                                <p class="text-gray-600 text-sm">{category.description}</p>
+                            </div>
+                        </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Images Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container">
+            <h2 class="section-title text-center">Recent Favorites</h2>
+
+            <!-- Large featured image grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                <!-- Large featured image -->
+                <div class="lg:col-span-2 lg:row-span-2">
+                    <div class="aspect-square lg:aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
+                        <img
+                                src="/images/photography/featured-1.jpg"
+                                alt="Featured photograph"
+                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                </div>
+
+                <!-- Smaller images -->
+                <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden">
+                    <img
+                            src="/images/photography/featured-2.jpg"
+                            alt="Featured photograph"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                </div>
+
+                <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden">
+                    <img
+                            src="/images/photography/featured-3.jpg"
+                            alt="Featured photograph"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                </div>
+
+                <div class="md:col-span-2 lg:col-span-1 aspect-square bg-gray-200 rounded-lg overflow-hidden">
+                    <img
+                            src="/images/photography/featured-4.jpg"
+                            alt="Featured photograph"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Photography Section -->
+    <section id="about-photography" class="py-20 bg-white">
+        <div class="container">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-center">About My Photography</h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                    <div>
+                        <p class="text-gray-700 mb-6 text-lg leading-relaxed">
+                            Photography has always been a way for me to slow down and really see the world around me.
+                            What started as a casual interest has grown into a passionate pursuit of capturing moments
+                            that might otherwise go unnoticed.
+                        </p>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            I'm drawn to the intersection of technical precision and creative expression that photography
+                            offers. Whether it's the way light falls across a building, a fleeting expression, or the
+                            patterns found in everyday life, I find endless inspiration in the visual stories around us.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            While not my primary profession, photography complements my technical work beautifully -
+                            both require attention to detail, problem-solving, and the ability to see things from
+                            different perspectives.
+                        </p>
+                    </div>
+
+                    <div class="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
+                        <img
+                                src="/images/photography/about-photographer.jpg"
+                                alt="Photographer at work"
+                                class="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
+
+                <!-- Photography Approach -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {approach.map(item => (
+                            <div class="approach-card text-center">
+                                <div class="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                                        <circle cx="12" cy="13" r="4"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-serif font-semibold mb-3">{item.title}</h3>
+                                <p class="text-gray-600 text-sm">{item.description}</p>
+                            </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment & Technical -->
+    <section class="py-20 bg-gray-50">
+        <div class="container">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-center">Tools & Techniques</h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-serif font-semibold mb-6">Equipment</h3>
+                        <p class="text-gray-600 mb-6">
+                            I believe the best camera is the one you have with you, but I do have some trusted tools
+                            that help me capture the images I envision.
+                        </p>
+                        <ul class="space-y-3">
+                            {equipment.map(item => (
+                                    <li class="flex items-center">
+                                        <svg class="w-4 h-4 mr-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-gray-700">{item}</span>
+                                    </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-serif font-semibold mb-6">Software</h3>
+                        <p class="text-gray-600 mb-6">
+                            While cameras these days produce beautiful pictures and videos on its own, sometimes
+                            some postprocessing is necessary.
+                        </p>
+                        <ul class="space-y-3">
+                            {software.map(item => (
+                                    <li class="flex items-center">
+                                        <svg class="w-4 h-4 mr-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-gray-700">{item}</span>
+                                    </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact for Photography -->
+    <section class="py-20 bg-white">
+        <div class="container">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-3xl font-serif font-bold mb-6">Interested in Working Together?</h2>
+                <p class="text-gray-600 mb-8">
+                    While photography is more of a project and hobby for me, I occasionally take on projects that
+                    align with my interests and schedule. Feel free to reach out if you think we'd be a good fit.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/contact" class="btn bg-accent hover:bg-accent/90 text-white">Get in Touch</a>
+                    <a href="/about" class="btn bg-transparent border-2 border-accent text-accent hover:bg-accent hover:text-white">Learn More About Me</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register GSAP plugins
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero animations
+            gsap.to('#hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' });
+            gsap.to('#hero-subtitle', { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' });
+            gsap.to('#hero-buttons', { opacity: 1, y: 0, duration: 1, delay: 0.6, ease: 'power3.out' });
+
+            // Portfolio categories animation
+            gsap.from('.portfolio-category', {
+                scrollTrigger: {
+                    trigger: '.portfolio-category',
+                    start: 'top 80%',
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.4,
+                stagger: 0.15,
+                ease: 'power2.out'
+            });
+
+            // Approach cards animation
+            gsap.from('.approach-card', {
+                scrollTrigger: {
+                    trigger: '.approach-card',
+                    start: 'top 80%',
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+        });
+    </script>
+</MainLayout>
