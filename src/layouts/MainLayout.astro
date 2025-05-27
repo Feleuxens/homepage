@@ -1,6 +1,8 @@
 ---
 // Main layout component that will be used across all pages
 const { title } = Astro.props;
+import "@fontsource-variable/roboto";
+import "@fontsource-variable/playfair-display";
 import '../styles/global.css';
 
 // Dynamically compute the current year for copyright
@@ -15,11 +17,6 @@ const currentYear = new Date().getFullYear();
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content="DevOps Professional & Pianist offering technical services and music performances" />
     <title>{`${title} | Felix Grüb`}</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
   <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
     <header class="sticky top-0 z-50 bg-white shadow-sm">
@@ -32,8 +29,8 @@ const currentYear = new Date().getFullYear();
             <li><a href="/" class="font-medium hover:text-primary transition">Home</a></li>
             <li><a href="/tech-services" class="font-medium hover:text-primary transition">Tech Services</a></li>
             <li><a href="/music" class="font-medium hover:text-primary transition">Music</a></li>
+            <li><a href="/photography" class="font-medium hover:text-primary transition">Photography</a></li>
             <li><a href="/about" class="font-medium hover:text-primary transition">About</a></li>
-            <li><a href="/portfolio" class="font-medium hover:text-primary transition">Portfolio</a></li>
             <li><a href="/contact" class="font-medium hover:text-primary transition">Contact</a></li>
           </ul>
 
@@ -51,8 +48,8 @@ const currentYear = new Date().getFullYear();
             <li><a href="/" class="block py-2 font-medium hover:text-primary transition">Home</a></li>
             <li><a href="/tech-services" class="block py-2 font-medium hover:text-primary transition">Tech Services</a></li>
             <li><a href="/music" class="block py-2 font-medium hover:text-primary transition">Music</a></li>
+            <li><a href="/photography" class="block py-2 font-medium hover:text-primary transition">Photography</a></li>
             <li><a href="/about" class="block py-2 font-medium hover:text-primary transition">About</a></li>
-            <li><a href="/portfolio" class="block py-2 font-medium hover:text-primary transition">Portfolio</a></li>
             <li><a href="/contact" class="block py-2 font-medium hover:text-primary transition">Contact</a></li>
           </ul>
         </div>
@@ -68,15 +65,18 @@ const currentYear = new Date().getFullYear();
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 class="font-serif text-xl font-semibold mb-4">Felix Grüb</h3>
-            <p class="text-gray-300">DevOps Professional & Pianist</p>
+            <ul class="space-y-2">
+              <li><a href="/impressum" class="text-gray-300 hover:text-white transition">Impressum / Imprint</a></li>
+              <li><a href="/privacy" class="text-gray-300 hover:text-white transition">Datenschutzerklärung / Privacy Notice</a></li>
+            </ul>
           </div>
 
           <div>
             <h3 class="font-serif text-xl font-semibold mb-4">Connect</h3>
             <ul class="space-y-2">
-              <li><a href="#" class="text-gray-300 hover:text-white transition">LinkedIn</a></li>
+              <li><a href="https://www.linkedin.com/in/felixgrueb/" class="text-gray-300 hover:text-white transition">LinkedIn</a></li>
               <li><a href="https://github.com/Feleuxens" class="text-gray-300 hover:text-white transition">GitHub</a></li>
-              <li><a href="#" class="text-gray-300 hover:text-white transition">Instagram</a></li>
+              <li><a href="https://instagram.com/Feleuxens" class="text-gray-300 hover:text-white transition">Instagram</a></li>
             </ul>
           </div>
 
