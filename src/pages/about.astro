@@ -1,32 +1,19 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import "../styles/about.css";
 
 const technicalSkills = [
-  { name: "x", level: 90 },
-  { name: "x", level: 85 },
-  { name: "x", level: 88 },
-  { name: "x", level: 82 },
-  { name: "x", level: 75 }
+  { name: "Linux/System Administration", level: 80 },
+  { name: "Docker/Docker Compose", level: 70 },
+  { name: "Python", level: 75 },
+  { name: "Java", level: 60 },
+  { name: "Kubernetes", level: 50 },
+  { name: "Terraform", level: 50},
+  { name: "Gitlab CI", level: 75},
+  { name: "opnSense", level: 60},
+  { name: "Software Architecture", level: 35}
 ];
 
-const musicalSkills = [
-  { name: "x", level: 95 },
-  { name: "x", level: 80 },
-  { name: "x", level: 70 },
-  { name: "x", level: 85 },
-  { name: "x", level: 90 }
-];
-
-/* Example timeline entry
-{
-  startYear: "",
-  endYear: "0000 or present",
-  title: "",
-  company: "",
-  description: "",
-  type: "tech or music"
-}
-*/
 const timeline: object = [
   {
     startYear: 2023,
@@ -38,10 +25,18 @@ const timeline: object = [
   },
   {
     startYear: 2020,
-    endYear: "present",
-    title: "Test",
-    company: "",
+    endYear: 2024,
+    title: "Bachelor's Degree in Computer Science",
+    company: "University of Stuttgart",
     description: "",
+    type: "tech"
+  },
+  {
+    startYear: 2025,
+    endYear: 2025,
+    title: "Certified Professional for Software Architecture - Foundation Level",
+    company: "iSAQB",
+    description: "Basic Concepts of Software Architecture, Requirements and Constraints, Design and Development, etc.",
     type: "tech"
   },
   {
@@ -49,7 +44,7 @@ const timeline: object = [
     endYear: 2020,
     title: "Music exam in A-levels",
     company: "",
-    description: "Played",
+    description: "Played Clarke Suit in D Major (Bourrée, Ecossaise, Prince of Denmark's March), Rachmaninoff Prelude in C# minor and Neruda Trumpet Concerto in E♭ Major: I. Allegro",
     type: "music"
   },
   {
@@ -92,6 +87,28 @@ function getYearPosition(year) {
   return progress * 100;
 }
 
+function estimateCardHeight(item) {
+  // Base height for title, company, and year badge (in percentage of timeline)
+  let baseHeight = 12;
+
+  if (item.description && item.description.length > 0) {
+    const descriptionLines = Math.ceil(item.description.length / 50);
+    baseHeight += Math.min(descriptionLines * 3, 9);
+  }
+
+  // Add height for long company names
+  if (item.company && item.company.length > 0) {
+    baseHeight += 1;
+  }
+
+  // Add height for long titles
+  if (item.title && item.title.length > 40) {
+    baseHeight += 2;
+  }
+
+  return baseHeight;
+}
+
 // Function to position items based on end year with overlap prevention
 function positionTimelineItems(items) {
   // Sort by end year (descending)
@@ -99,11 +116,13 @@ function positionTimelineItems(items) {
       getEndYear(b.endYear) - getEndYear(a.endYear)
   );
 
-  const cardHeightPercent = 15; // Card height as percentage of timeline
   const cardSpacingPercent = 2; // Minimum gap as percentage
   const usedPositions = [];
 
   sortedItems.forEach(item => {
+    // Calculate this card's estimated height
+    const cardHeight = estimateCardHeight(item);
+
     // Get the exact position that matches year markers
     const endYear = getEndYear(item.endYear);
     let position = getYearPosition(endYear);
@@ -117,9 +136,18 @@ function positionTimelineItems(items) {
       attempts++;
 
       for (const usedPos of usedPositions) {
-        if (Math.abs(position - usedPos) < (cardHeightPercent + cardSpacingPercent)) {
-          // Overlap detected, move card down
-          position = usedPos + cardHeightPercent + cardSpacingPercent;
+        const usedHeight = usedPos.height;
+        const usedTop = usedPos.position;
+        const usedBottom = usedTop + usedHeight;
+
+        const currentTop = position;
+        const currentBottom = position + cardHeight;
+
+        // Check if cards overlap (with spacing buffer)
+        if (currentTop < (usedBottom + cardSpacingPercent) &&
+            currentBottom > (usedTop - cardSpacingPercent)) {
+          // Overlap detected, move card below the overlapping card
+          position = usedBottom + cardSpacingPercent;
           hasOverlap = true;
           break;
         }
@@ -129,7 +157,14 @@ function positionTimelineItems(items) {
     // Store both the year-aligned position (for dot) and adjusted position (for card)
     item.dotPosition = getYearPosition(endYear);
     item.cardPosition = position;
-    usedPositions.push(position);
+    item.estimatedHeight = cardHeight;
+
+    // Track this card's position and dimensions for future overlap checks
+    usedPositions.push({
+      item: item,
+      position: position,
+      height: cardHeight
+    });
   });
 
   return sortedItems;
@@ -157,22 +192,17 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
 ---
 
 <MainLayout title="About Me">
-  <!-- Hero Section -->
   <section class="bg-gray-100 py-20">
     <div class="container">
       <h1 class="section-title text-center mb-12" id="about-title">About Me</h1>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="about-image">
-          <img
-              src="/images/about-me-large.jpg"
-              alt="Your Name"
-              class="rounded-lg shadow-xl w-full"
-          />
+          <img src="/images/me.jpg" alt="Your Name" class="profile-photo" />
         </div>
 
         <div class="about-content space-y-6">
-          <h2 class="font-serif text-3xl font-semibold animate-item">Hello, I'm Your Name</h2>
+          <h2 class="font-serif text-3xl font-semibold animate-item">Hello, I'm Felix</h2>
 
           <p class="text-gray-700 animate-item">
             Some text
@@ -221,23 +251,107 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
 
         <!-- Musical Skills -->
         <div class="skills-category">
-          <h3 class="font-serif text-2xl font-semibold mb-8 text-center">Musical Skills</h3>
+          <h3 class="font-serif text-2xl font-semibold mb-8 text-center">Musical Background</h3>
 
           <div class="space-y-6">
-            {musicalSkills.map(skill => (
-                <div class="skill-item">
-                  <div class="flex justify-between mb-2">
-                    <span class="font-medium">{skill.name}</span>
-                    <span class="text-gray-500">{skill.level}%</span>
-                  </div>
-                  <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                        class="skill-progress bg-secondary h-full rounded-full"
-                        data-level={skill.level}
-                    ></div>
-                  </div>
+            <!-- Piano Card -->
+            <div class="instrument-card group">
+              <div class="instrument-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 19h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  <path d="M8 7v10M12 7v10M16 7v10"/>
+                  <path d="M6 11h12"/>
+                </svg>
+              </div>
+
+              <div class="instrument-content">
+                <div class="instrument-header">
+                  <h4 class="instrument-name">Piano</h4>
+                  <span class="instrument-years">from 2016</span>
                 </div>
-            ))}
+
+                <p class="instrument-description">
+                  Classical and contemporary repertoire with focus on performance and music theory
+                </p>
+                <div class="instrument-highlight">
+                  <strong>Pieces:</strong> Rachmaninoff - Prelude in C# Minor,<br>
+                  Rachmaninoff - Prelude G# Minor,<br>
+                  Schubert - 4 Impromptus, Op. 90, D. 899: No. 2 in E♭ Major
+                </div>
+
+                <div class="instrument-specialties">
+                  <span class="specialty-tag">Classical</span>
+                  <span class="specialty-tag">Contemporary</span>
+                  <span class="specialty-tag">Performance</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trumpet Card -->
+            <div class="instrument-card group">
+              <div class="instrument-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 12h6l2 2v4l-2 2H9l-2-2v-4l2-2z"/>
+                  <path d="M7 12H3a1 1 0 01-1-1V9a1 1 0 011-1h4"/>
+                  <circle cx="15" cy="12" r="1"/>
+                  <circle cx="18" cy="12" r="1"/>
+                  <circle cx="21" cy="12" r="1"/>
+                </svg>
+              </div>
+
+              <div class="instrument-content">
+                <div class="instrument-header">
+                  <h4 class="instrument-name">Trumpet</h4>
+                  <span class="instrument-years">from 2008</span>
+                </div>
+
+                <p class="instrument-description">
+                  Classical trumpet in multiple orchestras as well as solo performances and competitions.
+                </p>
+                <div class="instrument-highlight">
+                  <strong>Pieces:</strong> Neruda - Trumpet Concerto in E♭ major: I. Allegro,<br>
+                  Bach - Weihnachtsoratorium: Großer Herr und starker König,<br>
+                  Albinoni - Concerto in B♭, Op.7 Nr.3: I. Allegro
+                </div>
+
+                <div class="instrument-specialties">
+                  <span class="specialty-tag">Classical</span>
+                  <span class="specialty-tag">Competitions</span>
+                  <span class="specialty-tag">Performance</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Music Theory & General Skills Card -->
+            <div class="instrument-card group">
+              <div class="instrument-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18V5l12-2v13"/>
+                  <circle cx="7" cy="18" r="2" fill="currentColor"/>
+                  <circle cx="19" cy="16.5" r="2" fill="currentColor"/>
+                  <path d="M17 7 L 20 6.5"/>
+                  <circle cx="12.5" cy="16" r="0.5" fill="currentColor" />
+                </svg>
+              </div>
+
+              <div class="instrument-content">
+                <div class="instrument-header">
+                  <h4 class="instrument-name">Music Theory & Skills</h4>
+                  <span class="instrument-years">from 2008</span>
+                </div>
+
+                <p class="instrument-description">
+                  Comprehensive understanding of music theory, composition, and arrangement.
+                </p>
+
+                <div class="instrument-specialties">
+                  <span class="specialty-tag">Theory</span>
+                  <span class="specialty-tag">Sight Reading</span>
+                  <span class="specialty-tag">Arrangement</span>
+                  <span class="specialty-tag">Transcription</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -300,13 +414,23 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
                   <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-primary hover:shadow-lg transition-shadow">
                     <div class="flex justify-between items-center mb-3">
                       <div class="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
-                        {item.startYear} - {item.endYear}
+                        {item.startYear === item.endYear && (
+                            item.startYear
+                        )}
+                        {item.startYear !== item.endYear && (
+                            item.startYear + " - " + item.endYear
+                        )}
                       </div>
 
                       {item.endYear === "present" && (
                           <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
                         Current
                       </span>
+                      )}
+                      {(item.endYear !== item.startYear && item.endYear !== "present") && (
+                          <span class="text-xs text-gray-500">
+                          {item.endYear - item.startYear} years
+                        </span>
                       )}
                     </div>
 
@@ -339,13 +463,23 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
                   <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-secondary hover:shadow-lg transition-shadow">
                     <div class="flex justify-between items-center mb-3">
                       <div class="px-3 py-1 text-sm font-medium bg-secondary/10 text-secondary rounded-full">
-                        {item.startYear} - {item.endYear}
+                        {item.startYear === item.endYear && (
+                            item.startYear
+                        )}
+                        {item.startYear !== item.endYear && (
+                            item.startYear + " - " + item.endYear
+                        )}
                       </div>
 
                       {item.endYear === "present" && (
                           <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
                         Current
                       </span>
+                      )}
+                      {(item.endYear !== item.startYear && item.endYear !== "present") && (
+                          <span class="text-xs text-gray-500">
+                          {item.endYear - item.startYear} years
+                        </span>
                       )}
                     </div>
 
@@ -366,19 +500,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
     <div class="container">
       <h2 class="section-title text-center">Personal Interests</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-        <div class="card p-6 text-center interests-item">
-          <div class="w-16 h-16 mx-auto mb-4 text-primary">
-            <!-- Book Icon -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
-          </div>
-          <h3 class="font-serif text-xl font-semibold mb-3">Reading</h3>
-          <p class="text-gray-600">I enjoy books on technology, music theory, and science fiction.</p>
-        </div>
-
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 interests-items">
         <div class="card p-6 text-center interests-item">
           <div class="w-16 h-16 mx-auto mb-4 text-primary">
             <svg viewBox="0 0 550 550" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
@@ -400,8 +522,20 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
               <line x1="14" y1="1" x2="14" y2="4"></line>
             </svg>
           </div>
-          <h3 class="font-serif text-xl font-semibold mb-3">Coffee</h3>
-          <p class="text-gray-600">Exploring artisanal coffee shops and brewing techniques.</p>
+          <h3 class="font-serif text-xl font-semibold mb-3">Photography?</h3>
+          <p class="text-gray-600">Photography!</p>
+        </div>
+
+        <div class="card p-6 text-center interests-item">
+          <div class="w-16 h-16 mx-auto mb-4 text-primary">
+            <!-- Book Icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-3">Reading</h3>
+          <p class="text-gray-600">I enjoy books on technology, mathematics, physics, and </p>
         </div>
       </div>
     </div>
@@ -452,7 +586,6 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
           start: 'top 80%',
         },
         opacity: 0,
-        x: -50,
         duration: 0.8,
         ease: 'power2.out'
       });
@@ -466,52 +599,102 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
         gsap.to(item, {
           scrollTrigger: {
             trigger: item,
-            start: 'top 90%',
+            start: 'top 98%',
           },
           width: `${level}%`,
-          duration: 1.2,
+          duration: 1,
           ease: 'power2.out'
         });
       });
 
+
+      // Interests items animation
+      document.querySelectorAll('.instrument-card').forEach((item, index) => {
+        gsap.fromTo(item,
+            {
+              opacity: 0,
+              y: 20
+            },
+            {
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 98%',
+                once: true
+              },
+              opacity: 1,
+              y: 0,
+              duration: 0.4,
+              delay: index * 0.2,
+              ease: 'power2.out'
+            }
+        );
+      });
+
       // Timeline animations
       // Tech items animation
-      gsap.from('.tech-item', {
-        scrollTrigger: {
-          trigger: '.timeline-item',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        x: 50,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'power2.out'
+      document.querySelectorAll('.tech-item').forEach((item, index) => {
+        gsap.fromTo(item,
+            {
+              opacity: 0,
+              x: 50
+            },
+            {
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 98%',
+                once: true
+              },
+              opacity: 1,
+              x: 0,
+              duration: 0.4,
+              delay: index * 0.1,
+              ease: 'power2.out'
+            }
+        );
       });
 
       // Music items animation
-      gsap.from('.music-item', {
-        scrollTrigger: {
-          trigger: '.timeline-item',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        x: -50,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'power2.out'
+      document.querySelectorAll('.music-item').forEach((item, index) => {
+        gsap.fromTo(item,
+            {
+              opacity: 0,
+              x: -50
+            },
+            {
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 98%',
+                once: true
+              },
+              opacity: 1,
+              x: 0,
+              duration: 0.8,
+              delay: index * 0.1,
+              ease: 'power2.out'
+            }
+        );
       });
 
       // Interests items animation
-      gsap.from('.interests-item', {
-        scrollTrigger: {
-          trigger: '.interests-item',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        stagger: 0.15,
-        ease: 'power2.out'
+      document.querySelectorAll('.interests-item,.instrument-card').forEach((item, index) => {
+        gsap.fromTo(item,
+            {
+              opacity: 0,
+              y: 20
+            },
+            {
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 98%',
+                once: true
+              },
+              opacity: 1,
+              stagger: 0.3,
+              y: 0,
+              duration: 0.4,
+              ease: 'power2.out'
+            }
+        );
       });
     });
   </script>

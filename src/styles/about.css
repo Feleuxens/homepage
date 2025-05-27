@@ -1,0 +1,137 @@
+@reference "tailwindcss";
+@reference "../styles/global.css";
+
+.instrument-card {
+    @apply bg-white rounded-lg shadow-md p-6 border-l-4 border-secondary transition-all duration-300 hover:shadow-lg hover:border-secondary/80;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.instrument-icon {
+    @apply w-16 h-16 bg-secondary/10 rounded-lg flex items-center justify-center text-secondary flex-shrink-0 transition-colors duration-300;
+}
+
+.group:hover .instrument-icon {
+    @apply bg-secondary/20;
+}
+
+.instrument-icon svg {
+    @apply w-8 h-8;
+}
+
+.instrument-content {
+    @apply flex-grow;
+}
+
+.instrument-header {
+    @apply flex justify-between items-start mb-3 flex-wrap gap-2;
+}
+
+.instrument-name {
+    @apply text-xl font-serif font-semibold text-gray-800;
+}
+
+.instrument-years {
+    @apply text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full;
+}
+
+.instrument-level {
+    @apply flex items-center gap-3 mb-3 flex-wrap;
+}
+
+.level-badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.level-advanced {
+    @apply bg-green-100 text-green-800;
+}
+
+.level-intermediate {
+    @apply bg-blue-100 text-blue-800;
+}
+
+.level-beginner {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.experience-text {
+    @apply text-sm text-gray-600;
+}
+
+.instrument-description {
+    @apply text-gray-700 mb-4 leading-relaxed;
+}
+
+.instrument-highlight {
+    @apply text-sm text-gray-600 mb-4 p-3 bg-secondary/5 rounded-lg border-l-2 border-secondary/20;
+}
+
+.instrument-specialties {
+    @apply flex flex-wrap gap-2;
+}
+
+.specialty-tag {
+    @apply px-2 py-1 text-xs font-medium bg-secondary/10 text-secondary rounded-full;
+}
+
+/* Animation for cards */
+.instrument-card {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .instrument-card {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .instrument-icon {
+        @apply w-12 h-12;
+    }
+
+    .instrument-icon svg {
+        @apply w-6 h-6;
+    }
+
+    .instrument-header {
+        @apply flex-col items-start gap-2;
+    }
+
+    .instrument-level {
+        @apply flex-col items-start gap-2;
+    }
+}
+
+.profile-photo {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border: 4px solid white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-photo:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Container for centering */
+.profile-photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.profile-photo-about:hover {
+    transform: scale(1.02);
+}
