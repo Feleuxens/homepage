@@ -10,7 +10,7 @@ const technicalSkills = [
   { name: "Kubernetes", level: 50 },
   { name: "Terraform", level: 50},
   { name: "Gitlab CI", level: 75},
-  { name: "opnSense", level: 60},
+  { name: "OPNsense", level: 60},
   { name: "Software Architecture", level: 35}
 ];
 
@@ -75,11 +75,11 @@ function getEndYear(endYear) {
 
 // Get timeline range from all years (both start and end)
 const allYears = timeline.flatMap(item => [item.startYear, getEndYear(item.endYear)]);
-const timelineStartYear = Math.min(...allYears);
+const timelineStartYear = 2002; // Math.min(...allYears);
 const timelineEndYear = Math.max(...allYears);
 
 // Fixed timeline height in pixels
-const TIMELINE_HEIGHT = 800;
+const TIMELINE_HEIGHT = 1000;
 
 // Function to calculate position percentage for a given year
 function getYearPosition(year) {
@@ -89,11 +89,11 @@ function getYearPosition(year) {
 
 function estimateCardHeight(item) {
   // Base height for title, company, and year badge (in percentage of timeline)
-  let baseHeight = 12;
+  let baseHeight = 8;
 
   if (item.description && item.description.length > 0) {
     const descriptionLines = Math.ceil(item.description.length / 50);
-    baseHeight += Math.min(descriptionLines * 3, 9);
+    baseHeight += Math.min(descriptionLines * 3, 6.5);
   }
 
   // Add height for long company names
@@ -618,13 +618,13 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
             {
               scrollTrigger: {
                 trigger: item,
-                start: 'top 98%',
+                start: 'top 102%',
                 once: true
               },
               opacity: 1,
               y: 0,
-              duration: 0.4,
-              delay: index * 0.2,
+              duration: 0.2,
+              delay: index * 0.05,
               ease: 'power2.out'
             }
         );
