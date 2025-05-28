@@ -43,8 +43,8 @@ const currentYear = new Date().getFullYear();
         </nav>
 
         <!-- Mobile Navigation Menu (Hidden by default) -->
-        <div class="md:hidden h-0 overflow-hidden transition-all duration-300" id="mobileMenu">
-          <ul class="py-4 space-y-4">
+        <div class="md:hidden h-0 overflow-hidden transition-all duration-150" id="mobileMenu">
+          <ul class="py-3 space-y-3">
             <li><a href="/" class="block py-2 font-medium hover:text-primary transition">Home</a></li>
             <li><a href="/tech-services" class="block py-2 font-medium hover:text-primary transition">Tech Services</a></li>
             <li><a href="/music" class="block py-2 font-medium hover:text-primary transition">Music</a></li>
@@ -104,10 +104,10 @@ const currentYear = new Date().getFullYear();
 
           if (mobileMenu?.classList.contains('h-0')) {
             mobileMenu.classList.remove('h-0');
-            mobileMenu.classList.add('h-64');
+            mobileMenu.classList.add('h-78');
           } else {
             mobileMenu?.classList.add('h-0');
-            mobileMenu?.classList.remove('h-64');
+            mobileMenu?.classList.remove('h-78');
           }
         });
       });
