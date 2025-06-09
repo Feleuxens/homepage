@@ -1,6 +1,8 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css";
+import { Image } from "astro:assets";
+//import meImg from "../../public/images/me.jpg";
 
 const technicalSkills = [
   { name: "Linux/System Administration", level: 80 },
@@ -192,13 +194,14 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
 ---
 
 <MainLayout title="About Me">
-  <section class="bg-gray-100 py-20">
+  <section class="bg-gray-100 pt-24 pb-8">
     <div class="container">
       <h1 class="section-title text-center mb-12" id="about-title">About Me</h1>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
         <div class="about-image justify-self-center">
           <img src="/images/me.jpg" alt="Felix" class="profile-photo" />
+          <!--<Image src={meImg} alt="Felix" class="profile-photo" />-->
         </div>
 
         <div class="about-content space-y-6">
@@ -222,7 +225,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
   </section>
 
   <!-- Skills Section -->
-  <section class="py-20 bg-white">
+  <section class="py-12 bg-white">
     <div class="container">
       <h2 class="section-title text-center">My Skills</h2>
 
@@ -359,7 +362,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
   </section>
 
   <!-- Timeline Section -->
-  <section class="py-20 bg-gray-100">
+  <section class="py-12 bg-gray-100">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl md:text-4xl font-serif font-bold text-center mb-12">My Journey</h2>
 
@@ -496,7 +499,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
   </section>
 
   <!-- Personal Interests -->
-  <section class="py-20 bg-white">
+  <section class="py-12 bg-white">
     <div class="container">
       <h2 class="section-title text-center">Personal Interests</h2>
 
@@ -542,7 +545,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
   </section>
 
   <!-- Call to Action -->
-  <section class="py-20 bg-primary text-white">
+  <section class="py-12 bg-primary text-white">
     <div class="container text-center">
       <h2 class="section-title text-white">Want to Work Together?</h2>
       <p class="max-w-2xl mx-auto mb-10 text-white/90">
