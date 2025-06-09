@@ -3,7 +3,8 @@
 const { title } = Astro.props;
 import "@fontsource-variable/roboto";
 import "@fontsource-variable/playfair-display";
-import '../styles/global.css';
+import "../styles/global.css";
+import "../styles/button.css";
 
 // Dynamically compute the current year for copyright
 const currentYear = new Date().getFullYear();
@@ -19,7 +20,7 @@ const currentYear = new Date().getFullYear();
     <title>{`${title} | Felix Grüb`}</title>
   </head>
   <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
-    <header class="sticky top-0 z-50 bg-white shadow-sm">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div class="container mx-auto px-4 py-4">
         <nav class="flex justify-between items-center">
           <a href="/" class="font-serif text-2xl font-bold">Felix Grüb</a>
