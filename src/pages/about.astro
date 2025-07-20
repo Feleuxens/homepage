@@ -201,7 +201,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
         <div class="about-image justify-self-center">
           <img src="/images/me.jpg" alt="Felix" class="profile-photo" />
-          <!--<Image src={meImg} alt="Felix" class="profile-photo" />-->
+          <!--<SquareImage src={meImg} alt="Felix" class="profile-photo" />-->
         </div>
 
         <div class="about-content space-y-6">
@@ -216,8 +216,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4 animate-item">
-            <a href="/cv" class="btn btn-primary">View My CV</a>
-            <a href="/contact" class="btn btn-secondary">Contact Me</a>
+            <a href="/contact" class="btn secondary">Contact Me</a>
           </div>
         </div>
       </div>
@@ -503,7 +502,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
     <div class="container">
       <h2 class="section-title text-center">Personal Interests</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 interests-items">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 interests-items">
         <div class="card p-6 text-center interests-item">
           <div class="w-16 h-16 mx-auto mb-4 text-primary">
             <svg viewBox="0 0 550 550" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
@@ -516,22 +515,6 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
 
         <div class="card p-6 text-center interests-item">
           <div class="w-16 h-16 mx-auto mb-4 text-primary">
-            <!-- Coffee Icon -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-              <line x1="6" y1="1" x2="6" y2="4"></line>
-              <line x1="10" y1="1" x2="10" y2="4"></line>
-              <line x1="14" y1="1" x2="14" y2="4"></line>
-            </svg>
-          </div>
-          <h3 class="font-serif text-xl font-semibold mb-3">Photography?</h3>
-          <p class="text-gray-600">Photography!</p>
-        </div>
-
-        <div class="card p-6 text-center interests-item">
-          <div class="w-16 h-16 mx-auto mb-4 text-primary">
-            <!-- Book Icon -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -553,7 +536,6 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a href="/contact" class="btn bg-white text-primary hover:bg-gray-100">Contact Me</a>
-        <a href="/cv" class="btn bg-transparent border-2 border-white text-white hover:bg-white/10">View My CV</a>
       </div>
     </div>
   </section>

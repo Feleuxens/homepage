@@ -1,57 +1,39 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import SquareImage from "../components/SquareImage.astro";
+import DynamicGallery from "../components/DynamicGallery.astro";
 
 // Photography categories for portfolio showcase
 const portfolioCategories = [
     {
-        title: "Landscapes",
-        image: "/images/photography/landscapes-sample.jpg",
-        description: "Capturing the beauty of natural environments and scenic vistas"
+        title: "Athletic Excellence",
+        image: "/images/photography/stories/sports.jpg",
+        description: "Competitive sport showcasing athletic intensity and technical precision."
     },
     {
-        title: "Street Photography",
-        image: "/images/photography/street-sample.jpg",
-        description: "Candid moments and urban life through an artistic lens"
+        title: "Companionship",
+        image: "/images/photography/stories/portraits.jpg",
+        description: "Portraits of genuine bond between humans and pets."
     },
     {
-        title: "Portraits",
-        image: "/images/photography/portraits-sample.jpg",
-        description: "Personal and environmental portraits that tell a story"
+        title: "Rural Patchwork",
+        image: "/images/photography/stories/rural.jpg",
+        description: "Revealing geometric patterns of German agricultural landscape."
     },
     {
-        title: "Architecture",
-        image: "/images/photography/architecture-sample.jpg",
-        description: "Exploring lines, forms, and the interaction of light with structures"
+        title: "Family From Above",
+        image: "/images/photography/stories/family2.jpg",
+        description: "Capturing everyday moments from another perspective."
     },
     {
-        title: "Events",
-        image: "/images/photography/events-sample.jpg",
-        description: "Documenting special moments and celebrations"
+        title: "Small Worlds, Wild Lives",
+        image: "/images/photography/stories/nature.jpg",
+        description: "Macro details or larger wildlife, every creature tells its own unique story."
     },
     {
-        title: "Abstract",
-        image: "/images/photography/abstract-sample.jpg",
-        description: "Creative compositions focusing on color, texture, and form"
-    }
-];
-
-// Photography approach/style
-const approach = [
-    {
-        title: "Natural Light",
-        description: "I prefer working with available light to create authentic, warm imagery that feels genuine and unforced."
-    },
-    {
-        title: "Documentary Style",
-        description: "My approach focuses on capturing real moments and genuine emotions as they naturally unfold."
-    },
-    {
-        title: "Artistic Vision",
-        description: "I see photography as a way to share perspectives and find beauty in both ordinary and extraordinary moments."
-    },
-    {
-        title: "Personal Connection",
-        description: "Every photo tells a story, and I strive to create images that resonate on a personal level."
+        title: "Precision in Flight",
+        image: "/images/photography/stories/technology.jpg",
+        description: "Advanced equipment that enables modern aerial photography."
     }
 ];
 
@@ -99,16 +81,17 @@ const software = [
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
                 {portfolioCategories.map(category => (
-                        <div class="portfolio-category group cursor-pointer">
-                            <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden mb-4">
-                                <img
-                                        src={category.image}
-                                        alt={category.title}
-                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        <div class="portfolio-category group">
+                            <div class="bg-gray-200 rounded-lg overflow-hidden mb-4">
+                                <SquareImage
+                                    src={category.image}
+                                    alt={category.title}
+                                    path=`${category.image}`
+                                    square={true}
                                 />
                             </div>
                             <div class="text-center">
-                                <h3 class="text-xl font-serif font-semibold mb-2 group-hover:text-accent transition-colors">{category.title}</h3>
+                                <h3 class="text-xl font-serif font-semibold mb-2">{category.title}</h3>
                                 <p class="text-gray-600 text-sm">{category.description}</p>
                             </div>
                         </div>
@@ -122,44 +105,7 @@ const software = [
         <div class="container">
             <h2 class="section-title text-center">Recent Favorites</h2>
 
-            <!-- Large featured image grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-                <!-- Large featured image -->
-                <div class="lg:col-span-2 lg:row-span-2">
-                    <div class="aspect-square lg:aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
-                        <img
-                                src="/images/photography/featured-1.jpg"
-                                alt="Featured photograph"
-                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                        />
-                    </div>
-                </div>
-
-                <!-- Smaller images -->
-                <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden">
-                    <img
-                            src="/images/photography/featured-2.jpg"
-                            alt="Featured photograph"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                </div>
-
-                <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden">
-                    <img
-                            src="/images/photography/featured-3.jpg"
-                            alt="Featured photograph"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                </div>
-
-                <div class="md:col-span-2 lg:col-span-1 aspect-square bg-gray-200 rounded-lg overflow-hidden">
-                    <img
-                            src="/images/photography/featured-4.jpg"
-                            alt="Featured photograph"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                </div>
-            </div>
+            <DynamicGallery layout="masonry" sortBy="date"/>
         </div>
     </section>
 
@@ -169,48 +115,28 @@ const software = [
             <div class="max-w-4xl mx-auto">
                 <h2 class="section-title text-center">About My Photography</h2>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <!--<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">-->
+                <div class="grid grid-cols-1 lg:grid-cols-1 gap-12 items-center mb-16">
                     <div>
-                        <p class="text-gray-700 mb-6 text-lg leading-relaxed">
-                            Photography has always been a way for me to slow down and really see the world around me.
-                            What started as a casual interest has grown into a passionate pursuit of capturing moments
-                            that might otherwise go unnoticed.
-                        </p>
                         <p class="text-gray-700 mb-6 leading-relaxed">
-                            I'm drawn to the intersection of technical precision and creative expression that photography
-                            offers. Whether it's the way light falls across a building, a fleeting expression, or the
-                            patterns found in everyday life, I find endless inspiration in the visual stories around us.
+                            Photography is a relatively new hobby that allows me to see the world through a different
+                            lens. As a competitive athlete myself, I'm naturally drawn to capturing the intensity and
+                            raw emotions of competitive sports.
                         </p>
                         <p class="text-gray-700 leading-relaxed">
-                            While not my primary profession, photography complements my technical work beautifully -
-                            both require attention to detail, problem-solving, and the ability to see things from
-                            different perspectives.
+                            While photography isn't my primary profession, it beautifully complements my technical work.
+                            Both disciplines demand keen attention to detail, quick problem-solving, and the ability to
+                            anticipate and capture the perfect moment from unique perspectives.
                         </p>
                     </div>
 
-                    <div class="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
+                    <!--<div class="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
                         <img
-                                src="/images/photography/about-photographer.jpg"
+                                src="/images/photography/stories/rural2.jpg"
                                 alt="Photographer at work"
                                 class="w-full h-full object-cover"
                         />
-                    </div>
-                </div>
-
-                <!-- Photography Approach -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {approach.map(item => (
-                            <div class="approach-card text-center">
-                                <div class="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
-                                    <svg class="w-8 h-8 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
-                                        <circle cx="12" cy="13" r="4"/>
-                                    </svg>
-                                </div>
-                                <h3 class="text-lg font-serif font-semibold mb-3">{item.title}</h3>
-                                <p class="text-gray-600 text-sm">{item.description}</p>
-                            </div>
-                    ))}
+                    </div>-->
                 </div>
             </div>
         </div>
@@ -281,6 +207,9 @@ const software = [
     </section>
 
     <script>
+        import { gsap } from "gsap";
+        import { ScrollTrigger} from "gsap/ScrollTrigger";
+
         document.addEventListener('DOMContentLoaded', () => {
             // Register GSAP plugins
             gsap.registerPlugin(ScrollTrigger);
@@ -294,24 +223,11 @@ const software = [
             gsap.from('.portfolio-category', {
                 scrollTrigger: {
                     trigger: '.portfolio-category',
-                    start: 'top 80%',
+                    start: 'top 98%',
                 },
-                y: 30,
+                y: 15,
                 opacity: 0,
-                duration: 0.4,
-                stagger: 0.15,
-                ease: 'power2.out'
-            });
-
-            // Approach cards animation
-            gsap.from('.approach-card', {
-                scrollTrigger: {
-                    trigger: '.approach-card',
-                    start: 'top 80%',
-                },
-                y: 30,
-                opacity: 0,
-                duration: 0.6,
+                duration: 0.25,
                 stagger: 0.1,
                 ease: 'power2.out'
             });

@@ -1,0 +1,141 @@
+---
+import { Image } from "astro:assets";
+import { exifData } from "../data/exif-data";
+
+interface Props {
+    src: ImageMetadata,
+    alt: string,
+    path: string,
+    thumbWidth?: number,
+    thumbHeight?: number,
+    fullWidth?: number,
+    fullHeight?: number,
+    quality?: number,
+    square?: boolean
+}
+
+const {
+    src,
+    alt,
+    path,
+    thumbWidth = 1000,
+    thumbHeight = 1000,
+    fullWidth = 2400,
+    fullHeight = 1600,
+    quality = 90,
+    square = false
+} = Astro.props;
+
+const imageId = `img-${Math.random().toString(36).substring(2, 9)}`;
+---
+<div class={square ? "cursor-pointer aspect-square" : "cursor-pointer"} data-lightbox={imageId}>
+    <Image
+        src={src}
+        alt={alt}
+        width={thumbWidth}
+        height={thumbHeight}
+        quality={quality}
+        decoding="async"
+        loading="lazy"
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        id={`thumbnail-${imageId}`}
+    />
+
+    <Image
+        src={src}
+        alt={alt}
+        width={fullWidth}
+        height={fullHeight}
+        quality={90}
+        decoding="async"
+        loading="lazy"
+        class="hidden"
+        id={`full-${imageId}`}
+    />
+</div>
+
+<script define:vars={{ imageId, alt, exifData, path, fullWidth, fullHeight }}>
+    // Add click handler to this specific image
+    document.querySelector(`[data-lightbox="${imageId}"]`).addEventListener('click', function() {
+        const fullImage = document.getElementById(`full-${imageId}`);
+        const thumbnail = document.getElementById(`thumbnail-${imageId}`);
+        const fullImageSrc = fullImage.src;
+        const thumbnailSrc = thumbnail.src;
+
+        // Create or get lightbox
+        let lightbox = document.getElementById('lightbox');
+        if (!lightbox) {
+            lightbox = createLightbox();
+        }
+
+        // Update lightbox content
+        const lightboxImage = lightbox.querySelector('#lightbox-image');
+        const lightboxDescription = lightbox.querySelector('#lightbox-description');
+
+        lightboxImage.src = thumbnailSrc;
+        lightboxImage.alt = alt;
+        lightboxDescription.textContent = exifData["public" + path]["exif"] ? exifData["public" + path]["exif"] : "No exif data";
+        lightboxDescription.innerHTML += `: <a href="${path}" target="_blank">Original</a>`
+        lightboxImage.height = fullHeight;
+        lightboxImage.width = fullWidth;
+
+        // Show lightbox
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        const loadingSpinner = document.getElementById('loading-spinner');
+        loadingSpinner.classList.remove('hidden');
+        const tempImage = new Image();
+        tempImage.onload = function() {
+            lightboxImage.src = fullImageSrc;
+            loadingSpinner.classList.add('hidden');
+        };
+        tempImage.src = fullImageSrc;
+    });
+
+    function createLightbox() {
+        const lightboxHTML = `
+      <div id="lightbox" class="fixed inset-0 bg-black/95 flex items-center justify-center z-50 hidden">
+        <div class="relative max-w-8xl max-h-full p-4 w-full">
+          <!-- Image container -->
+          <div class="flex flex-col items-center">
+            <img id="lightbox-image" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded-lg">            
+            <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm hidden">
+              <span class="loading-spinner"></span>
+            </div>
+            
+            <!-- Image info -->
+            <div class="mt-2 text-center text-white">
+              <p id="lightbox-description" class="text-gray-200"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+        document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+        const lightbox = document.getElementById('lightbox');
+
+        // Add event listeners
+        lightbox.addEventListener('click', function(e) {
+            closeLightbox();
+        })
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        return lightbox;
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox) {
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
+            const loadingSpinner = lightbox.querySelector('#loading-spinner');
+            loadingSpinner.classList.add('hidden');
+        }
+    }
+</script>

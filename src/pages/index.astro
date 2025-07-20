@@ -1,20 +1,22 @@
 ---
+import { date } from 'astro/zod';
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css"
+
+const currentYear = new Date().getFullYear();
 ---
 
 <MainLayout title="Home">
   <!-- Hero Section -->
   <section class="relative overflow-hidden h-screen">
-    <!-- Background Image with Overlay -->
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/hero-bg.jpg')"></div>
 
     <!-- Hero Content -->
     <div class="container relative z-20 h-full flex items-center justify-center pt-20">
       <div class="text-center text-white">
-        <h1 class="font-serif text-4xl md:text-6xl font-bold mb-4 opacity-90" id="hero-title">Felix Grüb</h1>
-        <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90" id="hero-subtitle">
+        <h1 class="font-serif text-4xl md:text-7xl font-bold mb-4 opacity-90" id="hero-title">Felix Grüb</h1>
+        <p class="font-serif text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90" id="hero-subtitle">
           Technical Solutions & Musical Performances
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-90" id="hero-buttons">
@@ -87,9 +89,8 @@ import "../styles/about.css"
   <section class="py-12 bg-gray-100">
     <div class="container">
       <h2 class="section-title text-center">Featured Work</h2>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-        <!-- Portfolio Item 1 -->
+      <h3 class="text-2xl text-center">Coming soon...</h3>
+      <!--<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
         <div class="card portfolio-item">
           <div class="aspect-video bg-gray-200 overflow-hidden">
             <img
@@ -99,27 +100,11 @@ import "../styles/about.css"
             />
           </div>
           <div class="p-6">
-            <h3 class="font-serif text-xl font-semibold mb-2">Cloud Migration</h3>
-            <p class="text-gray-600">Complete AWS infrastructure implementation</p>
+            <h3 class="font-serif text-xl font-semibold mb-2">System Administration</h3>
+            <p class="text-gray-600"></p>
           </div>
         </div>
 
-        <!-- Portfolio Item 2 -->
-        <div class="card portfolio-item">
-          <div class="aspect-video bg-gray-200 overflow-hidden">
-            <img
-              src="/images/portfolio-2.jpg"
-              alt="Wedding Performance"
-              class="w-full h-full object-cover transition duration-300 hover:scale-105"
-            />
-          </div>
-          <div class="p-6">
-            <h3 class="font-serif text-xl font-semibold mb-2">Wedding Performance</h3>
-            <p class="text-gray-600">Classical piano at The Grand Hotel</p>
-          </div>
-        </div>
-
-        <!-- Portfolio Item 3 -->
         <div class="card portfolio-item">
           <div class="aspect-video bg-gray-200 overflow-hidden">
             <img
@@ -130,10 +115,25 @@ import "../styles/about.css"
           </div>
           <div class="p-6">
             <h3 class="font-serif text-xl font-semibold mb-2">CI/CD Architecture</h3>
-            <p class="text-gray-600">Automated deployment pipeline for fintech client</p>
+            <p class="text-gray-600">Automated deployment pipeline of Keycloak</p>
           </div>
         </div>
-      </div>
+
+        <div class="card portfolio-item">
+          <div class="aspect-video bg-gray-200 overflow-hidden">
+            <img
+                src="/images/portfolio-2.jpg"
+                alt="Wedding Performance"
+                class="w-full h-full object-cover transition duration-300 hover:scale-105"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="font-serif text-xl font-semibold mb-2">Wedding Performance</h3>
+            <p class="text-gray-600">Soundtrack and modern music with self-arranged playback</p>
+          </div>
+        </div>
+      </div>-->
+    </div>
   </section>
 
   <!-- About Preview Section -->
@@ -147,14 +147,13 @@ import "../styles/about.css"
         <div class="about-content">
           <h2 class="section-title">About Me</h2>
           <p class="text-gray-600 mb-6">
-            I combine technical expertise in DevOps and cloud infrastructure with classical piano training, offering a unique blend of services to diverse clients.
+            I love variety and have a whole range of different interests. This allows me to combine different perspectives and solve problems with a unique approach.
           </p>
           <p class="text-gray-600 mb-8">
-            With over X years in the IT industry and a lifelong passion for music, I bring both analytical precision and creative expression to everything I do.
+            With over { currentYear-2022 } years in the IT industry and a lifelong passion for music, I bring both analytical precision and creative expression to everything I do.
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
             <a href="/about" class="btn primary">Learn More About Me</a>
-            <a href="/cv" class="btn secondary-transparent">View My CV</a>
           </div>
         </div>
       </div>
