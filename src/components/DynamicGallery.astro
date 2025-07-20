@@ -87,7 +87,7 @@ const galleryId = `gallery-${Math.random().toString(36).substring(2, 9)}`;
         <div class="masonry-container">
             <div class="masonry-sizer w-1/3"></div>
             {displayImages.map((image, index) => (
-                <div class={`masonry-item p-1 ${getMasonrySizeClass(index, image.aspectRatio)}`}>
+                <div class={`masonry-item ${getMasonrySizeClass(index, image.aspectRatio)} group p-1 overflow-hidden`}>
                     <SquareImage
                         src={image.src}
                         alt={`Photo ${index + 1}`}
