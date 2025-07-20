@@ -25,3 +25,4 @@ pnpm-debug.log*
 .vscode
 
 public/images/photography
+src/data/exif-data.js  # is generated on startup

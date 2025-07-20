@@ -5,22 +5,13 @@ import MainLayout from '../layouts/MainLayout.astro';
 const services = [
     {
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 19c-5 0-9-3-9-9s4-9 9-9 9 4 9 9-4 9-9 9"/>
-      <path d="M9 12l2 2 4-4"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 12l9 0" />
+      <path d="M12 15L17 12L12 9"/>
     </svg>`,
         title: "DevOps Implementation",
         description: "Complete DevOps transformation including CI/CD pipeline setup, automation, and infrastructure as code.",
         features: ["CI/CD Pipeline Design", "Infrastructure Automation", "Monitoring & Alerting", "Security Integration"]
-    },
-    {
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
-      <polyline points="17,21 17,13 7,13 7,21"/>
-      <polyline points="7,3 7,8 15,8"/>
-    </svg>`,
-        title: "Cloud Architecture",
-        description: "Design and implement scalable, secure cloud infrastructure tailored to your business needs.",
-        features: ["AWS/Azure/GCP Setup", "Scalability Planning", "Cost Optimization", "Disaster Recovery"]
     },
     {
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -40,19 +31,29 @@ const services = [
         title: "Containerization",
         description: "Docker and Kubernetes implementation for scalable, portable application deployment.",
         features: ["Docker Implementation", "Kubernetes Orchestration", "Container Security", "Microservices Architecture"]
+    },
+    {
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+      <polyline points="17,21 17,13 7,13 7,21"/>
+      <polyline points="7,3 7,8 15,8"/>
+    </svg>`,
+        title: "Cloud Architecture",
+        description: "Design and implement scalable, secure cloud infrastructure tailored to your business needs.",
+        features: ["Scalability Planning", "Cost Optimization", "Disaster Recovery"]
     }
 ];
 
 // Technologies/tools
 const technologies = [
-    { name: "AWS", level: 90 },
-    { name: "Docker", level: 85 },
-    { name: "Kubernetes", level: 80 },
-    { name: "Terraform", level: 85 },
-    { name: "Jenkins", level: 85 },
-    { name: "GitLab CI", level: 90 },
-    { name: "Ansible", level: 80 },
-    { name: "Prometheus", level: 75 }
+    { name: "Docker/Docker Compose", level: 85 },
+    { name: "Python", level: 80 },
+    { name: "Wireguard/Tailscale", level: 90 },
+    { name: "Keycloak/OpenID Connect", level: 65 },
+    { name: "GitLab CI", level: 75 },
+    { name: "Grafana + Prometheus", level: 75 },
+    { name: "Rust", level: 55 },
+    { name: "OPNsense", level: 40 }
 ];
 
 // Process steps
@@ -93,7 +94,7 @@ const process = [
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-90" id="hero-buttons">
                     <a href="/contact" class="btn primary">Start Your Project</a>
-                    <a href="/portfolio" class="btn primary-transparent">View Case Studies</a>
+                    <!--<a href="/portfolio" class="btn primary-transparent">View Case Studies</a>-->
                 </div>
             </div>
         </div>
@@ -173,7 +174,7 @@ const process = [
     </section>
 
     <!-- Why Choose Me Section -->
-    <section class="py-12 bg-gray-50">
+    <!--<section class="py-12 bg-gray-50">
         <div class="container">
             <div class="max-w-4xl mx-auto">
                 <h2 class="section-title text-center">Why Choose My Services</h2>
@@ -211,9 +212,8 @@ const process = [
                 </div>
             </div>
         </div>
-    </section>
+    </section>-->
 
-    <!-- CTA Section -->
     <section class="py-12 bg-primary text-white">
         <div class="container text-center">
             <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">Ready to Transform Your Infrastructure?</h2>
