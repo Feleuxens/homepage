@@ -1,4 +1,4 @@
-FROM node:22-alpine as build
+FROM node:22-alpine AS build
 LABEL authors="Feleuxens"
 
 WORKDIR /app
@@ -13,23 +13,23 @@ COPY . .
 
 RUN npm run build
 
-RUN chown astro:nodejs /app
-
 # Production stage
 FROM nginx:alpine
 
 RUN addgroup -g 1000 -S astro && \
-    adduser -S astro -u 1000 -G astro \
+    adduser -S astro -u 1000 -G astro
 
-COPY --chown astro:astro nginx.conf /etc/nginx/
+RUN apk add --no-cache dumb-init
+
+COPY nginx.conf /etc/nginx/
 
 RUN chown -R astro:astro /usr/share/nginx && \
     chown -R astro:astro /var/cache/nginx && \
     chown -R astro:astro /var/log/nginx && \
-    chown -R astro:astro /etc/nginx/ \
+    chown -R astro:astro /etc/nginx/
 
 RUN touch /var/run/nginx.pid && \
-    chown -R nginx_app:nginx_app /var/run/nginx.pid \
+    chown -R astro:astro /var/run/nginx.pid
 
 COPY --from=build --chown=astro:astro /app/dist /usr/share/nginx/html
 
