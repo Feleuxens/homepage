@@ -37,8 +37,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
-            ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.registry }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.registry }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
