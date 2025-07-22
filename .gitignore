@@ -24,4 +24,5 @@ pnpm-debug.log*
 .idea/
 .vscode
 
-src/data/exif-data.js  # is generated on startup
+# is generated on startup
+src/data/exif-data.js
