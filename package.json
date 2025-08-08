@@ -19,8 +19,12 @@
     "chokidar": "^4.0.3",
     "exifreader": "^4.31.1",
     "gsap": "^3.13.0",
+    "packery": "^3.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.7"
+  },
+  "devDependencies": {
+    "@types/packery": "^1.4.37"
   }
 }
