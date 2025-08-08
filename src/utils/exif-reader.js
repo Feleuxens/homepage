@@ -91,7 +91,7 @@ async function extractExifData(imagePath) {
             longitude: getTag('GPSLongitude'),
             height: getTag('Image Height').replace('px', ''),
             width: getTag('Image Width').replace('px', ''),
-            aspectRatio: getTag('Image Width').replace('px', '') / getTag('Image Height').replace('px', '') || 1
+            aspectRatio: getTag('Image Height').replace('px', '') / getTag('Image Width').replace('px', '') || 1
         };
 
         // Filter out null values

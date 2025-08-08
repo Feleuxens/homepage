@@ -6,10 +6,8 @@ interface Props {
     src: ImageMetadata,
     alt: string,
     path: string,
-    thumbWidth?: number,
-    thumbHeight?: number,
-    fullWidth?: number,
-    fullHeight?: number,
+    size?: number,
+    fullSize?: number,
     quality?: number,
     square?: boolean
 }
@@ -18,13 +16,29 @@ const {
     src,
     alt,
     path,
-    thumbWidth = 1000,
-    thumbHeight = 1000,
-    fullWidth = 2400,
-    fullHeight = 1600,
+    size = 750,
+    fullSize = 1600,
     quality = 90,
     square = false
 } = Astro.props;
+
+const aspectRatio: number = exifData["public" + path].aspectRatio;
+let thumbWidth;
+let thumbHeight;
+let fullWidth;
+let fullHeight;
+
+if (aspectRatio >= 1) {  // landscape
+    thumbWidth = size;
+    thumbHeight = size / aspectRatio;
+    fullHeight = fullSize;
+    fullWidth = size * aspectRatio;
+} else {
+    thumbWidth = size;
+    thumbHeight = size / aspectRatio;
+    fullWidth = fullSize;
+    fullHeight = size / aspectRatio;
+}
 
 const imageId = `img-${Math.random().toString(36).substring(2, 9)}`;
 ---
