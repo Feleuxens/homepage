@@ -58,6 +58,16 @@ const getMasonrySizeClass = (index: number, aspectRatio?: number) => {
     return 'w-1/3';
 };
 
+const getMasonryAspectRatio = (index: number, aspectRatio?: number) => {
+    if (!aspectRatio || aspectRatio <= 0.9) {
+        return "aspect-[3/2]";
+    } else if (aspectRatio >= 1.1) {
+        return "aspect-[2/3]";
+    } else {
+        return "aspect-square";
+    }
+}
+
 // Get responsive width for preserving aspect ratio
 const getImageSize = (layoutType: string, index: number, aspectRatio?: number) => {
     if (layoutType === 'masonry') {
@@ -73,6 +83,80 @@ const getImageSize = (layoutType: string, index: number, aspectRatio?: number) =
 // Generate unique gallery ID for this instance
 const galleryId = `gallery-${Math.random().toString(36).substring(2, 9)}`;
 ---
+<style>
+    /* Grid layout with preserved aspect ratios */
+    .dynamic-gallery[data-layout="grid"] .grid {
+        align-items: start; /* Align items to top */
+    }
+
+
+
+    /* Responsive size adjustments for masonry-mosaic */
+    @media (max-width: 768px) {
+        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-full,
+        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-2/3 {
+        width: 100% !important; /* Full width on mobile */
+    }
+
+        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-1/2 {
+        width: 50% !important; /* Half width on mobile */
+    }
+
+        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-1/3 {
+        width: 50% !important; /* Bigger on mobile */
+    }
+    }
+
+    @media (max-width: 480px) {
+        .dynamic-gallery[data-layout="masonry"] .masonry-item {
+            width: 100% !important; /* All full width on small mobile */
+        }
+    }
+
+    /* Ensure images in preserved aspect ratio mode look good */
+    .dynamic-gallery .portfolio-image:not(.aspect-square) {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dynamic-gallery .portfolio-image:not(.aspect-square) > div:first-child {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Smooth loading animation */
+    .dynamic-gallery .portfolio-image {
+        opacity: 0;
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .dynamic-gallery .portfolio-image:nth-child(1) { animation-delay: 0.1s; }
+    .dynamic-gallery .portfolio-image:nth-child(2) { animation-delay: 0.2s; }
+    .dynamic-gallery .portfolio-image:nth-child(3) { animation-delay: 0.3s; }
+    .dynamic-gallery .portfolio-image:nth-child(4) { animation-delay: 0.4s; }
+    .dynamic-gallery .portfolio-image:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .image-wrapper {
+        overflow: hidden;
+    }
+    .image-wrapper :global(img) {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
 
 <div class={`dynamic-gallery ${galleryId}`} data-layout={layout}>
 
@@ -81,7 +165,7 @@ const galleryId = `gallery-${Math.random().toString(36).substring(2, 9)}`;
         <div class="masonry-container">
             <div class="masonry-sizer w-1/3"></div>
             {displayImages.map((image, index) => (
-                <div class={`masonry-item ${getMasonrySizeClass(index, image.aspectRatio)} group p-1 overflow-hidden`}>
+                <div class={`masonry-item ${getMasonrySizeClass(index, image.aspectRatio)} ${getMasonryAspectRatio(index, image.aspectRatio)} group p-1 overflow-hidden image-wrapper`}>
                     <SquareImage
                         src={image.src}
                         alt={`Photo ${index + 1}`}
@@ -110,83 +194,21 @@ const galleryId = `gallery-${Math.random().toString(36).substring(2, 9)}`;
 </div>
 
 {(layout === 'masonry') && (
-        <script src="https://unpkg.com/packery@3/dist/packery.pkgd.min.js" />
 <script>
     // Initialize Masonry for both masonry layouts
+    import Packery from "packery";
+
+    const masonryContainer = document.querySelector('.masonry-container');
+    if (masonryContainer) {
+        new Packery(masonryContainer, {
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-sizer',
+            percentPosition: true,
+            fitWidth: true,
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        const masonryContainer = document.querySelector('.masonry-container');
-        if (masonryContainer) {
-            new Packery(masonryContainer, {
-                itemSelector: '.masonry-item',
-                columnWidth: '.masonry-sizer',
-                percentPosition: true,
-            });
-        }
+
     });
 </script>)}
-
-<style>
-/* Grid layout with preserved aspect ratios */
-.dynamic-gallery[data-layout="grid"] .grid {
-    align-items: start; /* Align items to top */
-    }
-
-
-
-/* Responsive size adjustments for masonry-mosaic */
-@media (max-width: 768px) {
-    .dynamic-gallery[data-layout="masonry"] .masonry-item.w-full,
-    .dynamic-gallery[data-layout="masonry"] .masonry-item.w-2/3 {
-        width: 100% !important; /* Full width on mobile */
-    }
-
-    .dynamic-gallery[data-layout="masonry"] .masonry-item.w-1/2 {
-        width: 50% !important; /* Half width on mobile */
-    }
-
-    .dynamic-gallery[data-layout="masonry"] .masonry-item.w-1/3 {
-        width: 50% !important; /* Bigger on mobile */
-        }
-    }
-
-@media (max-width: 480px) {
-    .dynamic-gallery[data-layout="masonry"] .masonry-item {
-        width: 100% !important; /* All full width on small mobile */
-        }
-    }
-
-/* Ensure images in preserved aspect ratio mode look good */
-.dynamic-gallery .portfolio-image:not(.aspect-square) {
-    display: flex;
-    flex-direction: column;
-    }
-
-.dynamic-gallery .portfolio-image:not(.aspect-square) > div:first-child {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    }
-
-/* Smooth loading animation */
-.dynamic-gallery .portfolio-image {
-    opacity: 0;
-    animation: fadeInUp 0.6s ease forwards;
-    }
-
-.dynamic-gallery .portfolio-image:nth-child(1) { animation-delay: 0.1s; }
-.dynamic-gallery .portfolio-image:nth-child(2) { animation-delay: 0.2s; }
-.dynamic-gallery .portfolio-image:nth-child(3) { animation-delay: 0.3s; }
-.dynamic-gallery .portfolio-image:nth-child(4) { animation-delay: 0.4s; }
-.dynamic-gallery .portfolio-image:nth-child(5) { animation-delay: 0.5s; }
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-        }
-    }
-</style>
