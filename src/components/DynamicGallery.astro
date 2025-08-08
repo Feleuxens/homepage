@@ -52,7 +52,7 @@ const displayImages = maxImages ? sortedImages.slice(0, maxImages) : sortedImage
 
 const getMasonrySizeClass = (index: number, aspectRatio?: number) => {
     // vertical images should always have less horizontal space
-    if (aspectRatio && aspectRatio < 1.1) return 'w-1/3';
+    if (aspectRatio && aspectRatio > 1) return 'w-1/3';
 
     if (index === 0 || index % 4 === 0) return 'w-2/3';
     return 'w-1/3';

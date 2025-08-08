@@ -28,11 +28,11 @@ let thumbHeight;
 let fullWidth;
 let fullHeight;
 
-if (aspectRatio >= 1) {  // landscape
+if (aspectRatio >= 1) {  // portrait
     thumbWidth = size;
     thumbHeight = size / aspectRatio;
-    fullHeight = fullSize;
-    fullWidth = size * aspectRatio;
+    fullWidth = fullSize;
+    fullHeight = size / aspectRatio;
 } else {
     thumbWidth = size;
     thumbHeight = size / aspectRatio;
