@@ -2,7 +2,7 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css";
 import { Image } from "astro:assets";
-//import meImg from "../../public/images/me.jpg";
+import meImg from "../../public/images/me.jpg";
 
 const technicalSkills = [
   { name: "Linux/System Administration", level: 80 },
@@ -200,8 +200,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
         <div class="about-image justify-self-center">
-          <img src="/images/me.jpg" alt="Felix" class="profile-photo" width="500" height="500" />
-          <!--<SquareImage src={meImg} alt="Felix" class="profile-photo" />-->
+          <Image src={meImg} alt="Felix" class="profile-photo" width="500" height="500" />
         </div>
 
         <div class="about-content space-y-6">
