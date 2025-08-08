@@ -3,36 +3,50 @@ import MainLayout from '../layouts/MainLayout.astro';
 import SquareImage from "../components/SquareImage.astro";
 import DynamicGallery from "../components/DynamicGallery.astro";
 
+import athleticPhoto from "../../public/images/photography/stories/sports.jpg"
+import companionshipPhoto from "../../public/images/photography/stories/portraits.jpg"
+import ruralPhoto from "../../public/images/photography/stories/rural.jpg"
+import familyPhoto from "../../public/images/photography/stories/family.jpg"
+import naturePhoto from "../../public/images/photography/stories/nature.jpg"
+import technologyPhoto from "../../public/images/photography/stories/technology.jpg"
+
+
 // Photography categories for portfolio showcase
 const portfolioCategories = [
     {
         title: "Athletic Excellence",
-        image: "/images/photography/stories/sports.jpg",
+        image: athleticPhoto,
+        path: "/images/photography/stories/sports.jpg",
         description: "Competitive sport showcasing athletic intensity and technical precision."
     },
     {
         title: "Companionship",
-        image: "/images/photography/stories/portraits.jpg",
+        image: companionshipPhoto,
+        path: "/images/photography/stories/portraits.jpg",
         description: "Portraits of genuine bond between humans and pets."
     },
     {
         title: "Rural Patchwork",
-        image: "/images/photography/stories/rural.jpg",
+        image: ruralPhoto,
+        path: "/images/photography/stories/rural.jpg",
         description: "Revealing geometric patterns of German agricultural landscape."
     },
     {
         title: "Family From Above",
-        image: "/images/photography/stories/family.jpg",
+        image: familyPhoto,
+        path: "/images/photography/stories/family.jpg",
         description: "Capturing everyday moments from another perspective."
     },
     {
         title: "Small Worlds, Wild Lives",
-        image: "/images/photography/stories/nature.jpg",
+        image: naturePhoto,
+        path: "/images/photography/stories/nature.jpg",
         description: "Macro details or larger wildlife, every creature tells its own unique story."
     },
     {
         title: "Precision in Flight",
-        image: "/images/photography/stories/technology.jpg",
+        image: technologyPhoto,
+        path: "/images/photography/stories/technology.jpg",
         description: "Advanced equipment that enables modern aerial photography."
     }
 ];
@@ -86,7 +100,7 @@ const software = [
                                 <SquareImage
                                     src={category.image}
                                     alt={category.title}
-                                    path=`${category.image}`
+                                    path=`${category.path}`
                                     square={true}
                                 />
                             </div>
