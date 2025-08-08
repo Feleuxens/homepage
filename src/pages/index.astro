@@ -2,15 +2,22 @@
 import { date } from 'astro/zod';
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css"
+import {Image} from "astro:assets";
+import meImg from "../../public/images/me.jpg";
+import backgroundImg from "../../public/images/hero-bg.jpg";
 
 const currentYear = new Date().getFullYear();
 ---
+<style define:vars="{{ backgroundUrl }}">
+  #background-div {
+  }
+</style>
 
 <MainLayout title="Home">
   <!-- Hero Section -->
   <section class="relative overflow-hidden h-screen">
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/hero-bg.jpg')"></div>
+    <div class="absolute inset-0 bg-cover bg-center" style={`background-image: url(${backgroundImg.src});`}></div>
 
     <!-- Hero Content -->
     <div class="container relative z-20 h-full flex items-center justify-center pt-20">
@@ -141,7 +148,7 @@ const currentYear = new Date().getFullYear();
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="about-image">
-          <img src="/images/me.jpg" alt="Felix" class="max-w-md mx-auto profile-photo" width="500" height="500" />
+          <Image src={meImg} alt="Felix" class="profile-photo" width="500" height="500" />
         </div>
 
         <div class="about-content">
