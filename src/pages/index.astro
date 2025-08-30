@@ -2,9 +2,11 @@
 import { date } from 'astro/zod';
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css"
-import {Image} from "astro:assets";
+import { Image } from "astro:assets";
 import meImg from "../../public/images/me.jpg";
 import backgroundImg from "../../public/images/hero-bg.jpg";
+import weddingImg from "../../public/images/wedding1.jpg";
+import SquareImage from "../components/SquareImage.astro";
 
 const currentYear = new Date().getFullYear();
 ---
@@ -87,54 +89,20 @@ const currentYear = new Date().getFullYear();
     </div>
   </section>
 
-  <!-- Portfolio Preview -->
   <section class="py-12 bg-gray-100">
     <div class="container">
       <h2 class="section-title text-center">Featured Work</h2>
-      <h3 class="text-2xl text-center">Coming soon...</h3>
-      <!--<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-        <div class="card portfolio-item">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div class="card portfolio-item sm:col-span-2 lg:col-span-1 lg:-col-end-2">
           <div class="aspect-video bg-gray-200 overflow-hidden">
-            <img
-              src="/images/portfolio-1.jpg"
-              alt="Cloud Infrastructure Project"
-              class="w-full h-full object-cover transition duration-300 hover:scale-105"
-            />
-          </div>
-          <div class="p-6">
-            <h3 class="font-serif text-xl font-semibold mb-2">System Administration</h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div>
-
-        <div class="card portfolio-item">
-          <div class="aspect-video bg-gray-200 overflow-hidden">
-            <img
-              src="/images/portfolio-3.jpg"
-              alt="CI/CD Pipeline"
-              class="w-full h-full object-cover transition duration-300 hover:scale-105"
-            />
-          </div>
-          <div class="p-6">
-            <h3 class="font-serif text-xl font-semibold mb-2">CI/CD Architecture</h3>
-            <p class="text-gray-600">Automated deployment pipeline of Keycloak</p>
-          </div>
-        </div>
-
-        <div class="card portfolio-item">
-          <div class="aspect-video bg-gray-200 overflow-hidden">
-            <img
-                src="/images/portfolio-2.jpg"
-                alt="Wedding Performance"
-                class="w-full h-full object-cover transition duration-300 hover:scale-105"
-            />
+            <Image src={weddingImg} alt="Wedding performance" width="750" height="500" />
           </div>
           <div class="p-6">
             <h3 class="font-serif text-xl font-semibold mb-2">Wedding Performance</h3>
             <p class="text-gray-600">Soundtrack and modern music with self-arranged playback</p>
           </div>
         </div>
-      </div>-->
+      </div>
     </div>
   </section>
 
