@@ -10,6 +10,10 @@ import familyPhoto from "../../public/images/photography/stories/family.jpg"
 import naturePhoto from "../../public/images/photography/stories/nature.jpg"
 import technologyPhoto from "../../public/images/photography/stories/technology.jpg"
 
+import photographer from "../../public/images/photographer1.jpg"
+import weddingImg from "../../public/images/wedding1.jpg";
+import {Image} from "astro:assets";
+
 
 // Photography categories for portfolio showcase
 const portfolioCategories = [
@@ -130,8 +134,7 @@ const software = [
             <div class="max-w-4xl mx-auto">
                 <h2 class="section-title text-center">About My Photography</h2>
 
-                <!--<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">-->
-                <div class="grid grid-cols-1 lg:grid-cols-1 gap-12 items-center mb-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
                     <div>
                         <p class="text-gray-700 mb-6 leading-relaxed">
                             Photography is a relatively new hobby that allows me to see the world through a different
@@ -145,13 +148,9 @@ const software = [
                         </p>
                     </div>
 
-                    <!--<div class="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
-                        <img
-                                src="/images/photography/stories/rural2.jpg"
-                                alt="Photographer at work"
-                                class="w-full h-full object-cover"
-                        />
-                    </div>-->
+                    <div class="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
+                        <Image src={photographer} alt="Wedding performance" width="750" height="500" class="w-full h-full object-cover" />
+                    </div>
                 </div>
             </div>
         </div>
