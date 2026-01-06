@@ -4,18 +4,14 @@
 @theme {
   --color-primary: #3a5db8;
   --color-secondary: #5a287d;
-  --color-accent: #b84411;
-  --color-dark: #232b38;
+  --color-accent: #fb8b24;
+  --color-dark: #23272e;
 }
 
 /*noinspection CssInvalidAtRule*/
 @theme {
   --font-sans: 'Roboto Variable', 'sans-serif';
   --font-serif: 'Playfair Display Variable', 'serif';
-}
-
-h1,h2,h3,h4,h5,h6 {
-  @apply font-serif font-semibold;
 }
 
 /*noinspection CssInvalidAtRule*/

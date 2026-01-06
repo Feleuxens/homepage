@@ -1,12 +1,10 @@
 ---
-import { date } from 'astro/zod';
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css"
 import { Image } from "astro:assets";
 import meImg from "../../public/images/me.jpg";
 import backgroundImg from "../../public/images/hero-bg.jpg";
 import weddingImg from "../../public/images/wedding1.jpg";
-import SquareImage from "../components/SquareImage.astro";
 
 const currentYear = new Date().getFullYear();
 ---
@@ -18,9 +16,9 @@ const currentYear = new Date().getFullYear();
 
     <!-- Hero Content -->
     <div class="container relative z-20 h-full flex items-center justify-center pt-20">
-      <div class="text-center text-white">
-        <h1 class="font-serif text-4xl md:text-7xl font-bold mb-4 opacity-90" id="hero-title">Felix Grüb</h1>
-        <p class="font-serif text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90" id="hero-subtitle">
+      <div class="text-center">
+        <h1 class="text-4xl md:text-7xl mb-4 opacity-90 text-white" id="hero-title">Felix Grüb</h1>
+        <p class="font-serif text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90 text-white" id="hero-subtitle">
           Technical Solutions, Musical Performances & Photography
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-90" id="hero-buttons">
@@ -99,7 +97,7 @@ const currentYear = new Date().getFullYear();
             <Image src={weddingImg} alt="Wedding performance" width="750" height="500" />
           </div>
           <div class="p-6">
-            <h3 class="font-serif text-xl font-semibold mb-2">Wedding Performance</h3>
+            <h3 class="text-xl mb-2">Wedding Performance</h3>
             <p class="text-gray-600">Soundtrack and modern music with self-arranged playback</p>
           </div>
         </div>
