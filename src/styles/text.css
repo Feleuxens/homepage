@@ -1,0 +1,12 @@
+@reference "../styles/global.css";
+
+
+@layer base {
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-serif font-semibold;
+    }
+
+    p {
+        @apply font-sans text-gray-600;
+    }
+}
