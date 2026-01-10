@@ -1,41 +1,46 @@
 @reference "../styles/global.css";
 
-.btn {
-    @apply inline-block px-5 py-3 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2;
-}
+@layer components {
+    .btn {
+        @apply inline-block px-5 py-3 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
 
-.btn.primary {
-    @apply bg-primary hover:bg-primary/90 text-white focus:ring-primary/50;
-}
+    .btn.theme {
+        @apply text-white;
+        background-color: var(--theme-color);
+        &:hover {
+            @media (hover: hover) {
+                background-color: color-mix(in oklab, var(--theme-color) 90%, transparent);
+            }
+        }
+    }
 
-.btn.primary-transparent {
-    @apply bg-transparent border-2 border-primary hover:bg-primary/90 text-primary hover:text-white focus:ring-primary/50;
-}
+    .btn.theme-transparent {
+        @apply bg-transparent border-2 hover:text-white;
+        color: var(--theme-color);
+        border-color: var(--theme-color);
+        &:hover {
+            @media (hover: hover) {
+                background-color: color-mix(in oklab, var(--theme-color) 90%, transparent);
+            }
+        }
+    }
 
-.btn.secondary {
-    @apply bg-secondary border-2 border-secondary text-white hover:bg-secondary/90 hover:text-white focus:ring-secondary/50;
-}
+    .btn.white {
+        @apply  bg-white hover:bg-gray-100/90  focus:ring-gray-100/50;
+        color: var(--theme-color);
+    }
 
-.btn.secondary-transparent {
-    @apply bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/90 hover:text-white focus:ring-secondary/50;
-}
+    .btn.white-transparent {
+        @apply bg-transparent border-2 border-white hover:bg-white/90 text-white;
+        &:hover {
+            @media (hover: hover) {
+                color: var(--theme-color);
+            }
+        }
+    }
 
-.btn.accent {
-    @apply bg-accent hover:bg-accent/90 text-white focus:ring-accent/50;
-}
-
-.btn.accent-transparent {
-    @apply bg-transparent border-2 border-accent hover:bg-accent/90 text-accent hover:text-white focus:ring-accent/50;
-}
-
-.btn.white {
-    @apply bg-white hover:bg-gray-100/90 text-primary focus:ring-gray-100/50;
-}
-
-.btn.white-transparent {
-    @apply bg-transparent border-2 border-white hover:bg-white/90 text-white hover:text-primary focus:ring-gray-100/50;
-}
-
-.btn-dark {
-    @apply bg-dark hover:bg-dark/90 text-white focus:ring-dark/50;
+    .btn-dark {
+        @apply bg-dark hover:bg-dark/90 text-white;
+    }
 }

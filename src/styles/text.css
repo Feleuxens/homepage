@@ -1,5 +1,10 @@
 @reference "../styles/global.css";
 
+@utility text-color {
+    text-color: white;
+}
+
+
 
 @layer base {
     h1, h2, h3, h4, h5, h6 {
@@ -9,4 +14,45 @@
     p {
         @apply font-sans text-gray-600;
     }
+
+    a {
+        @apply transition;
+        &:hover {
+            @media (hover: hover) {
+                color: var(--theme-color)
+            }
+        }
+    }
+
+    a.colored {
+        color: var(--theme-color);
+        &:hover {
+            @media (hover: hover) {
+                color: color-mix(in oklab, var(--theme-color) 80%, transparent);
+            }
+        }
+    }
+}
+
+@layer components {
+    .bg-dark, .bg-primary, .bg-accent {
+        @apply text-white;
+    }
+
+    .bg-dark p,
+    .bg-primary p,
+    .bg-accent p {
+         @apply text-white;
+     }
+
+    /*.bg-dark a, .bg-accent a {
+        @apply text-gray-300 hover:text-white transition;
+    }*/
+
+    a.dark {
+        @apply text-gray-300 hover:text-white transition;
+    }
+
+
+
 }

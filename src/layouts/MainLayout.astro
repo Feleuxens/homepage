@@ -1,6 +1,6 @@
 ---
 // Main layout component that will be used across all pages
-const { title } = Astro.props;
+const { title, class: className } = Astro.props;
 import "@fontsource-variable/roboto";
 import "@fontsource-variable/playfair-display";
 import "../styles/global.css";
@@ -22,7 +22,7 @@ const currentYear = new Date().getFullYear();
     <script defer data-domain="feleuxens.de" data-api="/plausible/api/event" src="https://feleuxens.de/plausible/js/script.file-downloads.outbound-links.tagged-events.js"></script>
     <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
   </head>
-  <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+  <body class:list={["bg-gray-50 text-gray-900 min-h-screen flex flex-col", className]}>
     <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div class="container mx-auto px-4 py-4">
         <nav class="flex justify-between items-center">
@@ -30,12 +30,12 @@ const currentYear = new Date().getFullYear();
 
           <!-- Desktop Navigation -->
           <ul class="hidden md:flex space-x-8">
-            <li><a href="/" class="font-medium hover:text-primary transition">Home</a></li>
-            <li><a href="/tech-services" class="font-medium hover:text-primary transition">Tech Services</a></li>
-            <li><a href="/music" class="font-medium hover:text-primary transition">Music</a></li>
-            <li><a href="/photography" class="font-medium hover:text-primary transition">Photography</a></li>
-            <li><a href="/about" class="font-medium hover:text-primary transition">About</a></li>
-            <li><a href="/contact" class="font-medium hover:text-primary transition">Contact</a></li>
+            <li><a href="/" class="font-medium ">Home</a></li>
+            <li><a href="/tech-services" class="font-medium ">Tech Services</a></li>
+            <li><a href="/music" class="font-medium">Music</a></li>
+            <li><a href="/photography" class="font-medium">Photography</a></li>
+            <li><a href="/about" class="font-medium">About</a></li>
+            <li><a href="/contact" class="font-medium">Contact</a></li>
           </ul>
 
           <!-- Mobile menu button -->
@@ -49,12 +49,12 @@ const currentYear = new Date().getFullYear();
         <!-- Mobile Navigation Menu (Hidden by default) -->
         <div class="md:hidden h-0 overflow-hidden transition-all duration-150" id="mobileMenu">
           <ul class="py-3 space-y-3">
-            <li><a href="/" class="block py-2 font-medium hover:text-primary transition">Home</a></li>
-            <li><a href="/tech-services" class="block py-2 font-medium hover:text-primary transition">Tech Services</a></li>
-            <li><a href="/music" class="block py-2 font-medium hover:text-primary transition">Music</a></li>
-            <li><a href="/photography" class="block py-2 font-medium hover:text-primary transition">Photography</a></li>
-            <li><a href="/about" class="block py-2 font-medium hover:text-primary transition">About</a></li>
-            <li><a href="/contact" class="block py-2 font-medium hover:text-primary transition">Contact</a></li>
+            <li><a href="/" class="block py-2 font-medium">Home</a></li>
+            <li><a href="/tech-services" class="block py-2 font-medium">Tech Services</a></li>
+            <li><a href="/music" class="block py-2 font-medium">Music</a></li>
+            <li><a href="/photography" class="block py-2 font-medium">Photography</a></li>
+            <li><a href="/about" class="block py-2 font-medium">About</a></li>
+            <li><a href="/contact" class="block py-2 font-medium">Contact</a></li>
           </ul>
         </div>
       </div>
@@ -64,28 +64,28 @@ const currentYear = new Date().getFullYear();
       <slot />
     </main>
 
-    <footer class="bg-dark text-white">
+    <footer class="bg-dark">
       <div class="container mx-auto px-4 py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 class="font-serif text-xl font-semibold mb-4">Felix Grüb</h3>
+            <h3 class="text-xl mb-4">Felix Grüb</h3>
             <ul class="space-y-2">
-              <li><a href="/impressum" class="text-gray-300 hover:text-white transition">Impressum / Imprint</a></li>
-              <li><a href="/privacy" class="text-gray-300 hover:text-white transition">Datenschutzerklärung / Privacy Notice</a></li>
+              <li><a href="/impressum" class="dark">Impressum / Imprint</a></li>
+              <li><a href="/privacy" class="dark">Datenschutzerklärung / Privacy Notice</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 class="font-serif text-xl font-semibold mb-4">Connect</h3>
+            <h3 class="text-xl mb-4">Connect</h3>
             <ul class="space-y-2">
-              <li><a href="https://www.linkedin.com/in/felixgrueb/" class="text-gray-300 hover:text-white transition">LinkedIn</a></li>
-              <li><a href="https://github.com/Feleuxens" class="text-gray-300 hover:text-white transition">GitHub</a></li>
-              <li><a href="https://instagram.com/Feleuxens" class="text-gray-300 hover:text-white transition">Instagram</a></li>
+              <li><a href="https://www.linkedin.com/in/felixgrueb/" class="dark">LinkedIn</a></li>
+              <li><a href="https://github.com/Feleuxens" class="dark">GitHub</a></li>
+              <li><a href="https://instagram.com/Feleuxens" class="dark">Instagram</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 class="font-serif text-xl font-semibold mb-4">Contact</h3>
+            <h3 class="text-xl mb-4"><a href="/contact" class="text-white">Contact</a></h3>
             <p class="text-gray-300">me@feleuxens.de</p>
             <!--<p class="text-gray-300">+49 xxxxxxx</p>-->
           </div>
