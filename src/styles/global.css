@@ -4,8 +4,28 @@
 @theme {
   --color-primary: #3a5db8;
   --color-secondary: #5a287d;
-  --color-accent: #fb8b24;
+  --color-accent: #cf6607;
   --color-dark: #23272e;
+}
+
+@layer base {
+  :root {
+    --theme-color: var(--color-primary);
+  }
+}
+
+@layer components {
+  .theme-primary {
+    --theme-color: var(--color-primary);
+  }
+
+  .theme-secondary {
+    --theme-color: var(--color-secondary);
+  }
+
+  .theme-accent {
+    --theme-color: var(--color-accent);
+  }
 }
 
 /*noinspection CssInvalidAtRule*/
