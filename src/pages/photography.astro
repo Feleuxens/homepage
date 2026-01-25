@@ -11,7 +11,6 @@ import naturePhoto from "../../public/images/photography/stories/nature.jpg"
 import technologyPhoto from "../../public/images/photography/stories/technology.jpg"
 
 import photographer from "../../public/images/photographer1.jpg"
-import weddingImg from "../../public/images/wedding1.jpg";
 import {Image} from "astro:assets";
 
 
@@ -64,8 +63,7 @@ const equipment = [
 
 const software = [
     "Affinity Photo",
-    "Affinity Designer",
-    "Affinity Publisher",
+    "Photomator",
     "BlackMagic Davinci Resolve"
 ]
 ---
@@ -124,7 +122,7 @@ const software = [
             <h2 class="section-title text-center">Recent Favorites</h2>
 
             <DynamicGallery layout="masonry" sortBy="date"/>
-            <div class="justify-center flex mt-4"><a href="https://photo.feleuxens.de" target="_blank" class="btn accent justify-center">Whole Gallery</a></div>
+            <div class="justify-center flex mt-4"><a href="https://photo.feleuxens.de" target="_blank" class="btn theme">Whole Gallery</a></div>
         </div>
     </section>
 
@@ -149,7 +147,7 @@ const software = [
                     </div>
 
                     <div class="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
-                        <Image src={photographer} alt="Wedding performance" width="750" height="500" class="w-full h-full object-cover" />
+                        <Image src={photographer} alt="Photographer in action" width="750" height="500" class="w-full h-full object-cover" />
                     </div>
                 </div>
             </div>
