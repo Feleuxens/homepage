@@ -10,8 +10,8 @@ function formatExifString(exifData) {
     if (exifData["lens"]) returnString += (" (" + exifData["lens"] + ")");
     if (exifData["focalLength"]) returnString += (", " + exifData["focalLength"]);
     if (exifData["shutterSpeed"]) returnString += (", " + exifData["shutterSpeed"]);
-    if (exifData["iso"]) returnString += (", ISO " + exifData["iso"]);
     if (exifData["aperture"]) returnString += (", " + exifData["aperture"]);
+    if (exifData["iso"]) returnString += (", ISO " + exifData["iso"]);
     if (exifData["exposureBiasValue"]) returnString += (", " + exifData["exposureBiasValue"]);
     return returnString;
 }
@@ -81,7 +81,7 @@ async function extractExifData(imagePath) {
             lens: getTag('LensModel') || getTag('LensInfo') || getTag('LensSpecification'),
             aperture: getTag('FNumber') || "f/?",
             shutterSpeed: formatShutterSpeed(getTag('ExposureTime')),
-            iso: getTag('ISO') || getTag('ISOSpeedRatings'),
+            iso: getTag('ISO') || getTag('ISOSpeedRatings') || getTag('ISOSpeed'),
             focalLength: getTag('FocalLength'),
             dateTaken: formatDate(getTag('DateTime') || getTag('DateTimeOriginal') || getTag('DateTimeDigitized'), getTag("OffsetTime") || getTag("OffsetTimeOriginal") || getTag("OffsetTimeDigitized") || null, true),
             dateIso: formatDate(getTag('DateTimeDigitized') || getTag('DateTimeOriginal') || getTag('DateTime'), getTag("OffsetTime") || getTag("OffsetTimeOriginal") || getTag("OffsetTimeDigitized") || null, false),
