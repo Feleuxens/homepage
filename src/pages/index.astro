@@ -5,6 +5,7 @@ import { Image } from "astro:assets";
 import meImg from "../../public/images/me.jpg";
 import backgroundImg from "../../public/images/hero-bg.jpg";
 import weddingImg from "../../public/images/wedding1.jpg";
+import photographerImg from "../../public/images/photographer2.jpg";
 
 const currentYear = new Date().getFullYear();
 ---
@@ -91,14 +92,23 @@ const currentYear = new Date().getFullYear();
   <section class="py-12 bg-gray-100">
     <div class="container">
       <h2 class="section-title text-center">Featured Work</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-        <div class="card portfolio-item sm:col-span-2 lg:col-span-1 lg:-col-end-2">
+      <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        <div class="card portfolio-item">
           <div class="aspect-video bg-gray-200 overflow-hidden">
             <Image src={weddingImg} alt="Wedding performance" width="750" height="500" />
           </div>
           <div class="p-6">
             <h3 class="text-xl mb-2">Wedding Performance</h3>
             <p class="text-gray-600">Soundtrack and modern music with self-arranged playback</p>
+          </div>
+        </div>
+        <div class="card portfolio-item">
+          <div class="aspect-video bg-gray-200 overflow-hidden">
+            <Image src={photographerImg} alt="Wedding performance" width="750" height="500" />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl mb-2">Photographing National Championships</h3>
+            <p class="text-gray-600">Photographing at the Track and Field National Championships Indoor</p>
           </div>
         </div>
       </div>
