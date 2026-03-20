@@ -9,20 +9,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
     "@fontsource-variable/playfair-display": "^5.2.8",
-    "@fontsource-variable/roboto": "^5.2.9",
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/react": "^19.2.9",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^5.16.15",
+    "@fontsource-variable/roboto": "^5.2.10",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.0.7",
     "chokidar": "^5.0.0",
-    "exifreader": "^4.36.0",
+    "exifreader": "^4.37.0",
     "gsap": "^3.14.2",
     "packery": "^3.0.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
     "@types/packery": "^1.4.37"
