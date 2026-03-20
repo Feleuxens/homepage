@@ -28,17 +28,10 @@ let thumbHeight;
 let fullWidth;
 let fullHeight;
 
-if (aspectRatio >= 1) {  // portrait
-    thumbWidth = size;
-    thumbHeight = size / aspectRatio;
-    fullWidth = fullSize;
-    fullHeight = size / aspectRatio;
-} else {
-    thumbWidth = size;
-    thumbHeight = size / aspectRatio;
-    fullWidth = fullSize;
-    fullHeight = size / aspectRatio;
-}
+thumbHeight = size;
+thumbWidth = size / aspectRatio;
+fullHeight = fullSize;
+fullWidth = fullSize / aspectRatio;
 
 const imageId = `img-${Math.random().toString(36).substring(2, 9)}`;
 ---
