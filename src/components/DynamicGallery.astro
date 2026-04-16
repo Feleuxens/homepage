@@ -1,16 +1,13 @@
 ---
-import { Image } from 'astro:assets';
 import { exifData } from "../data/exif-data.js";
 import SquareImage from "./SquareImage.astro";
 
 interface Props {
-    layout?: 'masonry' | 'grid';
     sortBy?: 'date' | 'filename' | 'random';
     maxImages?: number;
 }
 
 const {
-    layout = 'grid',
     sortBy = 'date',
     maxImages,
 } = Astro.props;
@@ -18,22 +15,23 @@ const {
 let folder = "/images/photography/favorites/";
 const imageModules = import.meta.glob('../../public/images/photography/favorites/*.{jpg,jpeg,png,webp,JPG}');
 const images = await Promise.all(
-Object.entries(imageModules).map(async ([path, importFn]) => {
-    const module = await importFn();
-    const filename = path.split('/').pop() || '';
-    const imageExif = exifData["public" + folder + filename] || {};
-    const aspectRatio = imageExif.aspectRatio;
-    return {
-        src: module.default,
-        filename,
-        path,
-        aspectRatio,
-        // Extract date for sorting
-        date: imageExif.dateIso
-            ? Date.parse(imageExif.dateIso)
-            : new Date(0) // fallback to epoch if no date
-    }
-}));
+    Object.entries(imageModules).map(async ([path, importFn]) => {
+        const module = await importFn();
+        const filename = path.split('/').pop() || '';
+        const imageExif = exifData["public" + folder + filename] || {};
+        const aspectRatio = imageExif.aspectRatio;
+        return {
+            src: module.default,
+            filename,
+            path,
+            aspectRatio,
+            // Extract date for sorting
+            date: imageExif.dateIso
+                ? Date.parse(imageExif.dateIso)
+                : new Date(0) // fallback to epoch if no date
+        }
+    })
+);
 
 // Sort images based on sortBy prop
 let sortedImages = [...images];
@@ -69,133 +67,29 @@ const getMasonryAspectRatio = (index: number, aspectRatio?: number) => {
 }
 
 // Get responsive width for preserving aspect ratio
-const getImageSize = (layoutType: string, index: number, aspectRatio?: number) => {
-    if (layoutType === 'masonry') {
-        const isLandscape = aspectRatio && aspectRatio > 1.1;
-        if (isLandscape && (index === 0 || index % 4 === 0)) {
-            return 1000; // width of two column
-        }
-        return 500;  // width of one column
+const getImageSize = (index: number, aspectRatio?: number) => {
+    const isLandscape = aspectRatio && aspectRatio < 1.1;
+    if (isLandscape && (index === 0 || index % 4 === 0)) {
+        return 1000; // width of two column
     }
-    return 500;
+    return 600;
 };
-
-// Generate unique gallery ID for this instance
-const galleryId = `gallery-${Math.random().toString(36).substring(2, 9)}`;
 ---
-<style>
-    /* Grid layout with preserved aspect ratios */
-    .dynamic-gallery[data-layout="grid"] .grid {
-        align-items: start; /* Align items to top */
-    }
-
-
-
-    /* Responsive size adjustments for masonry-mosaic */
-    @media (max-width: 768px) {
-        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-full,
-        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-2/3 {
-        width: 100% !important; /* Full width on mobile */
-    }
-
-        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-1/2 {
-        width: 50% !important; /* Half width on mobile */
-    }
-
-        .dynamic-gallery[data-layout="masonry"] .masonry-item.w-1/3 {
-        width: 50% !important; /* Bigger on mobile */
-    }
-    }
-
-    @media (max-width: 480px) {
-        .dynamic-gallery[data-layout="masonry"] .masonry-item {
-            width: 100% !important; /* All full width on small mobile */
-        }
-    }
-
-    /* Ensure images in preserved aspect ratio mode look good */
-    .dynamic-gallery .portfolio-image:not(.aspect-square) {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .dynamic-gallery .portfolio-image:not(.aspect-square) > div:first-child {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-    }
-
-    /* Smooth loading animation */
-    .dynamic-gallery .portfolio-image {
-        opacity: 0;
-        animation: fadeInUp 0.6s ease forwards;
-    }
-
-    .dynamic-gallery .portfolio-image:nth-child(1) { animation-delay: 0.1s; }
-    .dynamic-gallery .portfolio-image:nth-child(2) { animation-delay: 0.2s; }
-    .dynamic-gallery .portfolio-image:nth-child(3) { animation-delay: 0.3s; }
-    .dynamic-gallery .portfolio-image:nth-child(4) { animation-delay: 0.4s; }
-    .dynamic-gallery .portfolio-image:nth-child(5) { animation-delay: 0.5s; }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .image-wrapper {
-        overflow: hidden;
-    }
-    .image-wrapper :global(img) {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-</style>
-
-<div class={`dynamic-gallery ${galleryId}`} data-layout={layout}>
-
-    {layout === 'masonry' && (
-        <!-- Masonry-Mosaic Layout - Smart sizing with minimal white space -->
-        <div class="masonry-container">
-            <div class="masonry-sizer w-1/3"></div>
-            {displayImages.map((image, index) => (
-                <div class={`masonry-item ${getMasonrySizeClass(index, image.aspectRatio)} ${getMasonryAspectRatio(index, image.aspectRatio)} group p-1 overflow-hidden image-wrapper`}>
-                    <SquareImage
-                        src={image.src}
-                        alt={`Photo ${index + 1}`}
-                        path={`${folder}${image.filename}`}
-                        size={getImageSize(layout, index, image.aspectRatio)}
-                    />
-                </div>
-            ))}
+<div class="masonry-container">
+    <div class="masonry-sizer w-1/3"></div>
+    {displayImages.map((image, index) => (
+        <div class={`masonry-item ${getMasonrySizeClass(index, image.aspectRatio)} ${getMasonryAspectRatio(index, image.aspectRatio)} group p-1 overflow-hidden image-wrapper`}>
+            <SquareImage
+                src={image.src}
+                alt={`Photo ${index + 1}`}
+                path={`${folder}${image.filename}`}
+                size={getImageSize(index, image.aspectRatio)}
+            />
         </div>
-    )}
-
-    {layout === 'grid' && (
-        <!-- Simple Responsive Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                {displayImages.map((image, index) => (
-                        <SquareImage
-                                src={image.src}
-                                alt={`Photo ${index + 1}`}
-                                path={`${folder}${image.filename}`}
-                                size={getImageSize(layout, index, image.aspectRatio)}
-                                square={true}
-                        />
-                ))}
-            </div>
-    )}
+    ))}
 </div>
 
-{(layout === 'masonry') && (
 <script>
-    // Initialize Masonry for both masonry layouts
     import Packery from "packery";
 
     const masonryContainer = document.querySelector('.masonry-container');
@@ -207,8 +101,4 @@ const galleryId = `gallery-${Math.random().toString(36).substring(2, 9)}`;
             fitWidth: true,
         });
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-
-    });
-</script>)}
+</script>
