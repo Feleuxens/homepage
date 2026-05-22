@@ -23,6 +23,6 @@
     "@types/packery": "1.4.37"
   },
   "overrides": {
-    "vite": "^7"
+    "vite": "^8.0.0"
   }
 }
