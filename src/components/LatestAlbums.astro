@@ -1,0 +1,56 @@
+---
+const ENDPOINT =
+    import.meta.env.CHEVERETO_ALBUMS_URL ?? "https://photo.feleuxens.de/latestalbums";
+
+interface Props {
+    count?: number;
+}
+const { count = 4 } = Astro.props;
+
+interface Album {
+    name: string;
+    url: string;
+    image_count: number;
+    cover: string;
+    when: string;
+    date: string;
+}
+
+let albums: Album[] = [];
+try {
+    const res = await fetch(ENDPOINT);
+    if (res.ok) {
+        const data = await res.json();
+        const list: Album[] = Array.isArray(data) ? data : (data.albums ?? []);
+        albums = list.slice(0, count);
+    } else {
+        console.error("Chevereto albums fetch failed:", res.status);
+    }
+} catch (err) {
+    console.error("Chevereto albums fetch error:", err);
+}
+---
+{albums.length > 0 && (
+<div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+    {albums.map((album) => (
+            <a href={album.url} target="_blank" rel="noopener" class="group block">
+                <div class="bg-gray-200 rounded-lg overflow-hidden mb-4 aspect-square">
+                    {album.cover && (
+                            <img
+                                    src={album.cover}
+                                    alt={album.name}
+                                    loading="lazy"
+                                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                    )}
+                </div>
+                <div class="text-center">
+                    <h3 class="text-xl font-serif font-semibold mb-1">{album.name}</h3>
+                    <p class="text-gray-600 text-sm">
+                        {album.image_count} images{album.when ? ` · ${album.when}` : ""}
+                    </p>
+                </div>
+            </a>
+    ))}
+</div>
+    )}
