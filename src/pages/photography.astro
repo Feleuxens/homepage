@@ -2,6 +2,7 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import SquareImage from "../components/SquareImage.astro";
 import DynamicGallery from "../components/DynamicGallery.astro";
+import LatestAlbums from '../components/LatestAlbums.astro';
 
 import athleticPhoto from "../../public/images/photography/stories/sports.jpg"
 import companionshipPhoto from "../../public/images/photography/stories/portraits.jpg"
@@ -87,8 +88,16 @@ const software = [
         </div>
     </section>
 
-    <!-- Portfolio Gallery -->
     <section class="py-12 bg-white">
+        <h2 class="section-title text-center">Latest Albums</h2>
+        <div class="container">
+            <LatestAlbums count={6} />
+        </div>
+        <div class="justify-center flex mt-4"><a href="https://photo.feleuxens.de" target="_blank" class="btn theme">Whole Gallery</a></div>
+    </section>
+
+    <!-- Portfolio Gallery -->
+    <section class="py-12 bg-gray-50">
         <div class="container">
             <h2 class="section-title text-center">Visual Stories</h2>
             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
@@ -117,7 +126,7 @@ const software = [
     </section>
 
     <!-- Featured Images Section -->
-    <section id="gallery" class="py-10 bg-gray-50">
+    <section id="gallery" class="py-10 bg-white">
         <div class="container">
             <h2 class="section-title text-center">Recent Favorites</h2>
 
