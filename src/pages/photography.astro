@@ -91,7 +91,17 @@ const software = [
     <section class="py-12 bg-white">
         <h2 class="section-title text-center">Latest Albums</h2>
         <div class="container">
-            <LatestAlbums count={6} />
+            <LatestAlbums count={6} server:defer>
+                <div slot="fallback" class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+                    {Array.from({ length: 6 }).map(() => (
+                            <div>
+                                <div class="bg-gray-200 rounded-lg aspect-square mb-4 animate-pulse"></div>
+                                <div class="h-5 bg-gray-200 rounded w-3/4 mx-auto mb-2 animate-pulse"></div>
+                                <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
+                            </div>
+                    ))}
+                </div>
+            </LatestAlbums>
         </div>
         <div class="justify-center flex mt-4"><a href="https://photo.feleuxens.de" target="_blank" class="btn theme">Whole Gallery</a></div>
     </section>
@@ -227,32 +237,4 @@ const software = [
             </div>
         </div>
     </section>
-
-    <script>
-        import { gsap } from "gsap";
-        import { ScrollTrigger} from "gsap/ScrollTrigger";
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Register GSAP plugins
-            gsap.registerPlugin(ScrollTrigger);
-
-            // Hero animations
-            gsap.to('#hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' });
-            gsap.to('#hero-subtitle', { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' });
-            gsap.to('#hero-buttons', { opacity: 1, y: 0, duration: 1, delay: 0.6, ease: 'power3.out' });
-
-            // Portfolio categories animation
-            gsap.from('.portfolio-category', {
-                scrollTrigger: {
-                    trigger: '.portfolio-category',
-                    start: 'top 98%',
-                },
-                y: 15,
-                opacity: 0,
-                duration: 0.25,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
-        });
-    </script>
 </MainLayout>
