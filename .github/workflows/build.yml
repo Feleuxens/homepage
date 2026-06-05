@@ -42,7 +42,7 @@ jobs:
           target: nginx
 
       - name: Build and Push
-        id: push dynamic
+        id: push-dynamic
         uses: docker/build-push-action@v7
         with:
           context: .
