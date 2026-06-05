@@ -13,8 +13,8 @@ COPY . .
 
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# static content image
+FROM nginx:alpine AS nginx
 
 RUN addgroup -g 1000 -S astro && \
     adduser -S astro -u 1000 -G astro
@@ -31,7 +31,7 @@ RUN chown -R astro:astro /usr/share/nginx && \
 RUN touch /var/run/nginx.pid && \
     chown -R astro:astro /var/run/nginx.pid
 
-COPY --from=build --chown=astro:astro /app/dist /usr/share/nginx/html
+COPY --from=build --chown=astro:astro /app/dist/client /usr/share/nginx/html
 
 # Drop root privileges
 USER astro
@@ -43,3 +43,20 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["nginx", "-g", "daemon off;"]
+
+
+# dynamic content image
+FROM node:24-alpine AS node
+
+WORKDIR /app
+
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=8201
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
+
+EXPOSE 8201
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "./dist/server/entry.mjs"]
