@@ -28,6 +28,7 @@ async function fetchAlbums(): Promise<Album[]> {
         return list.map((a) => ({
             ...a,
             cover: (a.cover || "").replace(/^http:\/\//, "https://"),
+            name: (a.name || "").replace("amp;", ""),
         }));
     } finally {
         clearTimeout(timer);
