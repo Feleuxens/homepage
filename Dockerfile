@@ -54,11 +54,11 @@ RUN apk add --no-cache dumb-init
 
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8201
 
-COPY --from=build --chown=astro:astro /app/dist ./dist
-COPY --from=build --chown=astro:astro /app/node_modules ./node_modules
-COPY --from=build --chown=astro:astro /app/package.json ./package.json
+COPY --from=build --chown=node:node /app/dist ./dist
+COPY --from=build --chown=node:node /app/node_modules ./node_modules
+COPY --from=build --chown=node:node /app/package.json ./package.json
 
-USER astro
+USER node
 EXPOSE 8201
 
 ENTRYPOINT ["dumb-init", "--"]
