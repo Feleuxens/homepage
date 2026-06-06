@@ -50,12 +50,17 @@ FROM node:24-alpine AS node
 
 WORKDIR /app
 
+RUN addgroup -g 1000 -S astro && \
+    adduser -S astro -u 1000 -G astro
+RUN apk add --no-cache dumb-init
+
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8201
 
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json ./package.json
+COPY --from=build --chown=astro:astro /app/dist ./dist
+COPY --from=build --chown=astro:astro /app/node_modules ./node_modules
+COPY --from=build --chown=astro:astro /app/package.json ./package.json
 
+USER astro
 EXPOSE 8201
 
 ENTRYPOINT ["dumb-init", "--"]
