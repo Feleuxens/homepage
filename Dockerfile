@@ -52,6 +52,7 @@ WORKDIR /app
 
 RUN addgroup -g 1000 -S astro && \
     adduser -S astro -u 1000 -G astro
+
 RUN apk add --no-cache dumb-init
 
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8201
