@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/packery": "1.4.37",
-    "@types/node": "25.9.1"
+    "@types/node": "25.9.2"
   },
   "overrides": {
     "vite": "^7"
