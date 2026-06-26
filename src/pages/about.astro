@@ -16,14 +16,18 @@ const technicalSkills = [
   { name: "Software Architecture", level: 35}
 ];
 
-const timeline: object = [
+type timelineItem = {startYear: number, endYear: string | number, title: string, company: string, description: string, type: string, dotPosition: number, cardPosition: number, estimatedHeight: number};
+const timeline: timelineItem[] = [
   {
     startYear: 2023,
     endYear: "present",
-    title: "Working Student for DevOps and Software Development",
+    title: "Working Student for DevOps and System Administration",
     company: "intension GmbH",
     description: "",
-    type: "tech"
+    type: "tech",
+    dotPosition: 0,
+    cardPosition: 0,
+    estimatedHeight: 0,
   },
   {
     startYear: 2020,
@@ -31,7 +35,10 @@ const timeline: object = [
     title: "Bachelor's Degree in Computer Science",
     company: "University of Stuttgart",
     description: "",
-    type: "tech"
+    type: "tech",
+    dotPosition: 0,
+    cardPosition: 0,
+    estimatedHeight: 0,
   },
   {
     startYear: 2025,
@@ -39,7 +46,10 @@ const timeline: object = [
     title: "Certified Professional for Software Architecture - Foundation Level",
     company: "iSAQB",
     description: "Basic Concepts of Software Architecture, Requirements and Constraints, Design and Development, etc.",
-    type: "tech"
+    type: "tech",
+    dotPosition: 0,
+    cardPosition: 0,
+    estimatedHeight: 0,
   },
   {
     startYear: 2020,
@@ -47,7 +57,10 @@ const timeline: object = [
     title: "Music exam in A-levels",
     company: "",
     description: "Played Clarke Suit in D Major (Bourrée, Ecossaise, Prince of Denmark's March), Rachmaninoff Prelude in C# minor and Neruda Trumpet Concerto in E♭ Major: I. Allegro",
-    type: "music"
+    type: "music",
+    dotPosition: 0,
+    cardPosition: 0,
+    estimatedHeight: 0,
   },
   {
     startYear: 2008,
@@ -55,7 +68,10 @@ const timeline: object = [
     title: "Trumpet lessons",
     company: "",
     description: "",
-    type: "music"
+    type: "music",
+    dotPosition: 0,
+    cardPosition: 0,
+    estimatedHeight: 0,
   },
   {
     startYear: 2016,
@@ -63,7 +79,10 @@ const timeline: object = [
     title: "Piano lessons",
     company: "",
     description: "",
-    type: "music"
+    type: "music",
+    dotPosition: 0,
+    cardPosition: 0,
+    estimatedHeight: 0,
   },
 ];
 
@@ -71,12 +90,12 @@ const timeline: object = [
 const currentYear = new Date().getFullYear();
 
 // Helper function to get actual end year
-function getEndYear(endYear) {
-  return endYear === "present" ? currentYear : endYear;
+function getEndYear(endYear: string | number): number {
+  return typeof endYear == "string" ? currentYear : endYear;
 }
 
 // Get timeline range from all years (both start and end)
-const allYears = timeline.flatMap(item => [item.startYear, getEndYear(item.endYear)]);
+const allYears: (number)[] = timeline.flatMap(item => [item.startYear, getEndYear(item.endYear)]);
 const timelineStartYear = 2002; // Math.min(...allYears);
 const timelineEndYear = Math.max(...allYears);
 
@@ -84,12 +103,15 @@ const timelineEndYear = Math.max(...allYears);
 const TIMELINE_HEIGHT = 1000;
 
 // Function to calculate position percentage for a given year
-function getYearPosition(year) {
+function getYearPosition(year: string | number) {
+  if (typeof year == "string") {
+    return 100;
+  }
   const progress = (timelineEndYear - year) / (timelineEndYear - timelineStartYear);
   return progress * 100;
 }
 
-function estimateCardHeight(item) {
+function estimateCardHeight(item: timelineItem) {
   // Base height for title, company, and year badge (in percentage of timeline)
   let baseHeight = 8;
 
@@ -112,14 +134,14 @@ function estimateCardHeight(item) {
 }
 
 // Function to position items based on end year with overlap prevention
-function positionTimelineItems(items) {
+function positionTimelineItems(items: timelineItem[]) {
   // Sort by end year (descending)
   const sortedItems = [...items].sort((a, b) =>
       getEndYear(b.endYear) - getEndYear(a.endYear)
   );
 
   const cardSpacingPercent = 2; // Minimum gap as percentage
-  const usedPositions = [];
+  const usedPositions: { item: any; position: number; height: number; }[] = [];
 
   sortedItems.forEach(item => {
     // Calculate this card's estimated height
@@ -396,98 +418,93 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
 
           <!-- Tech Items (Left) -->
           {positionedTechItems.map(item => (
-              <div class="absolute left-0 md:w-[calc(50%-30px)] w-full timeline-item tech-item" style={`top: ${item.cardPosition}%;`}>
-                <div class="relative pr-8 md:pr-16">
-                  <!-- Connector line to the shared dot -->
-                  {item.dotPosition !== item.cardPosition && (
-                      <>
-                        <!-- Vertical connector from card to dot level -->
-                        <div class="absolute right-[7px] bg-primary/40 w-0.5 hidden md:block"
-                             style={`
-                           top: 40px;
-                           height: calc(${Math.abs(item.dotPosition - item.cardPosition)}% * ${TIMELINE_HEIGHT}px / 100 - 8px);
-                           ${item.dotPosition < item.cardPosition ? `transform: translateY(calc(${item.dotPosition - item.cardPosition}% * ${TIMELINE_HEIGHT}px / 100 + 8px));` : ''}
-                         `}></div>
-                      </>
-                  )}
+            <div class="absolute left-0 md:w-[calc(50%-30px)] w-full timeline-item tech-item" style={`top: ${item.cardPosition}%;`}>
+              <div class="relative pr-8 md:pr-16">
+                <!-- Connector line to the shared dot -->
+                {item.dotPosition !== item.cardPosition && (
+                  <div class="absolute right-[7px] bg-primary/40 w-0.5 hidden md:block" style={`
+                     top: 40px;
+                     height: calc(${Math.abs(item.dotPosition - item.cardPosition)}% * ${TIMELINE_HEIGHT}px / 100 - 8px);
+                     ${item.dotPosition < item.cardPosition ? `transform: translateY(calc(${item.dotPosition - item.cardPosition}% * ${TIMELINE_HEIGHT}px / 100 + 8px));` : ''}
+                   `}></div>
+                )}
 
-                  <!-- Card -->
-                  <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-primary hover:shadow-lg transition-shadow">
-                    <div class="flex justify-between items-center mb-3">
-                      <div class="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
-                        {item.startYear === item.endYear && (
-                            item.startYear
-                        )}
-                        {item.startYear !== item.endYear && (
-                            item.startYear + " - " + item.endYear
-                        )}
-                      </div>
-
-                      {item.endYear === "present" && (
-                          <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
-                        Current
-                      </span>
+                <!-- Card -->
+                <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-primary hover:shadow-lg transition-shadow">
+                  <div class="flex justify-between items-center mb-3">
+                    <div class="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
+                      {item.startYear === item.endYear && (
+                          item.startYear
                       )}
-                      {(item.endYear !== item.startYear && item.endYear !== "present") && (
-                          <span class="text-xs text-gray-500">
-                          {item.endYear - item.startYear} years
-                        </span>
+                      {item.startYear !== item.endYear && (
+                          item.startYear + " - " + item.endYear
                       )}
                     </div>
 
-                    <h3 class="text-xl">{item.title}</h3>
-                    {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
-                    {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
+                    {item.endYear === "present" && (
+                        <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                      Current
+                    </span>
+                    )}
+                    {(item.endYear !== item.startYear && typeof item.endYear !== "string") && (
+                        <span class="text-xs text-gray-500">
+                        {item.endYear - item.startYear} years
+                      </span>
+                    )}
                   </div>
+
+                  <h3 class="text-xl">{item.title}</h3>
+                  {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
+                  {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
                 </div>
               </div>
+            </div>
           ))}
 
           <!-- Music Items (Right) -->
           {positionedMusicItems.map(item => (
-              <div class="absolute right-0 md:w-[calc(50%-30px)] w-full timeline-item music-item" style={`top: ${item.cardPosition}%;`}>
-                <div class="relative pl-8 md:pl-16">
-                  <!-- Connector line to the shared dot -->
-                  {item.dotPosition !== item.cardPosition && (
-                        <!-- Vertical connector from card to dot level -->
-                        <div class="absolute left-[7px] bg-secondary/40 w-0.5 hidden md:block"
-                             style={`
-                           top: 40px;
-                           height: calc(${Math.abs(item.dotPosition - item.cardPosition)}% * ${TIMELINE_HEIGHT}px / 100 - 8px);
-                           ${item.dotPosition < item.cardPosition ? `transform: translateY(calc(${item.dotPosition - item.cardPosition}% * ${TIMELINE_HEIGHT}px / 100 + 8px));` : ''}
-                         `}></div>
-                  )}
+            <div class="absolute right-0 md:w-[calc(50%-30px)] w-full timeline-item music-item" style={`top: ${item.cardPosition}%;`}>
+              <div class="relative pl-8 md:pl-16">
+                <!-- Connector line to the shared dot -->
+                {item.dotPosition !== item.cardPosition && (
+                  <div class="absolute left-[7px] bg-secondary/40 w-0.5 hidden md:block"
+                       style={`
+                     top: 40px;
+                     height: calc(${Math.abs(item.dotPosition - item.cardPosition)}% * ${TIMELINE_HEIGHT}px / 100 - 8px);
+                     ${item.dotPosition < item.cardPosition ? `transform: translateY(calc(${item.dotPosition - item.cardPosition}% * ${TIMELINE_HEIGHT}px / 100 + 8px));` : ''}
+                   `}></div>
+                )}
 
-                  <!-- Card -->
-                  <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-secondary hover:shadow-lg transition-shadow">
-                    <div class="flex justify-between items-center mb-3">
-                      <div class="px-3 py-1 text-sm font-medium bg-secondary/10 text-secondary rounded-full">
-                        {item.startYear === item.endYear && (
-                            item.startYear
-                        )}
-                        {item.startYear !== item.endYear && (
-                            item.startYear + " - " + item.endYear
-                        )}
-                      </div>
-
-                      {item.endYear === "present" && (
-                          <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
-                        Current
-                      </span>
+                <!-- Card -->
+                <div class="card bg-white rounded-lg shadow-md p-4 border-l-4 border-secondary hover:shadow-lg transition-shadow">
+                  <div class="flex justify-between items-center mb-3">
+                    <div class="px-3 py-1 text-sm font-medium bg-secondary/10 text-secondary rounded-full">
+                      {item.startYear === item.endYear && (
+                          item.startYear
                       )}
-                      {(item.endYear !== item.startYear && item.endYear !== "present") && (
-                          <span class="text-xs text-gray-500">
-                          {item.endYear - item.startYear} years
-                        </span>
+                      {item.startYear !== item.endYear && (
+                          item.startYear + " - " + item.endYear
                       )}
                     </div>
 
-                    <h3 class="text-xl">{item.title}</h3>
-                    {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
-                    {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
+                    {item.endYear === "present" && (
+                        <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                      Current
+                    </span>
+                    )}
+                    {(item.endYear !== item.startYear && typeof item.endYear !== "string") && (
+                        <span class="text-xs text-gray-500">
+                        {item.endYear - item.startYear} years
+                      </span>
+                    )}
                   </div>
+
+                  <h3 class="text-xl">{item.title}</h3>
+                  {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
+                  {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
                 </div>
               </div>
+            </div>
           ))}
         </div>
       </div>
@@ -658,7 +675,7 @@ const musicDotYears = new Set(musicItems.map(item => getEndYear(item.endYear)));
       });
 
       // Interests items animation
-      document.querySelectorAll('.interests-item,.instrument-card').forEach((item, index) => {
+      document.querySelectorAll('.interests-item,.instrument-card').forEach((item, _) => {
         gsap.fromTo(item,
             {
               opacity: 0,
