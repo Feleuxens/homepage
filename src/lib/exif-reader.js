@@ -87,8 +87,8 @@ async function extractExifData(imagePath) {
             dateIso: formatDate(getTag('DateTimeDigitized') || getTag('DateTimeOriginal') || getTag('DateTime'), getTag("OffsetTime") || getTag("OffsetTimeOriginal") || getTag("OffsetTimeDigitized") || null, false),
             location: getTag('GPS Position') || getTag('Location'),
             exposureBiasValue: formatExposureBias(getTag('ExposureBiasValue')),
-            latitude: getTag('GPSLatitude'),
-            longitude: getTag('GPSLongitude'),
+            // latitude: getTag('GPSLatitude'),
+            // longitude: getTag('GPSLongitude'),
             height: getTag('Image Height').replace('px', ''),
             width: getTag('Image Width').replace('px', ''),
             aspectRatio: getTag('Image Height').replace('px', '') / getTag('Image Width').replace('px', '') || 1
