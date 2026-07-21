@@ -1,16 +1,24 @@
 ---
-import { Image } from "astro:assets";
-import { exifData } from "../data/exif-data";
+import { Image, getImage } from "astro:assets";
+import {exifData} from "../data/exif-data";
 
 interface Props {
-    src: ImageMetadata,
-    alt: string,
-    path: string,
-    size?: number,
-    fullSize?: number,
-    quality?: number,
-    square?: boolean
+    /** Imported image (from src/assets or public/, per your setup). */
+    src: ImageMetadata;
+    alt: string;
+    /** Public URL of the original file, e.g. /images/photography/favorites/x.jpg */
+    path: string;
+    /** Thumbnail height in px. Width is derived from the aspect ratio. */
+    size?: number;
+    /** Full-size height in px, used for the lightbox. */
+    fullSize?: number;
+    quality?: number;
+    /** Crop the thumbnail to a square. Does not affect the lightbox. */
+    square?: boolean;
+    /** Pre-resolved caption. Falls back to a lookup by path. */
+    preset_caption?: string;
 }
+
 
 const {
     src,
@@ -19,23 +27,56 @@ const {
     size = 750,
     fullSize = 1600,
     quality = 90,
-    square = false
+    square = false,
+    preset_caption,
 } = Astro.props;
 
-const aspectRatio: number = exifData["public" + path].aspectRatio;
+const meta = exifData["public" + path] ?? {};
+
+const aspectRatio: number = meta.aspectRatio || 1;
+if (!(aspectRatio > 0)) {
+    throw new Error(`SquareImage: invalid aspect ratio (${aspectRatio}) for ${path}`);
+}
+const caption = preset_caption ?? meta.exif ?? "No exif data";
+
 let thumbWidth;
 let thumbHeight;
 let fullWidth;
 let fullHeight;
 
-thumbHeight = size;
-thumbWidth = size / aspectRatio;
-fullHeight = fullSize;
-fullWidth = fullSize / aspectRatio;
+thumbHeight = size * aspectRatio;
+thumbWidth = size;
+if (aspectRatio >= 1) {
+    fullHeight = fullSize;
+    fullWidth = fullSize / aspectRatio;
+} else {
+    fullHeight = fullSize * aspectRatio;
+    fullWidth = fullSize;
+}
 
-const imageId = `img-${Math.random().toString(36).substring(2, 9)}`;
+// Generate the full-size variant at build time without emitting a second <img>.
+const full = await getImage({
+    src,
+    width: fullWidth,
+    height: fullHeight,
+    quality: 90,
+});
+
+if (typeof full.src !== "string" || full.src.length === 0) {
+    throw new Error(`SquareImage: getImage returned no src for ${path}`);
+}
 ---
-<div class={square ? "cursor-pointer aspect-square" : "cursor-pointer"} data-lightbox={imageId}>
+<button
+        type="button"
+        class:list={["appearance-none block w-full cursor-pointer", square && "aspect-square"]}
+        data-lightbox
+        data-full={full.src}
+        data-w={fullWidth}
+        data-h={fullHeight}
+        data-caption={caption ?? "No exif data"}
+        data-original={path}
+        data-alt={alt}
+>
     <Image
         src={src}
         alt={alt}
@@ -45,104 +86,10 @@ const imageId = `img-${Math.random().toString(36).substring(2, 9)}`;
         decoding="async"
         loading="lazy"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        id={`thumbnail-${imageId}`}
     />
+</button>
 
-    <Image
-        src={src}
-        alt={alt}
-        width={fullWidth}
-        height={fullHeight}
-        quality={90}
-        decoding="async"
-        loading="lazy"
-        class="hidden"
-        id={`full-${imageId}`}
-    />
-</div>
-
-<script define:vars={{ imageId, alt, exifData, path, fullWidth, fullHeight }}>
-    // Add click handler to this specific image
-    document.querySelector(`[data-lightbox="${imageId}"]`).addEventListener('click', function() {
-        const fullImage = document.getElementById(`full-${imageId}`);
-        const thumbnail = document.getElementById(`thumbnail-${imageId}`);
-        const fullImageSrc = fullImage.src;
-        const thumbnailSrc = thumbnail.src;
-
-        // Create or get lightbox
-        let lightbox = document.getElementById('lightbox');
-        if (!lightbox) {
-            lightbox = createLightbox();
-        }
-
-        // Update lightbox content
-        const lightboxImage = lightbox.querySelector('#lightbox-image');
-        const lightboxDescription = lightbox.querySelector('#lightbox-description');
-
-        lightboxImage.src = thumbnailSrc;
-        lightboxImage.alt = alt;
-        lightboxDescription.textContent = exifData["public" + path]["exif"] ? exifData["public" + path]["exif"] : "No exif data";
-        lightboxDescription.innerHTML += `: <a href="${path}" target="_blank">Original</a>`
-        lightboxImage.height = fullHeight;
-        lightboxImage.width = fullWidth;
-
-        // Show lightbox
-        lightbox.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-
-        const loadingSpinner = document.getElementById('loading-spinner');
-        loadingSpinner.classList.remove('hidden');
-        const tempImage = new Image();
-        tempImage.onload = function() {
-            lightboxImage.src = fullImageSrc;
-            loadingSpinner.classList.add('hidden');
-        };
-        tempImage.src = fullImageSrc;
-    });
-
-    function createLightbox() {
-        const lightboxHTML = `
-      <div id="lightbox" class="fixed inset-0 bg-black/95 flex items-center justify-center z-50 hidden">
-        <div class="relative max-w-8xl max-h-full p-4 w-full">
-          <!-- Image container -->
-          <div class="flex flex-col items-center">
-            <img id="lightbox-image" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded-lg">            
-            <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm hidden">
-              <span class="loading-spinner"></span>
-            </div>
-            
-            <!-- Image info -->
-            <div class="mt-2 text-center text-white">
-              <p id="lightbox-description" class="text-gray-200"></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-
-        document.body.insertAdjacentHTML('beforeend', lightboxHTML);
-        const lightbox = document.getElementById('lightbox');
-
-        // Add event listeners
-        lightbox.addEventListener('click', function(e) {
-            closeLightbox();
-        })
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeLightbox();
-        });
-
-        return lightbox;
-    }
-
-    function closeLightbox() {
-        const lightbox = document.getElementById('lightbox');
-        if (lightbox) {
-            lightbox.classList.add('hidden');
-            document.body.style.overflow = '';
-            const loadingSpinner = lightbox.querySelector('#loading-spinner');
-            loadingSpinner.classList.add('hidden');
-        }
-    }
+<script>
+    import { initLightbox } from "../lib/lightbox";
+    initLightbox();
 </script>
