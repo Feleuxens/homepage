@@ -17,7 +17,7 @@
 │   ├── styles/
 │   │   └── *.css
 │   └── utils/
-│       └── exif-reader.js
+│       └── exif-reader.ts
 ├── package.json
 ├── Dockerfile
 ├── nginx.conf
@@ -39,5 +39,5 @@ All commands are run from the root of the project, from a terminal:
 
 ## Exif reader
 
-The exif reader looks for all photos inside `public/images/` and outputs the exif data to `src/data/exif-data.js`.
+The exif reader looks for all photos inside `public/images/` and outputs the exif data to `src/data/exif-data.ts`.
 This is used for a string containing camera model, lens, etc. under clickable photos (e.g., on the photography page).

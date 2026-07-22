@@ -1,10 +1,28 @@
-// integrations/exif-extractor.js
 import ExifReader from 'exifreader';
 import fs from 'fs/promises';
 import path from 'path';
-import chokidar from 'chokidar';
+import chokidar, { FSWatcher } from 'chokidar';
 
-function formatExifString(exifData) {
+export interface ExifData {
+    camera?: string;
+    lens?: string;
+    aperture?: string;
+    shutterSpeed?: string;
+    iso?: number;
+    focalLength?: string;
+    dateTaken?: string;
+    dateIso?: string;
+    location? : string;
+    longitude?: string;
+    latitude?: string;
+    exposureBiasValue?: string;
+    height: number;
+    width: number;
+    aspectRatio: number;
+    caption: string;
+}
+
+function formatExifString(exifData: ExifData): string {
     let returnString = "";
     if (exifData["camera"]) returnString += exifData["camera"];
     if (exifData["lens"]) returnString += (" (" + exifData["lens"] + ")");
@@ -16,23 +34,23 @@ function formatExifString(exifData) {
     return returnString;
 }
 
-async function extractExifData(imagePath) {
+async function extractExifData(imagePath: string): Promise<ExifData | undefined> {
     try {
         const imageBuffer = await fs.readFile(imagePath);
         const tags = ExifReader.load(imageBuffer);
-        const getTag = (tagName) => {
+        const getTag = (tagName: string): string | undefined => {
             const tag = tags[tagName];
-            return tag ? tag.description || tag.value : null;
+            return tag ? tag.description || tag.value : undefined;
         };
 
-        const formatShutterSpeed = (exposureTime) => {
-            if (!exposureTime) return null;
+        const formatShutterSpeed = (exposureTime: string | undefined) => {
+            if (!exposureTime) return undefined;
             if (!exposureTime.endsWith('s')) return exposureTime + "s";
             return exposureTime;
         };
 
-        const formatDate = (dateString, offset, localeDate) => {
-            if (!dateString) return null;
+        const formatDate = (dateString: string | undefined, offset: string | undefined, localeDate: boolean = false): string | undefined => {
+            if (!dateString) return undefined;
             try {
                 dateString = dateString.trim();
 
@@ -58,8 +76,8 @@ async function extractExifData(imagePath) {
             }
         };
 
-        const mapCamera = (camera) => {
-            if (!camera) return null;
+        const mapCamera = (camera: string | undefined): string | undefined => {
+            if (!camera) return undefined;
             switch (camera) {
                 case "FC3170":
                     return "DJI Mavic Air 2";
@@ -68,50 +86,54 @@ async function extractExifData(imagePath) {
             }
         };
 
-        const formatExposureBias = (bias) => {
-            if (!bias) return null;
+        const getIso = (): number | undefined => {
+            let iso = getTag('ISO') || getTag('ISOSpeedRatings') || getTag('ISOSpeed');
+            if (iso) {
+                return Number(iso);
+            }
+            return undefined;
+        }
+
+        const formatExposureBias = (bias: string | undefined) => {
+            if (!bias) return undefined;
             let chars = 1;
             if (bias.startsWith('-')) chars += 1;
             if (bias.includes('.')) chars += 2;
             return bias.substring(0, chars) + " EV";
         };
 
-        const exifData = {
+        const h = Number(getTag('Image Height')?.replace('px', ''));
+        const w = Number(getTag('Image Width')?.replace('px', ''));
+
+        const exifData: ExifData = {
             camera: mapCamera(getTag('Model') || getTag('Camera Model Name')),
             lens: getTag('LensModel') || getTag('LensInfo') || getTag('LensSpecification'),
             aperture: getTag('FNumber') || "f/?",
             shutterSpeed: formatShutterSpeed(getTag('ExposureTime')),
-            iso: getTag('ISO') || getTag('ISOSpeedRatings') || getTag('ISOSpeed'),
+            iso: getIso(),
             focalLength: getTag('FocalLength'),
-            dateTaken: formatDate(getTag('DateTime') || getTag('DateTimeOriginal') || getTag('DateTimeDigitized'), getTag("OffsetTime") || getTag("OffsetTimeOriginal") || getTag("OffsetTimeDigitized") || null, true),
-            dateIso: formatDate(getTag('DateTimeDigitized') || getTag('DateTimeOriginal') || getTag('DateTime'), getTag("OffsetTime") || getTag("OffsetTimeOriginal") || getTag("OffsetTimeDigitized") || null, false),
+            dateTaken: formatDate(getTag('DateTime') || getTag('DateTimeOriginal') || getTag('DateTimeDigitized'), getTag("OffsetTime") || getTag("OffsetTimeOriginal") || getTag("OffsetTimeDigitized"), true),
+            dateIso: formatDate(getTag('DateTimeDigitized') || getTag('DateTimeOriginal') || getTag('DateTime'), getTag("OffsetTime") || getTag("OffsetTimeOriginal") || getTag("OffsetTimeDigitized"), false),
             location: getTag('GPS Position') || getTag('Location'),
             exposureBiasValue: formatExposureBias(getTag('ExposureBiasValue')),
             // latitude: getTag('GPSLatitude'),
             // longitude: getTag('GPSLongitude'),
-            height: getTag('Image Height').replace('px', ''),
-            width: getTag('Image Width').replace('px', ''),
-            aspectRatio: getTag('Image Height').replace('px', '') / getTag('Image Width').replace('px', '') || 1
+            height: h,
+            width: w,
+            aspectRatio: h && w ? h / w : 1,
+            caption: "",
         };
 
-        // Filter out null values
-        const cleanedExif = {};
-        Object.entries(exifData).forEach(([key, value]) => {
-            if (value !== null && value !== undefined && value !== '') {
-                cleanedExif[key] = value;
-            }
-        });
-        cleanedExif["exif"] = formatExifString(cleanedExif);
+        exifData.caption = formatExifString(exifData);
 
-        return cleanedExif;
+        return exifData;
 
     } catch (error) {
         console.error(`Error extracting EXIF from ${imagePath}:`, error);
-        return {};
     }
 }
 
-async function generateExifData(originalsDir = ['public/images/photography/originals'], outputFile = 'src/data/exif-data.js') {
+async function generateExifData(originalsDir: string[] = ['public/images/photography/originals'], outputFile: string = 'src/data/exif-data.ts') {
     try {
         // Ensure the data directory exists
         await fs.mkdir(path.dirname(outputFile), { recursive: true });
@@ -126,25 +148,28 @@ async function generateExifData(originalsDir = ['public/images/photography/origi
             /\.(jpg|jpeg|tiff)$/i.test(file)
         );
 
-        const allExifData = {};
+        const allExifData: { [key: string]: ExifData} = {};
 
         for (const file of imageFiles) {
-            const exifData = await extractExifData(file);
+            const exifData: ExifData | undefined = await extractExifData(file);
+            if (!exifData) continue;
 
             if (Object.keys(exifData).length > 0) {
                 allExifData[file] = exifData;
             }
         }
 
-        // Generate JavaScript file with EXIF data
-        const jsContent = `// Auto-generated EXIF data
+        // Generate TypeScript file with EXIF data
+        const tsContent = `// Auto-generated EXIF data
 // This file is automatically generated by the Astro EXIF integration
 // Do not edit manually - changes will be overwritten
 
-export const exifData = ${JSON.stringify(allExifData, null, 2)};
+import type { ExifData } from "../lib/exif-reader.ts";
+
+export const exifData: { [key: string]: ExifData } = ${JSON.stringify(allExifData, null, 2)};
 `;
 
-        await fs.writeFile(outputFile, jsContent);
+        await fs.writeFile(outputFile, tsContent);
         console.log(`✅ EXIF data generated for ${Object.keys(allExifData).length} images`);
 
         return allExifData;
@@ -155,19 +180,19 @@ export const exifData = ${JSON.stringify(allExifData, null, 2)};
     }
 }
 
-export function exifExtractor(options = {}) {
+export function exifExtractor(options: { originalsDir?: string[], outputFile?: string, watchForChanges?: boolean } = {}) {
     const {
         originalsDir = ['src/images/photography/originals'],
-        outputFile = 'src/data/exif-data.js',
+        outputFile = 'src/data/exif-data.ts',
         watchForChanges = true
     } = options;
 
-    let watcher;
+    let watcher: FSWatcher;
 
     return {
         name: 'exif-extractor',
         hooks: {
-            'astro:config:setup': async ({ command }) => {
+            'astro:config:setup': async ({ command }: { command: string }) => {
                 console.log('🔍 EXIF Extractor: Initializing...');
 
                 // Generate EXIF data on startup
