@@ -9,7 +9,7 @@ const { count = 4 } = Astro.props;
 const albums = (await getAlbums()).slice(0, count);
 ---
 {albums.length > 0 && (
-<div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+<div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
     {albums.map((album) => (
         <a href={album.url} target="_blank" rel="noopener" class="group block">
             <div class="bg-gray-200 rounded-lg overflow-hidden mb-4 aspect-square">

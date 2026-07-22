@@ -59,7 +59,7 @@ const portfolioCategories = [
 const equipment = [
     "Canon EOS R6 Mark III",
     "DJI Mavic Air 2",
-    "Google Pixel 8 Pro"
+    "iPhone 17 Pro"
 ];
 
 const software = [
@@ -71,7 +71,7 @@ const software = [
 
 <MainLayout title="Photography Portfolio" class="theme-accent">
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-accent/10 to-accent/5 pt-24 pb-8">
+    <section class="bg-linear-to-br from-accent/10 to-accent/5 pt-24 pb-8">
         <div class="container">
             <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-4xl md:text-6xl mb-6 opacity-90" id="hero-title">
@@ -92,7 +92,7 @@ const software = [
         <h2 class="section-title text-center">Latest Albums</h2>
         <div class="container">
             <LatestAlbums count={6} server:defer>
-                <div slot="fallback" class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+                <div slot="fallback" class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
                     {Array.from({ length: 6 }).map(() => (
                             <div>
                                 <div class="bg-gray-200 rounded-lg aspect-square mb-4 animate-pulse"></div>
@@ -114,7 +114,7 @@ const software = [
                 Each collection represents a different way of seeing the world. Click through to explore the stories behind these images.
             </p>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12">
                 {portfolioCategories.map(category => (
                         <div class="group">
                             <div class="bg-gray-200 rounded-lg overflow-hidden mb-4">
@@ -146,7 +146,7 @@ const software = [
     </section>
 
     <!-- About Photography Section -->
-    <section id="about-photography" class="py-12 bg-white">
+    <section id="about-photography" class="py-12 bg-gray-50">
         <div class="container">
             <div class="max-w-4xl mx-auto">
                 <h2 class="section-title text-center">About My Photography</h2>
@@ -174,7 +174,7 @@ const software = [
     </section>
 
     <!-- Equipment & Technical -->
-    <section class="py-12 bg-gray-50">
+    <section class="py-12 bg-white">
         <div class="container">
             <div class="max-w-4xl mx-auto">
                 <h2 class="section-title text-center">Tools & Techniques</h2>
