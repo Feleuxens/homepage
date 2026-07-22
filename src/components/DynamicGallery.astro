@@ -48,57 +48,74 @@ switch (sortBy) {
 }
 const displayImages = maxImages ? sortedImages.slice(0, maxImages) : sortedImages;
 
-const getMasonrySizeClass = (index: number, aspectRatio?: number) => {
-    // vertical images should always have less horizontal space
-    if (aspectRatio && aspectRatio > 1) return 'w-1/3';
+// Assumes every image is 3:2 or 2:3
+function cell(index: number, aspectRatio?: number) {
+    const isPortrait = aspectRatio != null && aspectRatio > 1;
 
-    if (index === 0 || index % 4 === 0) return 'w-2/3';
-    return 'w-1/3';
-};
-
-const getMasonryAspectRatio = (index: number, aspectRatio?: number) => {
-    if (!aspectRatio || aspectRatio <= 0.9) {
-        return "aspect-[3/2]";
-    } else if (aspectRatio >= 1.1) {
-        return "aspect-[3/4]";
-    } else {
-        return "aspect-square";
-    }
+    // size is rendered size
+    if (isPortrait) return { cols: 6, rows: 8, size: 900 }; // 2:3, slightly cropped to match layout
+    if (index === 0 || index % 4 === 0) return { cols: 12, rows: 8, size: 1600 }; // full 3:2
+    return { cols: 6, rows: 4, size: 600 }; // 3:2
 }
 
-// Get responsive width for preserving aspect ratio
-const getImageSize = (index: number, aspectRatio?: number) => {
-    const isLandscape = aspectRatio && aspectRatio < 1.1;
-    if (isLandscape && (index === 0 || index % 4 === 0)) {
-        return 1000; // width of two column
-    }
-    return 600;
-};
 ---
-<div class="masonry-container">
-    <div class="masonry-sizer w-1/3"></div>
-    {displayImages.map((image, index) => (
-        <div class={`masonry-item ${getMasonrySizeClass(index, image.aspectRatio)} ${getMasonryAspectRatio(index, image.aspectRatio)} group p-1 overflow-hidden image-wrapper`}>
-            <SquareImage
-                src={image.src}
-                alt={`Photo ${index + 1}`}
-                path={`${folder}${image.filename}`}
-                size={getImageSize(index, image.aspectRatio)}
-            />
-        </div>
-    ))}
+<div class="masonry-wrap">
+    <div class="masonry-grid ">
+    {
+        displayImages.map((image, index) => {
+            const { cols, rows, size } = cell(
+                index,
+                image.aspectRatio
+            );
+            return (
+                    <div
+                            class="masonry-item group overflow-hidden rounded-lg"
+                            style={`grid-column: span ${cols}; grid-row: span ${rows};`}
+                    >
+                        <SquareImage
+                                src={image.src}
+                                alt={`Photo ${index + 1}`}
+                                path={`${folder}${image.filename}`}
+                                size={size}
+                        />
+                    </div>
+            );
+        })
+    }
+    </div>
+
 </div>
 
-<script>
-    import Packery from "packery";
-
-    const masonryContainer = document.querySelector('.masonry-container');
-    if (masonryContainer) {
-        new Packery(masonryContainer, {
-            itemSelector: '.masonry-item',
-            columnWidth: '.masonry-sizer',
-            percentPosition: true,
-            fitWidth: true,
-        });
+<style>
+    /* Establishes the width reference for cqw below. */
+    .masonry-wrap {
+        container-type: inline-size;
     }
-</script>
+
+    .masonry-grid {
+        --cols: 18;
+        --gap: 0.5rem;
+        display: grid;
+        grid-template-columns: repeat(var(--cols), 1fr);
+        /* Row height == column width, so cells are square and 3:2 / 2:3
+           spans are exact. cqw tracks the wrapper's width responsively. */
+        grid-auto-rows: calc(
+                (100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols)
+        );
+        grid-auto-flow: dense;
+        gap: var(--gap);
+    }
+
+    .masonry-item :global(button),
+    .masonry-item :global(img) {
+        width: 100%;
+        height: 100%;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .masonry-item :global(img) {
+            transition: transform 0.5s ease;
+        }
+    }
+</style>
+
