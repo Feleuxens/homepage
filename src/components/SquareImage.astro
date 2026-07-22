@@ -1,6 +1,6 @@
 ---
 import { Image, getImage } from "astro:assets";
-import {exifData} from "../data/exif-data";
+import { exifData } from "../data/exif-data";
 
 interface Props {
     /** Imported image (from src/assets or public/, per your setup). */
@@ -37,7 +37,7 @@ const aspectRatio: number = meta.aspectRatio || 1;
 if (!(aspectRatio > 0)) {
     throw new Error(`SquareImage: invalid aspect ratio (${aspectRatio}) for ${path}`);
 }
-const caption = preset_caption ?? meta.exif ?? "No exif data";
+const caption = preset_caption ?? meta.caption ?? "No exif data";
 
 let thumbWidth;
 let thumbHeight;
