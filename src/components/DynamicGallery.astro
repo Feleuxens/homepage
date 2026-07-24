@@ -53,9 +53,9 @@ function cell(index: number, aspectRatio?: number) {
     const isPortrait = aspectRatio != null && aspectRatio > 1;
 
     // size is rendered size
-    if (isPortrait) return { cols: 6, rows: 8, size: 900 }; // 2:3, slightly cropped to match layout
-    if (index === 0 || index % 4 === 0) return { cols: 12, rows: 8, size: 1600 }; // full 3:2
-    return { cols: 6, rows: 4, size: 600 }; // 3:2
+    if (isPortrait) return { cols: 6, rows: 8, size: 600 }; // 2:3, slightly cropped to match layout
+    if (index === 0 || index % 4 === 0) return { cols: 12, rows: 8, size: 900 }; // full 3:2
+    return { cols: 6, rows: 4, size: 400 }; // 3:2
 }
 
 ---
