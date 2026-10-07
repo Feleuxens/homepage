@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:26-alpine AS build
 LABEL authors="Feleuxens"
 
 WORKDIR /app
@@ -46,7 +46,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 
 # dynamic content image
-FROM node:24-alpine AS node
+FROM node:26-alpine AS node
 
 WORKDIR /app
 
