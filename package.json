@@ -21,7 +21,7 @@
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@types/packery": "1.4.37"
   },
   "allowScripts": {
