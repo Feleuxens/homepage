@@ -16,7 +16,7 @@
     "@tailwindcss/vite": "4.3.3",
     "astro": "7.3.6",
     "chokidar": "5.0.0",
-    "exifreader": "4.46.0",
+    "exifreader": "4.48.1",
     "gsap": "3.15.0",
     "tailwindcss": "4.3.3"
   },
