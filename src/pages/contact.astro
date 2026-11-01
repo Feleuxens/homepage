@@ -270,50 +270,6 @@ const serviceAreas = [
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Register GSAP plugins
-            gsap.registerPlugin(ScrollTrigger);
-
-            // Hero animations
-            gsap.to('#hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' });
-            gsap.to('#hero-subtitle', { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' });
-
-            // Form animations
-            gsap.from('.contact-form', {
-                scrollTrigger: {
-                    trigger: '.contact-form',
-                    start: 'top 98%',
-                },
-                x: -50,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power2.out'
-            });
-
-            gsap.from('.contact-info', {
-                scrollTrigger: {
-                    trigger: '.contact-info',
-                    start: 'top 98%',
-                },
-                x: 50,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power2.out'
-            });
-
-            gsap.from('.faq-item', {
-                scrollTrigger: {
-                    trigger: '.faq-item',
-                    start: 'top 98%',
-                },
-                y: 30,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
-        });
-
         // Form submission handler
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();

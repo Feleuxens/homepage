@@ -229,7 +229,7 @@ const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(it
                   <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
                         class="skill-progress bg-primary h-full rounded-full"
-                        data-level={skill.level}
+                        style={`width: ${skill.level}%`}
                     ></div>
                   </div>
                 </div>
@@ -517,9 +517,6 @@ const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(it
   </style>
 
   <script>
-    import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-
     const CARD_GAP = 10; // rendered card gap
 
     function layoutTimeline() {
@@ -562,16 +559,10 @@ const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(it
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      gsap.registerPlugin(ScrollTrigger);
-
-      // Timeline layout
       let frame = 0;
       const scheduleLayout = () => {
         cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(() => {
-          layoutTimeline();
-          ScrollTrigger.refresh();
-        });
+        frame = requestAnimationFrame(layoutTimeline);
       };
 
       scheduleLayout();
@@ -587,69 +578,6 @@ const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(it
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(scheduleLayout);
       }
-
-      // Animations
-      gsap.from("#about-title", { opacity: 0, y: -30, duration: 0.8, ease: "power2.out" });
-      gsap.from(".animate-item", { opacity: 0, y: 20, duration: 0.6, stagger: 0.2, ease: "power2.out" });
-
-      gsap.from(".about-image", {
-        scrollTrigger: { trigger: ".about-image", start: "top 80%" },
-        opacity: 0,
-        duration: 0.8,
-        ease: "power2.out"
-      });
-
-      document.querySelectorAll(".skill-progress").forEach(item => {
-        const level = item.getAttribute("data-level");
-        gsap.to(item, {
-          scrollTrigger: { trigger: item, start: "top 98%" },
-          width: `${level}%`,
-          duration: 1,
-          ease: "power2.out"
-        });
-      });
-
-      document.querySelectorAll(".tech-item").forEach((item, index) => {
-        gsap.fromTo(item,
-            { opacity: 0, x: 50 },
-            {
-              scrollTrigger: { trigger: item, start: "top 98%", once: true },
-              opacity: 1,
-              x: 0,
-              duration: 0.4,
-              delay: index * 0.1,
-              ease: "power2.out"
-            }
-        );
-      });
-
-      document.querySelectorAll(".music-item").forEach((item, index) => {
-        gsap.fromTo(item,
-            { opacity: 0, x: -50 },
-            {
-              scrollTrigger: { trigger: item, start: "top 98%", once: true },
-              opacity: 1,
-              x: 0,
-              duration: 0.8,
-              delay: index * 0.1,
-              ease: "power2.out"
-            }
-        );
-      });
-
-      document.querySelectorAll(".interests-item, .instrument-card").forEach(item => {
-        gsap.fromTo(item,
-            { opacity: 0, y: 20 },
-            {
-              scrollTrigger: { trigger: item, start: "top 98%", once: true },
-              opacity: 1,
-              stagger: 0.3,
-              y: 0,
-              duration: 0.4,
-              ease: "power2.out"
-            }
-        );
-      });
     });
   </script>
 </MainLayout>
