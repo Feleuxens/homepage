@@ -4,7 +4,7 @@
 @theme {
   --color-primary: #3a5db8;
   --color-secondary: #5a287d;
-  --color-accent: #cf6607;
+  --color-accent: #bb5a03;
   --color-dark: #23272e;
 }
 
@@ -105,6 +105,8 @@
 /* Additional custom styles */
 html {
   scroll-behavior: smooth;
+  /* Keeps anchored headings clear of the fixed header */
+  scroll-padding-top: 5rem;
 }
 
 
