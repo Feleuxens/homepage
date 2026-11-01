@@ -6,13 +6,13 @@ import meImg from "../../public/images/me.jpg";
 
 const technicalSkills = [
   { name: "Linux/System Administration", level: 80 },
-  { name: "Docker/Docker Compose", level: 70 },
-  { name: "Python", level: 75 },
+  { name: "Docker/Docker Compose", level: 85 },
+  { name: "Python", level: 80 },
   { name: "Java", level: 60 },
   { name: "Kubernetes", level: 50 },
   { name: "Terraform", level: 50},
-  { name: "Gitlab CI", level: 75},
-  { name: "OPNsense", level: 60},
+  { name: "GitLab CI", level: 75},
+  { name: "OPNsense", level: 40},
   { name: "Software Architecture", level: 35}
 ];
 
@@ -78,7 +78,7 @@ const timeline: timelineItem[] = [
     endYear: 2020,
     title: "Music exam in A-levels",
     company: "",
-    description: "Played Clarke Suit in D Major (Bourrée, Ecossaise, Prince of Denmark's March), Rachmaninoff Prelude in C# minor and Neruda Trumpet Concerto in E♭ Major: I. Allegro",
+    description: "Played Clarke Suite in D major (Bourrée, Ecossaise, Prince of Denmark's March), Rachmaninoff Prelude in C# minor and Neruda Trumpet Concerto in E♭ major: I. Allegro",
     type: "music",
     dotPosition: 0,
     cardPosition: 0,
@@ -180,21 +180,21 @@ const techDotYears = [...new Set(positionedTechItems.map(item => getEndYear(item
 const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(item.endYear)))];
 ---
 
-<MainLayout title="About Me">
+<MainLayout title="About Me" description="About Felix Grüb: computer science, DevOps and system administration, piano and trumpet, and track and field.">
   <section class="bg-gray-100 pt-24 pb-8">
     <div class="container">
       <h1 class="section-title text-center mb-12 enter">About Me</h1>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
         <div class="about-image justify-self-center enter" style="--enter-index: 1">
-          <Image src={meImg} alt="Felix" class="profile-photo" width="500" height="500" position="top" />
+          <Image src={meImg} alt="Portrait of Felix Grüb" class="profile-photo" width="500" height="500" position="top" />
         </div>
 
         <div class="about-content space-y-6">
           <h2 class="text-3xl enter" style="--enter-index: 1">Hello, I'm Felix</h2>
 
           <p class="text-gray-700 enter" style="--enter-index: 2">
-            I'm Felix, a computer science student specializing in IT-security and distributed systems.
+            I'm Felix, a computer science student specializing in IT security and distributed systems.
             When I'm not diving into system administration or exploring IT security, you'll find me at the piano or
             capturing moments through my camera lens. I love how technical precision and creative expression complement
             each other—whether debugging infrastructure or perfecting a Rachmaninoff prelude. Want to see how these
@@ -262,9 +262,9 @@ const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(it
                   Classical and contemporary repertoire with focus on performance and music theory
                 </p>
                 <div class="instrument-highlight">
-                  <strong>Pieces:</strong> Rachmaninoff - Prelude in C# Minor,<br>
-                  Rachmaninoff - Prelude G# Minor,<br>
-                  Schubert - 4 Impromptus, Op. 90, D. 899: No. 2 in E♭ Major
+                  <strong>Pieces:</strong> Rachmaninoff - Prelude in C# minor,<br>
+                  Rachmaninoff - Prelude in G# minor,<br>
+                  Schubert - 4 Impromptus, Op. 90, D. 899: No. 2 in E♭ major
                 </div>
 
                 <div class="instrument-specialties">
@@ -299,7 +299,7 @@ const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(it
                 <div class="instrument-highlight">
                   <strong>Pieces:</strong> Neruda - Trumpet Concerto in E♭ major: I. Allegro,<br>
                   Bach - Weihnachtsoratorium: Großer Herr und starker König,<br>
-                  Albinoni - Concerto in B♭, Op.7 Nr.3: I. Allegro
+                  Albinoni - Concerto in B♭, Op. 7 No. 3: I. Allegro
                 </div>
 
                 <div class="instrument-specialties">
