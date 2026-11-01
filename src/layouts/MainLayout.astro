@@ -23,9 +23,9 @@ const currentYear = new Date().getFullYear();
     <script defer data-domain="feleuxens.de" data-api="/plausible/api/event" src="https://feleuxens.de/plausible/js/script.file-downloads.outbound-links.tagged-events.js"></script>
     <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
   </head>
-  <body class:list={["bg-gray-50 text-gray-900 min-h-screen flex flex-col", className]}>
+  <body class:list={["bg-gray-50 text-gray-900 min-h-svh flex flex-col", className]}>
     <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
-      <div class="container mx-auto px-4 py-4">
+      <div class="container py-4">
         <nav class="flex justify-between items-center">
           <a href="/" class="font-serif text-2xl font-bold">Felix Grüb</a>
 
@@ -40,15 +40,15 @@ const currentYear = new Date().getFullYear();
           </ul>
 
           <!-- Mobile menu button -->
-          <button class="md:hidden flex flex-col space-y-1.5" aria-label="Toggle menu" id="menuButton">
-            <span class="block w-6 h-0.5 bg-gray-800 transition-all"></span>
-            <span class="block w-6 h-0.5 bg-gray-800 transition-all"></span>
-            <span class="block w-6 h-0.5 bg-gray-800 transition-all"></span>
+          <button class="md:hidden flex flex-col space-y-1.5" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu" id="menuButton">
+            <span class="block w-6 h-0.5 bg-gray-800 transition-[transform,opacity]"></span>
+            <span class="block w-6 h-0.5 bg-gray-800 transition-[transform,opacity]"></span>
+            <span class="block w-6 h-0.5 bg-gray-800 transition-[transform,opacity]"></span>
           </button>
         </nav>
 
         <!-- Mobile Navigation Menu (Hidden by default) -->
-        <div class="md:hidden h-0 overflow-hidden transition-all duration-150" id="mobileMenu">
+        <div class="md:hidden h-0 overflow-hidden transition-[height] duration-150" id="mobileMenu" inert>
           <ul class="py-3 space-y-3">
             <li><a href="/" class="block py-2 font-medium">Home</a></li>
             <li><a href="/tech-services" class="block py-2 font-medium">Tech Services</a></li>
@@ -66,7 +66,7 @@ const currentYear = new Date().getFullYear();
     </main>
 
     <footer class="bg-dark">
-      <div class="container mx-auto px-4 py-12">
+      <div class="container py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 class="text-xl mb-4">Felix Grüb</h3>
@@ -110,15 +110,13 @@ const currentYear = new Date().getFullYear();
         const mobileMenu = document.getElementById('mobileMenu');
 
         menuButton?.addEventListener('click', () => {
-          menuButton.classList.toggle('active');
+          const open = menuButton.classList.toggle('active');
 
-          if (mobileMenu?.classList.contains('h-0')) {
-            mobileMenu.classList.remove('h-0');
-            mobileMenu.classList.add('h-78');
-          } else {
-            mobileMenu?.classList.add('h-0');
-            mobileMenu?.classList.remove('h-78');
-          }
+          menuButton.setAttribute('aria-expanded', String(open));
+          mobileMenu?.classList.toggle('h-0', !open);
+          mobileMenu?.classList.toggle('h-78', open);
+          // Closed menu links stay out of the tab order and away from screen readers
+          mobileMenu?.toggleAttribute('inert', !open);
         });
       });
     </script>
