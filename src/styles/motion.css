@@ -5,10 +5,6 @@
  *
  *   .enter   plays once on page load (use for the first screen).
  *            Stagger with style="--enter-index: n".
- *   .reveal  plays as the element scrolls into view (CSS scroll-driven animation).
- *            It runs over a fixed share of the screen height, so small and large
- *            elements reveal at the same pace. Stagger with style="--reveal-index: n".
- *            Browsers without scroll-driven animations show the content unchanged.
  *   .appear  plays once, timed, when the element first scrolls into view. Elements that
  *            enter together are staggered automatically. Driven by src/lib/appear.ts
  *            (loaded in MainLayout); without the script the content simply shows.
@@ -25,25 +21,11 @@
     --motion-duration-base: 300ms;
     --motion-duration-slow: 700ms;
     --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-    --motion-ease-scroll: ease-out; /* gentler, because scroll position already paces it */
     --motion-distance: 24px;
     --motion-stagger: 120ms;
-    --motion-reveal-length: 25vh;
-    --motion-reveal-stagger: 5vh;
     --motion-duration-appear: 500ms;
     --motion-appear-stagger: 80ms;
     --motion-distance-x: 40px;
-  }
-}
-
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    translate: 0 var(--motion-distance);
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
   }
 }
 
@@ -70,18 +52,8 @@
 @layer components {
   @media (prefers-reduced-motion: no-preference) {
     .enter {
-      animation: rise-in var(--motion-duration-slow) var(--motion-ease-out) both;
+      animation: appear var(--motion-duration-slow) var(--motion-ease-out) both;
       animation-delay: calc(var(--enter-index, 0) * var(--motion-stagger));
-    }
-
-    @supports (animation-timeline: view()) {
-      .reveal {
-        animation: rise-in var(--motion-ease-scroll) both;
-        animation-timeline: view();
-        animation-range:
-          entry calc(var(--reveal-index, 0) * var(--motion-reveal-stagger))
-          entry calc(var(--motion-reveal-length) + var(--reveal-index, 0) * var(--motion-reveal-stagger));
-      }
     }
 
     /* Hidden only once appear.ts has started (.appear-ready), so nothing stays hidden without it */

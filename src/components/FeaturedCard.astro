@@ -11,13 +11,11 @@ interface Props {
     alt: string;
     title: string;
     description: string;
-    /** Position in its row, used to stagger the scroll reveal. */
-    index?: number;
 }
 
-const { href, theme, image, alt, title, description, index = 0 } = Astro.props;
+const { href, theme, image, alt, title, description } = Astro.props;
 ---
-<a href={href} class={`card card-link reveal group theme-${theme}`} style={`--reveal-index: ${index}`}>
+<a href={href} class={`card card-link appear group theme-${theme}`}>
     <div class="aspect-video bg-gray-200 overflow-hidden">
         <Image
             src={image}

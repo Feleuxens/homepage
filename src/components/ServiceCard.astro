@@ -8,13 +8,11 @@ interface Props {
     theme: Theme;
     title: string;
     description: string;
-    /** Position in its row, used to stagger the scroll reveal. */
-    index?: number;
 }
 
-const { href, theme, title, description, index = 0 } = Astro.props;
+const { href, theme, title, description } = Astro.props;
 ---
-<a href={href} class={`card card-link reveal group p-8 theme-${theme}`} style={`--reveal-index: ${index}`}>
+<a href={href} class={`card card-link appear group p-8 theme-${theme}`}>
     <div class="w-16 h-16 mb-6 text-(--theme-color)">
         <slot />
     </div>

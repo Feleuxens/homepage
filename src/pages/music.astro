@@ -100,7 +100,7 @@ const repertoire = [
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
                 {services.map(service => (
-                        <div class="service-card card p-8 hover:shadow-xl transition-all duration-300">
+                        <div class="service-card card p-8 hover:shadow-xl transition-shadow duration-300 appear">
                             <div class="w-16 h-16 mb-6 text-secondary" set:html={service.icon}></div>
 
                             <h3 class="text-2xl mb-4">{service.title}</h3>
@@ -129,7 +129,7 @@ const repertoire = [
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
                 {repertoire.map(category => (
-                        <div class="repertoire-card bg-white rounded-lg p-6 shadow-md">
+                        <div class="repertoire-card bg-white rounded-lg p-6 shadow-md appear">
                             <h3 class="text-xl mb-4 text-secondary">{category.category}</h3>
                             <ul class="space-y-2">
                                 {category.pieces.map(piece => (

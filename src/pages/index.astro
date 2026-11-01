@@ -41,8 +41,8 @@ const featuredWork = [
 ---
 <MainLayout title="Home">
   <!-- Hero Section -->
-  <section class="relative overflow-hidden h-screen">
-    <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
+  <section class="relative overflow-hidden h-svh">
+    <div class="absolute inset-0 bg-black/40 z-10"></div>
     <div class="absolute inset-0 bg-cover bg-center scale-110 blur-xl" style={`background-image: url(${heroPlaceholder});`}></div>
     <Image
         src={backgroundImg}
@@ -76,7 +76,7 @@ const featuredWork = [
   <!-- Services Overview -->
   <section class="py-20 bg-white">
     <div class="container">
-      <h2 class="section-title text-center reveal">What I Offer</h2>
+      <h2 class="section-title text-center appear">What I Offer</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
         <ServiceCard
@@ -98,7 +98,6 @@ const featuredWork = [
             theme="secondary"
             title="Piano Performances"
             description="Elegant piano music for weddings, funerals, and private gatherings. Customized repertoire to suit your occasion."
-            index={1}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M9 18V5l12-2v13"></path>
@@ -112,9 +111,9 @@ const featuredWork = [
 
   <section class="py-12 bg-gray-100">
     <div class="container">
-      <h2 class="section-title text-center reveal">Featured Work</h2>
+      <h2 class="section-title text-center appear">Featured Work</h2>
       <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        {featuredWork.map((work, index) => <FeaturedCard {...work} index={index} />)}
+        {featuredWork.map(work => <FeaturedCard {...work} />)}
       </div>
     </div>
   </section>
@@ -123,11 +122,11 @@ const featuredWork = [
   <section class="py-20 bg-white">
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div class="about-image reveal">
+        <div class="about-image appear">
           <Image src={meImg} alt="Felix" class="profile-photo" width="500" height="500" position='top' />
         </div>
 
-        <div class="about-content reveal" style="--reveal-index: 1">
+        <div class="about-content appear">
           <h2 class="section-title">About Me</h2>
           <p class="mb-6">
             I love variety and have a whole range of different interests. This allows me to combine different perspectives and solve problems with a unique approach.
@@ -145,7 +144,7 @@ const featuredWork = [
 
   <!-- Contact Preview -->
   <section class="py-20 bg-primary text-white">
-    <div class="container text-center reveal">
+    <div class="container text-center appear">
       <h2 class="section-title text-white">Let's Work Together</h2>
       <p class="max-w-2xl mx-auto mb-10 text-white">
         Whether you need technical expertise for your infrastructure or beautiful piano music for your event, I'm here to help.

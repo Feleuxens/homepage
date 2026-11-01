@@ -107,7 +107,7 @@ const process = [
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
                 {services.map(service => (
-                        <div class="service-card card p-8 hover:shadow-xl transition-all duration-300">
+                        <div class="service-card card p-8 hover:shadow-xl transition-shadow duration-300 appear">
                             <div class="w-16 h-16 mb-6 text-primary" set:html={service.icon}></div>
 
                             <h3 class="text-2xl mb-4">{service.title}</h3>
@@ -136,12 +136,12 @@ const process = [
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
                 {technologies.map(tech => (
-                        <div class="tech-item flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
+                        <div class="tech-item flex items-center justify-between p-4 bg-white rounded-lg shadow-sm appear">
                             <span class="font-medium text-gray-800">{tech.name}</span>
                             <div class="flex items-center ml-4">
                                 <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
                                     <div
-                                            class="tech-progress h-full bg-primary rounded-full transition-all duration-1000"
+                                            class="tech-progress h-full bg-primary rounded-full appear-grow"
                                             style={`width: ${tech.level}%`}
                                     ></div>
                                 </div>
@@ -160,7 +160,7 @@ const process = [
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
                 {process.map(item => (
-                        <div class="process-item text-center">
+                        <div class="process-item text-center appear">
                             <div class="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center text-2xl font-bold mb-6 mx-auto">
                                 {item.step}
                             </div>
