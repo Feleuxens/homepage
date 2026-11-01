@@ -1,6 +1,7 @@
 ---
 // Main layout component that will be used across all pages
-const { title, class: className } = Astro.props;
+const DEFAULT_DESCRIPTION = "IT services and consulting, live music on piano and trumpet, and photography by Felix Grüb.";
+const { title, description = DEFAULT_DESCRIPTION, class: className } = Astro.props;
 import "@fontsource-variable/roboto";
 import "@fontsource-variable/playfair-display";
 import "../styles/global.css";
@@ -18,7 +19,7 @@ const currentYear = new Date().getFullYear();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="description" content="IT Professional, Musician, and Photographer offering technical services, music performances and photography" />
+    <meta name="description" content={description} />
     <title>{`${title} | Felix Grüb`}</title>
     <script defer data-domain="feleuxens.de" data-api="/plausible/api/event" src="https://feleuxens.de/plausible/js/script.file-downloads.outbound-links.tagged-events.js"></script>
     <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
@@ -32,7 +33,7 @@ const currentYear = new Date().getFullYear();
           <!-- Desktop Navigation -->
           <ul class="hidden md:flex space-x-8">
             <li><a href="/" class="font-medium ">Home</a></li>
-            <li><a href="/tech-services" class="font-medium ">Tech Services</a></li>
+            <li><a href="/tech-services" class="font-medium">IT Services</a></li>
             <li><a href="/music" class="font-medium">Music</a></li>
             <li><a href="/photography" class="font-medium">Photography</a></li>
             <li><a href="/about" class="font-medium">About</a></li>
@@ -51,7 +52,7 @@ const currentYear = new Date().getFullYear();
         <div class="md:hidden h-0 overflow-hidden transition-[height] duration-150" id="mobileMenu" inert>
           <ul class="py-3 space-y-3">
             <li><a href="/" class="block py-2 font-medium">Home</a></li>
-            <li><a href="/tech-services" class="block py-2 font-medium">Tech Services</a></li>
+            <li><a href="/tech-services" class="block py-2 font-medium">IT Services</a></li>
             <li><a href="/music" class="block py-2 font-medium">Music</a></li>
             <li><a href="/photography" class="block py-2 font-medium">Photography</a></li>
             <li><a href="/about" class="block py-2 font-medium">About</a></li>
