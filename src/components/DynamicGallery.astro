@@ -1,5 +1,5 @@
 ---
-import { exifData } from "../data/exif-data";
+import { FAVORITES_FOLDER, getFavoritePhotos, newestFirst } from "../lib/favorites";
 import SquareImage from "./SquareImage.astro";
 
 interface Props {
@@ -12,32 +12,14 @@ const {
     maxImages,
 } = Astro.props;
 
-let folder = "/images/photography/favorites/";
-const imageModules = import.meta.glob('../../public/images/photography/favorites/*.{jpg,jpeg,png,webp,JPG}');
-const images = await Promise.all(
-    Object.entries(imageModules).map(async ([path, importFn]) => {
-        const module = await importFn();
-        const filename = path.split('/').pop() || '';
-        const imageExif = exifData["public" + folder + filename] || {};
-        const aspectRatio = imageExif.aspectRatio;
-        return {
-            src: module.default,
-            filename,
-            path,
-            aspectRatio,
-            // Extract date for sorting
-            date: imageExif.dateIso
-                ? Date.parse(imageExif.dateIso)
-                : new Date(0) // fallback to epoch if no date
-        }
-    })
-);
+const folder = FAVORITES_FOLDER;
+const images = getFavoritePhotos();
 
 // Sort images based on sortBy prop
 let sortedImages = [...images];
 switch (sortBy) {
     case 'date':
-    sortedImages.sort((a, b) => b.date - a.date); // newest first
+    sortedImages.sort(newestFirst);
     break;
     case 'filename':
     sortedImages.sort((a, b) => a.filename.localeCompare(b.filename));
