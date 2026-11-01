@@ -76,12 +76,6 @@
     @apply px-2 py-1 text-xs font-medium bg-secondary/10 text-secondary rounded-full;
 }
 
-/* Animation for cards */
-.instrument-card {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
 /* Responsive adjustments */
 @media (max-width: 640px) {
     .instrument-card {

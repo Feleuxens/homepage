@@ -142,8 +142,7 @@ const process = [
                                 <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
                                     <div
                                             class="tech-progress h-full bg-primary rounded-full transition-all duration-1000"
-                                            data-level={tech.level}
-                                            style="width: 0%"
+                                            style={`width: ${tech.level}%`}
                                     ></div>
                                 </div>
                                 <span class="ml-3 text-sm text-gray-500">{tech.level}%</span>
@@ -226,70 +225,4 @@ const process = [
             </div>
         </div>
     </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Register GSAP plugins
-            gsap.registerPlugin(ScrollTrigger);
-
-            // Hero animations
-            gsap.to('#hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' });
-            gsap.to('#hero-subtitle', { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' });
-            gsap.to('#hero-buttons', { opacity: 1, y: 0, duration: 1, delay: 0.6, ease: 'power3.out' });
-
-            // Service cards animation
-            gsap.from('.service-card', {
-                scrollTrigger: {
-                    trigger: '.service-card',
-                    start: 'top 80%',
-                },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.2,
-                ease: 'power2.out'
-            });
-
-            // Technology progress bars
-            gsap.from('.tech-item', {
-                scrollTrigger: {
-                    trigger: '.tech-item',
-                    start: 'top 80%',
-                },
-                opacity: 0,
-                x: -20,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
-
-            // Animate progress bars
-            const progressBars = document.querySelectorAll('.tech-progress');
-            progressBars.forEach(bar => {
-                const level = bar.getAttribute('data-level');
-                gsap.to(bar, {
-                    scrollTrigger: {
-                        trigger: bar,
-                        start: 'top 80%',
-                    },
-                    width: `${level}%`,
-                    duration: 1.5,
-                    ease: 'power2.out'
-                });
-            });
-
-            // Process items animation
-            gsap.from('.process-item', {
-                scrollTrigger: {
-                    trigger: '.process-item',
-                    start: 'top 80%',
-                },
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.2,
-                ease: 'power2.out'
-            });
-        });
-    </script>
 </MainLayout>
