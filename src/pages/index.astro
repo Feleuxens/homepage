@@ -2,8 +2,6 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css"
 import { Image } from "astro:assets";
-import ServiceCard from "../components/ServiceCard.astro";
-import FeaturedCard from "../components/FeaturedCard.astro";
 import meImg from "../../public/images/me.jpg";
 import backgroundImg from "../../public/images/hero-bg.jpg";
 import weddingImg from "../../public/images/wedding1.jpg";
@@ -20,24 +18,25 @@ const heroPlaceholder = `data:image/webp;base64,${heroPlaceholderBuffer.toString
 
 const currentYear = new Date().getFullYear();
 
-const featuredWork = [
+// Taken from /tech-services, so the homepage promises exactly what that page offers
+const itServices = [
   {
-    href: "/music",
-    theme: "secondary",
-    image: weddingImg,
-    alt: "Playing the piano at a wedding",
-    title: "Wedding Performance",
-    description: "Soundtrack and modern music with self-arranged playback",
+    title: "DevOps Implementation",
+    description: "CI/CD pipelines, automation and infrastructure as code.",
   },
   {
-    href: "/photography",
-    theme: "accent",
-    image: photographerImg,
-    alt: "Photographing at the Track and Field National Championships",
-    title: "Photographing National Championships",
-    description: "Photographing at the Track and Field National Championships Indoor",
+    title: "System Administration",
+    description: "System management, monitoring and optimization for peak performance.",
   },
-] as const;
+  {
+    title: "Containerization",
+    description: "Docker and Kubernetes for scalable, portable deployments.",
+  },
+  {
+    title: "Cloud Architecture",
+    description: "Scalable, secure cloud infrastructure tailored to your needs.",
+  },
+];
 ---
 <MainLayout title="Home">
   <!-- Hero Section -->
@@ -60,7 +59,7 @@ const featuredWork = [
     <!-- Hero Content -->
     <div class="container relative z-20 h-full flex items-center justify-center pt-20">
       <div class="text-center">
-        <h1 class="text-4xl md:text-7xl mb-4 text-white enter">Felix Grüb</h1>
+        <h1 class="text-display mb-6 text-white enter">Felix Grüb</h1>
         <p class="font-serif text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white enter" style="--enter-index: 1">
           Technical Solutions, Musical Performances & Photography
         </p>
@@ -73,65 +72,99 @@ const featuredWork = [
     </div>
   </section>
 
-  <!-- Services Overview -->
-  <section class="py-20 bg-white">
-    <div class="container">
-      <h2 class="section-title text-center appear">What I Offer</h2>
+  <!-- IT: the main topic, on the page's home colour -->
+  <section class="py-24 md:py-32 bg-white theme-primary">
+    <div class="container grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-5 appear">
+        <h2 class="text-headline font-serif font-bold mb-6">DevOps & IT Services</h2>
+        <p class="text-lg mb-8 max-w-prose">
+          Professional infrastructure setup, CI/CD pipelines, system administration, and system automation tailored to your business needs.
+        </p>
+        <a href="/tech-services" class="btn theme">Explore Tech Services</a>
+      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        <ServiceCard
-            href="/tech-services"
-            theme="primary"
-            title="DevOps & IT Services"
-            description="Professional infrastructure setup, CI/CD pipelines, system administration, and system automation tailored to your business needs."
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-            <line x1="6" y1="6" x2="6.01" y2="6"></line>
-            <line x1="6" y1="18" x2="6.01" y2="18"></line>
-          </svg>
-        </ServiceCard>
+      <ul class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-12 content-start">
+        {itServices.map(service => (
+          <li class="appear">
+            <h3 class="text-2xl mb-3 text-(--theme-color)">{service.title}</h3>
+            <p class="text-lg">{service.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-        <ServiceCard
-            href="/music"
-            theme="secondary"
-            title="Piano Performances"
-            description="Elegant piano music for weddings, funerals, and private gatherings. Customized repertoire to suit your occasion."
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-          </svg>
-        </ServiceCard>
+  <!-- Music: one large picture, text beside it -->
+  <section class="py-24 md:py-32 bg-secondary/5 theme-secondary">
+    <div class="container grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+      <a href="/music" class="md:col-span-7 card card-link group appear">
+        <div class="aspect-[3/2] overflow-hidden">
+          <Image
+              src={weddingImg}
+              alt="Playing the piano at a wedding"
+              widths={[640, 960, 1280]}
+              sizes="(min-width: 768px) 58vw, 100vw"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      </a>
+
+      <div class="md:col-span-5 appear">
+        <h2 class="text-headline font-serif font-bold mb-6">Piano Performances</h2>
+        <p class="text-lg mb-6 max-w-prose">
+          Elegant piano music for weddings, funerals, and private gatherings. Customized repertoire to suit your occasion.
+        </p>
+        <p class="text-lg mb-8 max-w-prose">
+          Most recently: a wedding with soundtrack and modern music, played to self-arranged playback.
+        </p>
+        <a href="/music" class="btn theme">Explore Live Music</a>
       </div>
     </div>
   </section>
 
-  <section class="py-12 bg-gray-100">
-    <div class="container">
-      <h2 class="section-title text-center appear">Featured Work</h2>
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        {featuredWork.map(work => <FeaturedCard {...work} />)}
+  <!-- Photography: mirrors the music section, picture on the right -->
+  <section class="py-24 md:py-32 bg-white theme-accent">
+    <div class="container grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+      <!-- First in the markup so phones show the picture first, as in the music section -->
+      <a href="/photography" class="md:col-span-7 md:order-last card card-link group appear">
+        <div class="aspect-[3/2] overflow-hidden">
+          <Image
+              src={photographerImg}
+              alt="Photographing at the Track and Field National Championships"
+              widths={[640, 960, 1280]}
+              sizes="(min-width: 768px) 58vw, 100vw"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      </a>
+
+      <div class="md:col-span-5 appear">
+        <h2 class="text-headline font-serif font-bold mb-6">Photography</h2>
+        <p class="text-lg mb-6 max-w-prose">
+          A personal portfolio, mostly competitive sports: as an athlete myself, I'm drawn to its intensity.
+        </p>
+        <p class="text-lg mb-8 max-w-prose">
+          Most recently: photographing at the Track and Field National Championships Indoor.
+        </p>
+        <a href="/photography" class="btn theme">View the Portfolio</a>
       </div>
     </div>
   </section>
 
   <!-- About Preview Section -->
-  <section class="py-20 bg-white">
+  <section class="py-24 md:py-32 bg-gray-100">
     <div class="container">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div class="about-image appear">
           <Image src={meImg} alt="Felix" class="profile-photo" width="500" height="500" position='top' />
         </div>
 
         <div class="about-content appear">
-          <h2 class="section-title">About Me</h2>
-          <p class="mb-6">
+          <h2 class="section-title text-headline">About Me</h2>
+          <p class="text-lg mb-6 max-w-prose">
             I love variety and have a whole range of different interests. This allows me to combine different perspectives and solve problems with a unique approach.
           </p>
-          <p class="mb-6">
+          <p class="text-lg mb-8 max-w-prose">
             With over { currentYear-2022 } years in the IT industry and a lifelong passion for music, I bring both analytical precision and creative expression to everything I do.
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
@@ -143,10 +176,10 @@ const featuredWork = [
   </section>
 
   <!-- Contact Preview -->
-  <section class="py-20 bg-primary text-white">
+  <section class="py-24 md:py-32 bg-primary text-white">
     <div class="container text-center appear">
-      <h2 class="section-title text-white">Let's Work Together</h2>
-      <p class="max-w-2xl mx-auto mb-10 text-white">
+      <h2 class="section-title text-headline text-white">Let's Work Together</h2>
+      <p class="text-lg max-w-2xl mx-auto mb-10 text-white">
         Whether you need technical expertise for your infrastructure or beautiful piano music for your event, I'm here to help.
       </p>
       <a href="/contact" class="btn white">Contact Me</a>

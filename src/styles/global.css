@@ -32,6 +32,15 @@
 @theme {
   --font-sans: 'Roboto Variable', 'sans-serif';
   --font-serif: 'Playfair Display Variable', 'serif';
+
+  /* Type scale: two large steps do the visible work, body text stays 16-18px.
+     Generates the text-display (hero name) and text-headline (section headings) utilities. */
+  --text-display: clamp(3rem, 9vw, 8.5rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.02em;
+  --text-headline: clamp(2.25rem, 4.5vw, 4rem);
+  --text-headline--line-height: 1.05;
+  --text-headline--letter-spacing: -0.015em;
 }
 
 /*noinspection CssInvalidAtRule*/
