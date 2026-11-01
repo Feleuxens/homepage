@@ -6,6 +6,7 @@ import "@fontsource-variable/playfair-display";
 import "../styles/global.css";
 import "../styles/button.css";
 import "../styles/text.css";
+import "../styles/motion.css";
 
 // Dynamically compute the current year for copyright
 const currentYear = new Date().getFullYear();
@@ -96,6 +97,11 @@ const currentYear = new Date().getFullYear();
         </div>
       </div>
     </footer>
+
+    <script>
+      import { initAppear } from "../lib/appear";
+      initAppear();
+    </script>
 
     <script>
       // Mobile menu toggle
