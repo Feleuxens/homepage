@@ -2,7 +2,7 @@
 @reference "../styles/global.css";
 
 .instrument-card {
-    @apply bg-white rounded-lg shadow-md p-6 border-l-4 border-secondary transition-all duration-300 hover:shadow-lg hover:border-secondary/80;
+    @apply bg-white rounded-lg shadow-md p-6 border-l-4 border-secondary transition-[box-shadow,border-color] duration-300 hover:shadow-lg hover:border-secondary/80;
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
