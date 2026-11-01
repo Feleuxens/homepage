@@ -58,7 +58,34 @@
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg;
+    @apply bg-white rounded-lg shadow-md overflow-hidden;
+  }
+
+  /* A card that is a link as a whole: lifts on hover, presses on click */
+  .card-link {
+    @apply block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-(--theme-color);
+    transition:
+      box-shadow var(--motion-duration-base) var(--motion-ease-out),
+      transform var(--motion-duration-base) var(--motion-ease-out);
+
+    @media (hover: hover) {
+      &:hover {
+        @apply shadow-lg;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      @media (hover: hover) {
+        &:hover {
+          transform: translateY(-4px);
+        }
+      }
+
+      &:active {
+        transform: translateY(-1px);
+        transition-duration: var(--motion-duration-fast);
+      }
+    }
   }
 }
 

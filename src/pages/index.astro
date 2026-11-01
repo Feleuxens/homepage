@@ -2,6 +2,8 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import "../styles/about.css"
 import { Image } from "astro:assets";
+import ServiceCard from "../components/ServiceCard.astro";
+import FeaturedCard from "../components/FeaturedCard.astro";
 import meImg from "../../public/images/me.jpg";
 import backgroundImg from "../../public/images/hero-bg.jpg";
 import weddingImg from "../../public/images/wedding1.jpg";
@@ -17,6 +19,25 @@ const heroPlaceholderBuffer = await sharp(path.join(process.cwd(), "public/image
 const heroPlaceholder = `data:image/webp;base64,${heroPlaceholderBuffer.toString("base64")}`;
 
 const currentYear = new Date().getFullYear();
+
+const featuredWork = [
+  {
+    href: "/music",
+    theme: "secondary",
+    image: weddingImg,
+    alt: "Playing the piano at a wedding",
+    title: "Wedding Performance",
+    description: "Soundtrack and modern music with self-arranged playback",
+  },
+  {
+    href: "/photography",
+    theme: "accent",
+    image: photographerImg,
+    alt: "Photographing at the Track and Field National Championships",
+    title: "Photographing National Championships",
+    description: "Photographing at the Track and Field National Championships Indoor",
+  },
+] as const;
 ---
 <MainLayout title="Home">
   <!-- Hero Section -->
@@ -39,11 +60,11 @@ const currentYear = new Date().getFullYear();
     <!-- Hero Content -->
     <div class="container relative z-20 h-full flex items-center justify-center pt-20">
       <div class="text-center">
-        <h1 class="text-4xl md:text-7xl mb-4 opacity-90 text-white" id="hero-title">Felix Grüb</h1>
-        <p class="font-serif text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90 text-white" id="hero-subtitle">
+        <h1 class="text-4xl md:text-7xl mb-4 text-white enter">Felix Grüb</h1>
+        <p class="font-serif text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white enter" style="--enter-index: 1">
           Technical Solutions, Musical Performances & Photography
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-90" id="hero-buttons">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center enter" style="--enter-index: 2">
           <a href="/tech-services" class="btn theme theme-primary">IT Services</a>
           <a href="/music" class="btn theme theme-secondary">Live Music</a>
           <a href="/photography" class="btn theme theme-accent">Photography</a>
@@ -55,83 +76,45 @@ const currentYear = new Date().getFullYear();
   <!-- Services Overview -->
   <section class="py-20 bg-white">
     <div class="container">
-      <h2 class="section-title text-center">What I Offer</h2>
+      <h2 class="section-title text-center reveal">What I Offer</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        <!-- DevOps Card -->
-        <div class="card p-8 service-card">
-          <div class="w-16 h-16 mb-6 text-primary">
-            <!-- DevOps Icon (SVG) -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-              <line x1="6" y1="6" x2="6.01" y2="6"></line>
-              <line x1="6" y1="18" x2="6.01" y2="18"></line>
-            </svg>
-          </div>
+        <ServiceCard
+            href="/tech-services"
+            theme="primary"
+            title="DevOps & IT Services"
+            description="Professional infrastructure setup, CI/CD pipelines, system administration, and system automation tailored to your business needs."
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          </svg>
+        </ServiceCard>
 
-          <h3 class="text-2xl mb-4">DevOps & IT Services</h3>
-          <p class="text-gray-600 mb-6">
-            Professional infrastructure setup, CI/CD pipelines, system administration, and system automation tailored to your business needs.
-          </p>
-          <a href="/tech-services" class="inline-flex items-center font-medium colored theme-primary">
-            Learn More
-            <svg class="w-4 h-4 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </div>
-
-        <!-- Music Card -->
-        <div class="card p-8 service-card">
-          <div class="w-16 h-16 mb-6 text-secondary">
-            <!-- Music Icon (SVG) -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18V5l12-2v13"></path>
-              <circle cx="6" cy="18" r="3"></circle>
-              <circle cx="18" cy="16" r="3"></circle>
-            </svg>
-          </div>
-
-          <h3 class="text-2xl mb-4">Piano Performances</h3>
-          <p class="text-gray-600 mb-6">
-            Elegant piano music for weddings, funerals, and private gatherings. Customized repertoire to suit your occasion.
-          </p>
-          <a href="/music" class="inline-flex items-center font-medium colored theme-secondary">
-            Learn More
-            <svg class="w-4 h-4 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </div>
+        <ServiceCard
+            href="/music"
+            theme="secondary"
+            title="Piano Performances"
+            description="Elegant piano music for weddings, funerals, and private gatherings. Customized repertoire to suit your occasion."
+            index={1}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+        </ServiceCard>
       </div>
     </div>
   </section>
 
   <section class="py-12 bg-gray-100">
     <div class="container">
-      <h2 class="section-title text-center">Featured Work</h2>
+      <h2 class="section-title text-center reveal">Featured Work</h2>
       <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        <div class="card portfolio-item">
-          <div class="aspect-video bg-gray-200 overflow-hidden">
-            <Image src={weddingImg} alt="Wedding performance" width="750" height="500" />
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl mb-2 text-secondary">Wedding Performance</h3>
-            <p class="text-gray-600">Soundtrack and modern music with self-arranged playback</p>
-          </div>
-        </div>
-        <div class="card portfolio-item">
-          <div class="aspect-video bg-gray-200 overflow-hidden">
-            <Image src={photographerImg} alt="Wedding performance" width="750" height="500" />
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl mb-2 text-accent">Photographing National Championships</h3>
-            <p class="text-gray-600">Photographing at the Track and Field National Championships Indoor</p>
-          </div>
-        </div>
+        {featuredWork.map((work, index) => <FeaturedCard {...work} index={index} />)}
       </div>
     </div>
   </section>
@@ -140,11 +123,11 @@ const currentYear = new Date().getFullYear();
   <section class="py-20 bg-white">
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div class="about-image">
+        <div class="about-image reveal">
           <Image src={meImg} alt="Felix" class="profile-photo" width="500" height="500" position='top' />
         </div>
 
-        <div class="about-content">
+        <div class="about-content reveal" style="--reveal-index: 1">
           <h2 class="section-title">About Me</h2>
           <p class="mb-6">
             I love variety and have a whole range of different interests. This allows me to combine different perspectives and solve problems with a unique approach.
@@ -162,7 +145,7 @@ const currentYear = new Date().getFullYear();
 
   <!-- Contact Preview -->
   <section class="py-20 bg-primary text-white">
-    <div class="container text-center">
+    <div class="container text-center reveal">
       <h2 class="section-title text-white">Let's Work Together</h2>
       <p class="max-w-2xl mx-auto mb-10 text-white">
         Whether you need technical expertise for your infrastructure or beautiful piano music for your event, I'm here to help.

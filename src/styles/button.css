@@ -2,7 +2,17 @@
 
 @layer components {
     .btn {
-        @apply inline-block px-5 py-3 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2;
+        @apply inline-block px-5 py-3 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2;
+        transition:
+            background-color var(--motion-duration-fast) ease-out,
+            color var(--motion-duration-fast) ease-out,
+            transform var(--motion-duration-fast) ease-out;
+
+        @media (prefers-reduced-motion: no-preference) {
+            &:active {
+                transform: scale(0.97);
+            }
+        }
     }
 
     .btn.theme {
