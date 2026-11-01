@@ -6,6 +6,15 @@ import meImg from "../../public/images/me.jpg";
 import backgroundImg from "../../public/images/hero-bg.jpg";
 import weddingImg from "../../public/images/wedding1.jpg";
 import photographerImg from "../../public/images/photographer2.jpg";
+import sharp from "sharp";
+import path from "node:path";
+
+// Tiny blurred stand-in, inlined so the hero is never empty while the real image loads
+const heroPlaceholderBuffer = await sharp(path.join(process.cwd(), "public/images/hero-bg.jpg"))
+    .resize(32)
+    .webp({ quality: 50 })
+    .toBuffer();
+const heroPlaceholder = `data:image/webp;base64,${heroPlaceholderBuffer.toString("base64")}`;
 
 const currentYear = new Date().getFullYear();
 ---
@@ -13,7 +22,19 @@ const currentYear = new Date().getFullYear();
   <!-- Hero Section -->
   <section class="relative overflow-hidden h-screen">
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
-    <div class="absolute inset-0 bg-cover bg-center" style={`background-image: url(${backgroundImg.src});`}></div>
+    <div class="absolute inset-0 bg-cover bg-center scale-110 blur-xl" style={`background-image: url(${heroPlaceholder});`}></div>
+    <Image
+        src={backgroundImg}
+        alt=""
+        width={2400}
+        height={1600}
+        widths={[640, 1024, 1600, 2400]}
+        sizes="100vw"
+        quality={80}
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 w-full h-full object-cover"
+    />
 
     <!-- Hero Content -->
     <div class="container relative z-20 h-full flex items-center justify-center pt-20">
