@@ -14,14 +14,18 @@
     "@fontsource-variable/playfair-display": "5.3.0",
     "@fontsource-variable/roboto": "5.3.0",
     "@tailwindcss/vite": "4.3.3",
+    "altcha": "3.5.0",
+    "altcha-lib": "2.8.0",
     "astro": "7.4.4",
     "chokidar": "6.0.0",
     "exifreader": "4.52.0",
+    "nodemailer": "10.3.1",
     "sharp": "0.35.5",
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {
     "@types/node": "26.6.6",
+    "@types/nodemailer": "8.0.2",
     "@types/packery": "1.4.37"
   },
   "allowScripts": {
