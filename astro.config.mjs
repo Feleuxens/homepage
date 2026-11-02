@@ -33,12 +33,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-Keep HSTS. Do not add a static `script-src` or `default-src` header: it would
-also apply to the page and could block Astro's hashed inline scripts. The static
-container sets `frame-ancestors` too, since browsers ignore that directive in
-meta tags. Deploy the built pages and the proxy change together, run `nginx -t`,
-then reload nginx. Check the contact widget, mobile menu, gallery/lightbox and
-Plausible in a browser for CSP violations after deployment.
 
   integrations: [
       exifExtractor({
