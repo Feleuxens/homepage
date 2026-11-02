@@ -10,9 +10,35 @@ const secret = (options = {}) => envField.string({ context: "server", access: "s
 
 // https://astro.build/config
 export default defineConfig({
+  security: {
+    csp: {
+      // Astro hashes the built inline scripts, including the server-island loader.
+      scriptDirective: { resources: ["'self'"] },
+      // Layout styles and ALTCHA's shadow-root styles require inline CSS.
+      styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
+      directives: [
+        "default-src 'none'",
+        "base-uri 'none'",
+        "object-src 'none'",
+        "form-action 'self'",
+        "connect-src 'self'",
+        "img-src 'self' data: https://photo.feleuxens.de",
+        "font-src 'self'",
+        "worker-src 'self' blob:", // ALTCHA proof-of-work workers
+        "frame-src 'none'",
+        "manifest-src 'self'",
+      ],
+    },
+  },
   vite: {
     plugins: [tailwindcss()]
   },
+Keep HSTS. Do not add a static `script-src` or `default-src` header: it would
+also apply to the page and could block Astro's hashed inline scripts. The static
+container sets `frame-ancestors` too, since browsers ignore that directive in
+meta tags. Deploy the built pages and the proxy change together, run `nginx -t`,
+then reload nginx. Check the contact widget, mobile menu, gallery/lightbox and
+Plausible in a browser for CSP violations after deployment.
 
   integrations: [
       exifExtractor({
