@@ -13,7 +13,7 @@
     "@astrojs/node": "11.1.9",
     "@fontsource-variable/playfair-display": "5.3.0",
     "@fontsource-variable/roboto": "5.3.0",
-    "@tailwindcss/vite": "4.3.3",
+    "@tailwindcss/vite": "4.3.4",
     "altcha": "3.5.0",
     "altcha-lib": "2.8.0",
     "astro": "7.4.4",
@@ -21,7 +21,7 @@
     "exifreader": "4.52.0",
     "nodemailer": "10.3.1",
     "sharp": "0.35.5",
-    "tailwindcss": "4.3.3"
+    "tailwindcss": "4.3.4"
   },
   "devDependencies": {
     "@types/node": "26.6.6",
