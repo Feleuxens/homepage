@@ -1,0 +1,30 @@
+---
+// Latest gallery albums, rendered as camera "folders". Used as a server island
+// (server:defer) on the photography page.
+import { getAlbums } from "../lib/getAlbums";
+import "../styles/albums.css";
+
+interface Props {
+  count?: number;
+}
+const { count = 6 } = Astro.props;
+const albums = (await getAlbums()).slice(0, count);
+---
+{albums.length > 0 ? (
+  <ul class="albums list-reset">
+    {albums.map((album, i) => (
+      <li>
+        <a href={album.url} target="_blank" rel="noopener" class="album">
+          <span class="album-img">
+            {album.cover && <img src={album.cover} alt="" loading="lazy" />}
+            <span class="album-idx mono">{String(100 + i + 1)}</span>
+          </span>
+          <span class="album-name">{album.name}</span>
+          <span class="album-meta mono">{album.image_count} images{album.when ? ` · ${album.when}` : ""}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+) : (
+  <p class="albums-empty mono">NO CARD · gallery unavailable right now</p>
+)}

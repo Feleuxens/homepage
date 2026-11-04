@@ -1,125 +1,68 @@
 ---
-// Main layout component that will be used across all pages
-const DEFAULT_DESCRIPTION = "IT services and consulting, live music on piano and trumpet, and photography by Felix Grüb.";
-const { title, description = DEFAULT_DESCRIPTION, class: className } = Astro.props;
+// Shared shell for every page.
+// The header and footer are identical on every page; each page brings its own world
+// (dashboard, score, viewfinder) and only tells the shell which lane it is.
 import "@fontsource-variable/roboto";
 import "@fontsource-variable/playfair-display";
 import "../styles/global.css";
-import "../styles/button.css";
-import "../styles/text.css";
-import "../styles/motion.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 
-// Dynamically compute the current year for copyright
-const currentYear = new Date().getFullYear();
+interface Props {
+  title: string;
+  description?: string;
+  /** 0 = home/about, 1 = IT, 2 = music, 3 = photography */
+  lane?: 0 | 1 | 2 | 3;
+}
+
+const {
+  title,
+  description = "IT services and consulting, live music on piano and trumpet, and photography by Felix Grüb.",
+  lane = 0,
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="description" content={description} />
-    <title>{`${title} | Felix Grüb`}</title>
-    <script defer data-domain="feleuxens.de" data-api="/plausible/api/event" src="/plausible/js/script.file-downloads.outbound-links.tagged-events.js"></script>
-    <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-  </head>
-  <body class:list={["bg-gray-50 text-gray-900 min-h-svh flex flex-col", className]}>
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
-      <div class="container py-4">
-        <nav class="flex justify-between items-center">
-          <a href="/" class="font-serif text-2xl font-bold">Felix Grüb</a>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <title>{`${title} | Felix Grüb`}</title>
+  <script defer data-domain="feleuxens.de" data-api="/plausible/api/event" src="/plausible/js/script.file-downloads.outbound-links.tagged-events.js"></script>
+  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
 
-          <!-- Desktop Navigation -->
-          <ul class="hidden md:flex space-x-8">
-            <li><a href="/" class="font-medium ">Home</a></li>
-            <li><a href="/tech-services" class="font-medium">IT Services</a></li>
-            <li><a href="/music" class="font-medium">Music</a></li>
-            <li><a href="/photography" class="font-medium">Photography</a></li>
-            <li><a href="/about" class="font-medium">About</a></li>
-            <li><a href="/contact" class="font-medium">Contact</a></li>
-          </ul>
+  <SiteHeader lane={lane} />
 
-          <!-- Mobile menu button -->
-          <button class="md:hidden flex flex-col space-y-1.5" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu" id="menuButton">
-            <span class="block w-6 h-0.5 bg-gray-800 transition-[transform,opacity]"></span>
-            <span class="block w-6 h-0.5 bg-gray-800 transition-[transform,opacity]"></span>
-            <span class="block w-6 h-0.5 bg-gray-800 transition-[transform,opacity]"></span>
-          </button>
-        </nav>
+  <main id="main">
+    <slot />
+  </main>
 
-        <!-- Mobile Navigation Menu (Hidden by default) -->
-        <div class="md:hidden h-0 overflow-hidden transition-[height] duration-150" id="mobileMenu" inert>
-          <ul class="py-3 space-y-3">
-            <li><a href="/" class="block py-2 font-medium">Home</a></li>
-            <li><a href="/tech-services" class="block py-2 font-medium">IT Services</a></li>
-            <li><a href="/music" class="block py-2 font-medium">Music</a></li>
-            <li><a href="/photography" class="block py-2 font-medium">Photography</a></li>
-            <li><a href="/about" class="block py-2 font-medium">About</a></li>
-            <li><a href="/contact" class="block py-2 font-medium">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-    </header>
+  <SiteFooter />
 
-    <main class="flex-grow">
-      <slot />
-    </main>
-
-    <footer class="bg-dark">
-      <div class="container py-12">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h3 class="text-xl mb-4">Felix Grüb</h3>
-            <ul class="space-y-2">
-              <li><a href="/impressum" class="dark">Impressum / Imprint</a></li>
-              <li><a href="/privacy" class="dark">Datenschutzerklärung / Privacy Notice</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl mb-4">Connect</h3>
-            <ul class="space-y-2">
-              <li><a href="https://www.linkedin.com/in/felixgrueb/" class="dark">LinkedIn</a></li>
-              <li><a href="https://github.com/Feleuxens" class="dark">GitHub</a></li>
-              <li><a href="https://instagram.com/Feleuxens" class="dark">Instagram</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl mb-4"><a href="/contact" class="text-white">Contact</a></h3>
-            <p class="text-gray-300">me@feleuxens.de</p>
-            <!--<p class="text-gray-300">+49 xxxxxxx</p>-->
-          </div>
-        </div>
-
-        <div class="border-t border-gray-700 mt-10 pt-6 text-center">
-          <p class="text-gray-400 text-sm">&copy; {currentYear} Felix Grüb. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-
-    <script>
-      import { initAppear } from "../lib/appear";
-      initAppear();
-    </script>
-
-    <script>
-      // Mobile menu toggle
-      document.addEventListener('DOMContentLoaded', () => {
-        const menuButton = document.getElementById('menuButton');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        menuButton?.addEventListener('click', () => {
-          const open = menuButton.classList.toggle('active');
-
-          menuButton.setAttribute('aria-expanded', String(open));
-          mobileMenu?.classList.toggle('h-0', !open);
-          mobileMenu?.classList.toggle('h-78', open);
-          // Closed menu links stay out of the tab order and away from screen readers
-          mobileMenu?.toggleAttribute('inert', !open);
-        });
-      });
-    </script>
-  </body>
+  <script>
+    // Reveal on scroll. Content stays visible without JS or with reduced motion.
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce && "IntersectionObserver" in window) {
+      document.documentElement.classList.add("js-reveal");
+      const io = new IntersectionObserver(entries => {
+        for (const e of entries) {
+          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        }
+      }, { rootMargin: "0px 0px -8% 0px" });
+      document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+    }
+  </script>
+</body>
 </html>
+
+<style>
+  .skip { position: absolute; left: -999px; }
+  .skip:focus { left: 1rem; top: 1rem; z-index: 100; background: var(--page-fg); color: var(--page-bg); padding: var(--space-2) var(--space-4); }
+</style>

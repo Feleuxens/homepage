@@ -8,21 +8,31 @@
 /
 ├── public/
 ├── src/
-│   ├── components/
+│   ├── components/      # Reusable components with their own scoped styles
 │   │   └── ...
+│   ├── data/            # Content shared between pages (services, repertoire, career years, ...)
+│   │   └── ...          # exif-data.ts is generated, don't edit it
 │   ├── layouts/
 │   │   └── MainLayout.astro
+│   ├── lib/             # Site facts, contact form, gallery, lightbox, exif reader
+│   │   └── ...
 │   ├── pages/
 │   │   └── ...
-│   ├── styles/
-│   │   └── *.css
-│   └── utils/
-│       └── exif-reader.ts
+│   └── styles/
+│       ├── global.css   # Design tokens, base styles and shared classes
+│       └── ...          # Styles shared by a few pages or built at runtime
 ├── package.json
+├── stylelint.config.mjs
 ├── Dockerfile
 ├── nginx.conf
 └── ...
 ```
+
+## 🎨 Styling
+
+- Styles belong in the scoped `<style>` of the page or component that uses them.
+- `src/styles/global.css` holds the design tokens (colours, spacing, type) and the few classes used across pages. Colours are only defined there; `npm run lint:css` rejects raw colours anywhere else.
+- A future dark theme only needs to override the tokens under `[data-theme="dark"]`.
 
 ## 🧞 Commands
 
@@ -34,6 +44,7 @@ All commands are run from the root of the project, from a terminal:
 | `npm run dev`             | Starts local dev server at `localhost:4321`      |
 | `npm run build`           | Build your production site to `./dist/`          |
 | `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run lint:css`        | Checks the CSS with Stylelint (also runs in CI)  |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 

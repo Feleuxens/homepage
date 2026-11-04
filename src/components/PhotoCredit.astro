@@ -1,0 +1,15 @@
+---
+// "Photo: Name" with a link to the photographer. The look comes from the surrounding caption.
+import { PHOTOGRAPHERS } from "../data/credits";
+
+interface Props {
+  by: keyof typeof PHOTOGRAPHERS;
+}
+const { name, url } = PHOTOGRAPHERS[Astro.props.by];
+---
+<span>Photo: <a href={url} target="_blank" rel="noopener">{name}</a></span>
+
+<style>
+  a { text-decoration: underline; text-underline-offset: .15em; }
+  a:hover { color: var(--track); }
+</style>

@@ -1,240 +1,335 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+// Lane 3: photography seen through a viewfinder.
+// HUD over the hero (real EXIF of that frame), playback mode for albums and favourites,
+// scene modes for the stories, a camera menu for the gear and a shutter button to get in touch.
+import MainLayout from "../layouts/MainLayout.astro";
+import { Image } from "astro:assets";
 import SquareImage from "../components/SquareImage.astro";
 import DynamicGallery from "../components/DynamicGallery.astro";
-import LatestAlbums from '../components/LatestAlbums.astro';
+import AlbumPlayback from "../components/AlbumPlayback.astro";
+import AlbumSkeleton from "../components/AlbumSkeleton.astro";
+import PhotoCredit from "../components/PhotoCredit.astro";
+import { getFavoritePhotos, photoSettings } from "../lib/favorites";
+import { CAREER } from "../data/career";
+import { exifData } from "../data/exif-data";
+import { EMAIL } from "../lib/site";
 
-import athleticPhoto from "../../public/images/photography/stories/sports.jpg"
-import companionshipPhoto from "../../public/images/photography/stories/portraits.jpg"
-import ruralPhoto from "../../public/images/photography/stories/rural.jpg"
-import familyPhoto from "../../public/images/photography/stories/family.jpg"
-import naturePhoto from "../../public/images/photography/stories/nature.jpg"
-import technologyPhoto from "../../public/images/photography/stories/technology.jpg"
+import heroImg from "../../public/images/photography/favorites/IMG_2933.jpg";
+import athleticPhoto from "../../public/images/photography/stories/sports.jpg";
+import companionshipPhoto from "../../public/images/photography/stories/portraits.jpg";
+import ruralPhoto from "../../public/images/photography/stories/rural.jpg";
+import familyPhoto from "../../public/images/photography/stories/family.jpg";
+import naturePhoto from "../../public/images/photography/stories/nature.jpg";
+import technologyPhoto from "../../public/images/photography/stories/technology.jpg";
+import photographerImg from "../../public/images/photographer1.jpg";
 
-import photographer from "../../public/images/photographer1.jpg"
-import {Image} from "astro:assets";
+const exif = (path: string) => exifData["public" + path] ?? {};
+const heroExif = exif("/images/photography/favorites/IMG_2933.jpg");
+const shutter = (heroExif.shutterSpeed ?? "").replace(/s$/, "");
+const aperture = (heroExif.aperture ?? "").replace("f/", "F");
 
+const stories = [
+  { title: "Athletic Excellence", image: athleticPhoto, path: "/images/photography/stories/sports.jpg", description: "Competitive sport: intensity and technical precision." },
+  { title: "Companionship", image: companionshipPhoto, path: "/images/photography/stories/portraits.jpg", description: "Portraits of the bond between people and their pets." },
+  { title: "Rural Patchwork", image: ruralPhoto, path: "/images/photography/stories/rural.jpg", description: "Geometric patterns of the German agricultural landscape." },
+  { title: "Family From Above", image: familyPhoto, path: "/images/photography/stories/family.jpg", description: "Everyday moments from another perspective." },
+  { title: "Small Worlds, Wild Lives", image: naturePhoto, path: "/images/photography/stories/nature.jpg", description: "Macro details and larger wildlife." },
+  { title: "Precision in Flight", image: technologyPhoto, path: "/images/photography/stories/technology.jpg", description: "The equipment behind modern aerial photography." },
+].map(s => {
+  return { ...s, meta: photoSettings(exif(s.path), "  ") };
+});
 
-// Photography categories for portfolio showcase
-const portfolioCategories = [
-    {
-        title: "Athletic Excellence",
-        image: athleticPhoto,
-        path: "/images/photography/stories/sports.jpg",
-        description: "Competitive sport showcasing athletic intensity and technical precision."
-    },
-    {
-        title: "Companionship",
-        image: companionshipPhoto,
-        path: "/images/photography/stories/portraits.jpg",
-        description: "Portraits of genuine bond between humans and pets."
-    },
-    {
-        title: "Rural Patchwork",
-        image: ruralPhoto,
-        path: "/images/photography/stories/rural.jpg",
-        description: "Revealing geometric patterns of German agricultural landscape."
-    },
-    {
-        title: "Family From Above",
-        image: familyPhoto,
-        path: "/images/photography/stories/family.jpg",
-        description: "Capturing everyday moments from another perspective."
-    },
-    {
-        title: "Small Worlds, Wild Lives",
-        image: naturePhoto,
-        path: "/images/photography/stories/nature.jpg",
-        description: "Macro details or larger wildlife, every creature tells its own unique story."
-    },
-    {
-        title: "Precision in Flight",
-        image: technologyPhoto,
-        path: "/images/photography/stories/technology.jpg",
-        description: "Advanced equipment that enables modern aerial photography."
-    }
+const favorites = getFavoritePhotos();
+
+const gear = [
+  { k: "Camera", v: "Canon EOS R6 Mark III" },
+  { k: "Lens", v: "RF 70–200 mm F2.8 L IS USM Z" },
+  { k: "Drone", v: "DJI Mavic Air 2" },
+  { k: "Phone", v: "iPhone 17 Pro" },
 ];
-
-// Equipment (simplified, less commercial)
-const equipment = [
-    "Canon EOS R6 Mark III",
-    "DJI Mavic Air 2",
-    "iPhone 17 Pro"
-];
-
 const software = [
-    "Affinity Photo",
-    "Photomator",
-    "Blackmagic DaVinci Resolve"
-]
+  { k: "Photo", v: "Affinity Photo" },
+  { k: "Quick edits", v: "Photomator" },
+  { k: "Video", v: "DaVinci Resolve" },
+];
 ---
 
-<MainLayout title="Photography Portfolio" description="Photography portfolio of Felix Grüb: mostly competitive sports, also drone and portrait photography, available for commercial work." class="theme-accent">
-    <!-- Hero Section -->
-    <section class="bg-linear-to-br from-accent/10 to-accent/5 pt-24 pb-8">
-        <div class="container">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl md:text-6xl mb-6 enter">
-                    Photography Portfolio
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-700 mb-8 enter" style="--enter-index: 1">
-                    Exploring the world through my lens - a personal collection of moments, places, and perspectives
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center enter" style="--enter-index: 2">
-                    <a href="#gallery" class="btn theme">View Gallery</a>
-                    <a href="#about-photography" class="btn theme-transparent">About My Photography</a>
-                </div>
+<MainLayout title="Photography Portfolio" lane={3}
+  description="Photography portfolio of Felix Grüb: mostly competitive sports, also drone and portrait photography, available for commercial work.">
+
+  <div class="vf-page">
+    <!-- HERO: viewfinder -->
+    <section class="vf">
+      <div class="vf-frame">
+        <!-- The AF box lives in the photo's own coordinates, so it stays on the vaulter at every size -->
+        <div class="vf-stage">
+          <Image src={heroImg} alt="Pole vaulter arching over the bar against a blue sky" widths={[800, 1400, 2200, 3200, 4400]} sizes="max(100vw, 140vh)"
+            loading="eager" fetchpriority="high" class="vf-img" />
+          <div class="af" aria-hidden="true"><span>AF-C<span class="af-long"> · TRACKING</span></span></div>
+        </div>
+        <div class="vf-hud" aria-hidden="true">
+          <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+          <div class="grid3"></div>
+        </div>
+      </div>
+      <div class="vf-text">
+        <p class="lane-tag mono"><span class="chip chip-track">3</span> Photography</p>
+        <h1>Shot at 1/3200 s, because sport doesn't wait.</h1>
+        <div class="vf-cta">
+          <a href="#favourites" class="btn shoot-primary">View favourites</a>
+          <a href="/contact" class="btn shoot-secondary">Book a shoot</a>
+        </div>
+      </div>
+      <div class="readout mono" aria-label="Settings of this photo">
+        <span>{heroExif.camera}</span><span>{shutter}</span><span>{aperture}</span><span>ISO {heroExif.iso}</span><span>{heroExif.focalLength}</span>
+        <span class="meter" aria-hidden="true">-2 ·· 1 ·· <b>0</b> ·· 1 ·· +2</span>
+      </div>
+    </section>
+
+    <!-- Latest albums -->
+    <section class="block">
+      <div class="block-head">
+        <p class="label mono"><b>▶</b> Playback · latest albums</p>
+        <a href="https://photo.feleuxens.de" target="_blank" rel="noopener" class="link mono">Whole gallery ↗</a>
+      </div>
+      <AlbumPlayback count={6} server:defer>
+        <AlbumSkeleton slot="fallback" count={6} />
+      </AlbumPlayback>
+    </section>
+
+    <!-- Stories: scene modes -->
+    <section class="block">
+      <div class="block-head">
+        <p class="label mono"><b>SCN</b> Scene modes · visual stories</p>
+      </div>
+      <h2>Six ways of seeing.</h2>
+      <ul class="stories list-reset">
+        {stories.map((s, i) => (
+          <li class="story reveal">
+            <div class="story-img">
+              <SquareImage src={s.image} alt={s.title} path={s.path} size={600} />
+              <span class="story-idx mono">SCN {i + 1}</span>
             </div>
-        </div>
+            <h3>{s.title}</h3>
+            <p>{s.description}</p>
+            <p class="story-meta mono">{s.meta}</p>
+          </li>
+        ))}
+      </ul>
     </section>
 
-    <section class="py-12 bg-white">
-        <h2 class="section-title text-center">Latest Albums</h2>
-        <div class="container">
-            <LatestAlbums count={6} server:defer>
-                <div slot="fallback" class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-                    {Array.from({ length: 6 }).map(() => (
-                            <div>
-                                <div class="bg-gray-200 rounded-lg aspect-square mb-4 animate-pulse"></div>
-                                <div class="h-5 bg-gray-200 rounded w-3/4 mx-auto mb-2 animate-pulse"></div>
-                                <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
-                            </div>
-                    ))}
-                </div>
-            </LatestAlbums>
-        </div>
-        <div class="justify-center flex mt-4"><a href="https://photo.feleuxens.de" target="_blank" class="btn theme">Whole Gallery</a></div>
+    <!-- Favourites: playback grid with lightbox -->
+    <section class="block" id="favourites">
+      <div class="block-head">
+        <p class="label mono"><b>▶</b> Playback · favourites</p>
+        <p class="link mono">{favorites.length} frames</p>
+      </div>
+      <div class="playback">
+        <DynamicGallery sortBy="date" />
+      </div>
+      <p class="hint mono">Select a frame to open it full size.</p>
     </section>
 
-    <!-- Portfolio Gallery -->
-    <section class="py-12 bg-gray-50">
-        <div class="container">
-            <h2 class="section-title text-center">Visual Stories</h2>
-            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-                Each collection represents a different way of seeing the world. Click through to explore the stories behind these images.
-            </p>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12">
-                {portfolioCategories.map(category => (
-                        <div class="group">
-                            <div class="bg-gray-200 rounded-lg overflow-hidden mb-4">
-                                <SquareImage
-                                    src={category.image}
-                                    alt={category.title}
-                                    path=`${category.path}`
-                                    square={true}
-                                />
-                            </div>
-                            <div class="text-center">
-                                <h3 class="text-xl font-serif font-semibold mb-2">{category.title}</h3>
-                                <p class="text-gray-600 text-sm">{category.description}</p>
-                            </div>
-                        </div>
-                ))}
-            </div>
-        </div>
+    <!-- About -->
+    <section class="block about">
+      <figure class="about-img reveal">
+        <Image src={photographerImg} alt="Felix holding a camera outdoors" widths={[600, 1000]} sizes="(min-width: 900px) 50vw, 100vw" />
+        <span class="face" aria-hidden="true"><span class="mono">FACE · 1</span></span>
+        <figcaption class="mono photo-label"><PhotoCredit by="oliver" /></figcaption>
+      </figure>
+      <div class="reveal">
+        <p class="label mono"><b>P</b> Portrait · about</p>
+        <h2>An athlete behind the lens.</h2>
+        <p>
+          I picked up photography in {CAREER.photographyFrom}. It's mostly a passion that lets me see the world differently,
+          but I also take on commercial work. As a competitive athlete myself, I'm drawn to the intensity
+          and raw emotion of competitive sport, and I usually know where the decisive moment will happen.
+        </p>
+        <p>
+          It complements my technical work: both need attention to detail, quick decisions and the ability
+          to anticipate a moment before it arrives.
+        </p>
+      </div>
     </section>
 
-    <!-- Featured Images Section -->
-    <section id="gallery" class="py-10 bg-white">
-        <div class="container">
-            <h2 class="section-title text-center">Recent Favorites</h2>
-
-            <DynamicGallery sortBy="date"/>
-            <div class="justify-center flex mt-4"><a href="https://photo.feleuxens.de" target="_blank" class="btn theme">Whole Gallery</a></div>
-        </div>
+    <!-- Gear: camera menu -->
+    <section class="block gear">
+      <div>
+        <p class="label mono"><b>⚙</b> Setup · tools</p>
+        <h2>The kit.</h2>
+        <p>The best camera is the one you have with you. These are the ones I usually have with me.</p>
+      </div>
+      <div class="menu" role="group" aria-label="Equipment and software">
+        <div class="menu-tabs mono" aria-hidden="true"><span class="on">GEAR</span><span>SOFTWARE</span></div>
+        <dl>
+          {gear.map(g => (<div class="menu-row"><dt>{g.k}</dt><dd class="mono">{g.v}</dd></div>))}
+        </dl>
+        <div class="menu-tabs mono sub" aria-hidden="true"><span class="on">SOFTWARE</span></div>
+        <dl>
+          {software.map(g => (<div class="menu-row"><dt>{g.k}</dt><dd class="mono">{g.v}</dd></div>))}
+        </dl>
+      </div>
     </section>
 
-    <!-- About Photography Section -->
-    <section id="about-photography" class="py-12 bg-gray-50">
-        <div class="container">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="section-title text-center">About My Photography</h2>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-                    <div>
-                        <p class="text-gray-700 mb-6 leading-relaxed">
-                            I picked up photography in 2025. It's still mostly a hobby that lets me see the world
-                            through a different lens, but I also take on commercial work. As a competitive athlete myself, I'm naturally drawn to capturing the intensity and
-                            raw emotions of competitive sports.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed">
-                            While photography isn't my primary profession, it beautifully complements my technical work.
-                            Both disciplines demand keen attention to detail, quick problem-solving, and the ability to
-                            anticipate and capture the perfect moment from unique perspectives.
-                        </p>
-                    </div>
-
-                    <div class="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
-                        <Image src={photographer} alt="Photographer in action" width="750" height="500" class="w-full h-full object-cover" />
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Shutter CTA -->
+    <section class="block cta">
+      <h2>Sports, drone or portrait?</h2>
+      <p>Tell me about your event or project.</p>
+      <a href="/contact" class="shutter" aria-label="Get in touch about a photo project">
+        <span class="ring"></span><span class="mono">PRESS<br />TO TALK</span>
+      </a>
+      <a href={`mailto:${EMAIL}`} class="mail mono">{EMAIL}</a>
     </section>
-
-    <!-- Equipment & Technical -->
-    <section class="py-12 bg-white">
-        <div class="container">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="section-title text-center">Tools & Techniques</h2>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <div>
-                        <h3 class="text-2xl mb-6">Equipment</h3>
-                        <p class="text-gray-600 mb-6">
-                            I believe the best camera is the one you have with you, but I do have some trusted tools
-                            that help me capture the images I envision.
-                        </p>
-                        <ul class="space-y-3">
-                            {equipment.map(item => (
-                                    <li class="flex items-center">
-                                        <svg class="w-4 h-4 mr-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                        </svg>
-                                        <span class="text-gray-700">{item}</span>
-                                    </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 class="text-2xl mb-6">Software</h3>
-                        <p class="text-gray-600 mb-6">
-                            While cameras these days produce beautiful pictures and videos on their own, sometimes
-                            some postprocessing is necessary.
-                        </p>
-                        <ul class="space-y-3">
-                            {software.map(item => (
-                                    <li class="flex items-center">
-                                        <svg class="w-4 h-4 mr-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                        </svg>
-                                        <span class="text-gray-700">{item}</span>
-                                    </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact for Photography -->
-    <section class="py-20 bg-accent">
-        <div class="container">
-            <div class="max-w-2xl mx-auto text-center">
-                <h2 class="text-3xl mb-6">Interested in Working Together?</h2>
-                <p class="mb-8">
-                    What started as a personal hobby has grown into a genuine passion I now offer as a professional
-                    service. Whether it's sports, drone, or portrait photography —
-                    I'd love to hear about your project and bring your vision to life.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="/contact" class="btn white">Get in Touch</a>
-                    <a href="/about" class="btn white-transparent">Learn More About Me</a>
-                </div>
-            </div>
-        </div>
-    </section>
+  </div>
 </MainLayout>
+
+<style>
+  .vf-page { --mono-tracking: .08em; }
+  h1, h2, h3 { font-family: var(--sans); font-weight: 800; letter-spacing: -.035em; margin: 0; line-height: .98; }
+  h2 { font-size: clamp(2rem, 4.5vw, 3.75rem); margin-bottom: var(--space-6); }
+  p { color: var(--page-fg-2); }
+
+  /* Hero */
+  /* Shorter than the window, so the next section shows. The floor is what the vaulter needs at
+     full width: his box is 34.7% of the photo's width, plus room for the readout bar. */
+  .vf { position: relative; height: min(calc(100svh - 3.6rem), max(62svh, calc(34.7vw + 4.5rem))); min-height: 32rem; overflow: hidden; background: var(--screen-bg); }
+  .vf-frame { position: absolute; inset: 0; overflow: hidden; container-type: size; }
+  .vf-frame::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse at 50% 42%, transparent 35%, rgba(0,0,0,.65)); }
+
+  /* The stage is exactly the photo's shape and is never cropped itself; the frame trims it.
+     --cx, --cy: the vaulter's centre in the photo. --fy: where that centre should sit in the frame.
+     --w: covers the frame, but stops growing where he would no longer fit above the readout bar on very wide windows
+     (the frame's dark background then shows at the sides). */
+  .vf-stage {
+    --cx: .5675; --cy: .445; --fy: calc(50cqh - 1.65rem);
+    --w: max(150cqh, min(100cqw, calc((100cqh - 4.5rem) * 2.9)));
+    --h: calc(var(--w) / 1.5);
+    --sx: calc(100cqw - var(--w));
+    --sy: calc(100cqh - var(--h));
+    position: absolute; width: var(--w); height: var(--h); container-type: inline-size;
+    left: clamp(min(var(--sx), var(--sx) / 2), calc(50cqw - var(--w) * var(--cx)), max(var(--sx) / 2, 0px));
+    top: clamp(min(var(--sy), 0px), calc(var(--fy) - var(--h) * var(--cy)), 0px);
+  }
+  .vf-img { display: block; width: 100%; height: 100%; }
+  .vf-hud { position: absolute; inset: 2rem var(--pad) 5rem; z-index: 2; pointer-events: none; }
+  .c { position: absolute; width: 2.5rem; height: 2.5rem; border: 2px solid rgba(255, 255, 255, .85); }
+  .tl { top: 0; left: 0; border-right: 0; border-bottom: 0; } .tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+  .bl { bottom: 0; left: 0; border-right: 0; border-top: 0; } .br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+  .grid3 { position: absolute; inset: 0; opacity: .22;
+    background:
+      linear-gradient(to right, transparent calc(33.33% - .5px), var(--on-accent) calc(33.33% - .5px) calc(33.33% + .5px), transparent 0, transparent calc(66.66% - .5px), var(--on-accent) calc(66.66% - .5px) calc(66.66% + .5px), transparent 0),
+      linear-gradient(to bottom, transparent calc(33.33% - .5px), var(--on-accent) calc(33.33% - .5px) calc(33.33% + .5px), transparent 0, transparent calc(66.66% - .5px), var(--on-accent) calc(66.66% - .5px) calc(66.66% + .5px), transparent 0); }
+  .af { position: absolute; z-index: 2; left: 41.5%; top: 18.5%; width: 30.5%; height: 52%; border: 2px solid var(--hud-ok); border-radius: 4px; }
+  /* On a small photo the full label would cover his shoe */
+  @container (max-width: 52rem) { .af-long { display: none; } }
+  .af > span { position: absolute; top: .35rem; left: .35rem; padding: .2rem .4rem; border-radius: 2px; background: rgba(0,0,0,.65); font: 600 .68rem/1 var(--mono); color: var(--hud-ok); letter-spacing: .1em; white-space: nowrap; }
+  .vf-text { position: absolute; z-index: 3; left: calc(var(--pad) + 1.5rem); right: var(--pad); bottom: 6.5rem; max-width: min(34rem, 38%); }
+  .lane-tag { display: inline-flex; align-items: center; gap: .6rem; color: var(--on-accent); margin: 0 0 var(--space-4); }
+  .chip { --chip-size: 1.6rem; border-radius: .25rem; font-size: var(--text-sm); letter-spacing: 0; }
+  .vf-text h1 { font-size: clamp(2.4rem, 4.6vw, 4.6rem); color: var(--on-accent); text-shadow: 0 2px 30px rgba(0,0,0,.45); }
+  .vf-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-7); }
+  .vf-cta .btn { --btn-pad: .85rem 1.35rem; --btn-radius: 4px; }
+  .shoot-primary { --btn-bg: var(--screen-text); --btn-fg: var(--on-hud); --btn-border: 1px solid var(--screen-text); --btn-hover-bg: var(--hud); }
+  .shoot-primary:hover { border-color: var(--hud); }
+  .shoot-secondary { --btn-bg: rgba(0, 0, 0, .25); --btn-fg: var(--on-accent); --btn-border: 1px solid var(--on-accent); backdrop-filter: blur(4px); }
+  .readout { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-8); padding: var(--space-4) var(--pad); background: rgba(0, 0, 0, .85); color: var(--screen-text); font-size: .82rem; }
+  .readout .meter { color: var(--screen-dim); } .readout .meter b { color: var(--hud); }
+  /* Phones and portrait-ish screens: photo and readout form the camera, the text sits below on
+     paper. Nothing covers the vaulter, and the photo zooms in on him. */
+  @media (max-width: 720px), (max-aspect-ratio: 7/5) {
+    .vf { height: auto; min-height: 0; max-height: none; display: flex; flex-direction: column; background: none; }
+    .vf-frame { position: relative; inset: auto; flex: none; height: max(calc(34.7vw + 1.5rem), clamp(18rem, 41svh, 32rem)); }
+    .vf-stage { --w: max(150cqh, 100cqw, min(280cqw, 200cqh)); --fy: 50cqh; }
+    .vf-hud { inset: 1rem; }
+    .readout { position: static; order: 1; }
+    .readout .meter { display: none; }
+    .vf-text { position: static; order: 2; max-width: none; padding: var(--space-7) var(--pad) 0; }
+    .lane-tag { color: var(--page-dim); }
+    .vf-text h1 { font-size: clamp(2.3rem, 10vw, 3.4rem); color: var(--page-fg); text-shadow: none; }
+    .shoot-primary { --btn-bg: var(--page-fg); --btn-fg: var(--page-bg); --btn-border: 1px solid var(--page-fg); --btn-hover-bg: var(--page-fg); }
+    .shoot-primary:hover { border-color: var(--page-fg); }
+    .shoot-secondary { --btn-bg: transparent; --btn-fg: var(--page-fg); --btn-border: 1px solid var(--page-fg); --btn-hover-bg: var(--page-fg); --btn-hover-fg: var(--page-bg); backdrop-filter: none; }
+  }
+
+  /* Short, wide windows (a phone held sideways): fit everything into the screen height */
+  @media (min-width: 721px) and (max-height: 30rem) and (min-aspect-ratio: 7/5) {
+    .vf { min-height: 0; }
+    .vf-stage { --w: max(150cqh, min(100cqw, 200cqh)); }
+    .vf-hud { inset: .75rem var(--pad) 3.25rem; }
+    .vf-text { left: calc(var(--pad) + .5rem); bottom: 3.25rem; }
+    .lane-tag { margin-bottom: .4rem; }
+    .vf-text h1 { font-size: 1.75rem; }
+    .vf-cta { margin-top: var(--space-3); }
+    .vf-cta .btn { --btn-pad: .45rem .8rem; font-size: var(--text-sm); }
+    .readout { padding-block: .55rem; font-size: .72rem; }
+  }
+
+  /* Blocks */
+  .block { max-width: 86rem; margin: 0 auto; padding: clamp(4rem, 8vw, 6.5rem) var(--pad) 0; }
+  .block-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); margin-bottom: var(--space-7); }
+  .label { display: inline-flex; gap: .6rem; align-items: center; color: var(--page-dim); border: 1px solid var(--page-line); padding: .4rem .7rem; border-radius: 4px; margin: 0; }
+  .label b { color: var(--track-text); }
+  .block > div > .label, .about .label { margin-bottom: var(--space-6); }
+  .link { color: var(--page-dim); text-decoration: none; margin: 0; }
+  a.link:hover { color: var(--track-text); }
+
+  /* Stories */
+  .stories { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-10) var(--space-5); }
+  .story-img { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 4px; outline: 2px solid transparent; transition: outline-color .15s; }
+  /* The button's own focus ring is clipped here, so the wrapper shows it */
+  .story-img:hover, .story-img:has(:focus-visible) { outline-color: var(--track); }
+  .story-idx { position: absolute; left: .6rem; top: .6rem; padding: .15rem .45rem; background: var(--hud); color: var(--on-hud); font-size: .65rem; pointer-events: none; }
+  .story h3 { margin-top: var(--space-4); font-size: 1.35rem; letter-spacing: -.02em; }
+  .story p { margin: .35rem 0 0; font-size: var(--text-md); }
+  .story .story-meta { color: var(--page-dim); font-size: .65rem; margin-top: var(--space-2); }
+  @media (max-width: 900px) { .stories { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .stories { grid-template-columns: 1fr; } }
+
+  /* Favourites playback */
+  .playback { background: var(--screen-bg); border: 1px solid var(--screen-line); border-radius: 8px; padding: .6rem; box-shadow: 0 0 0 6px var(--screen-bg-2), var(--screen-shadow); }
+  .playback :global(.masonry-item) { overflow: hidden; border-radius: 3px; outline: 2px solid transparent; outline-offset: -2px; transition: outline-color .15s; }
+  .playback :global(.masonry-item:hover), .playback :global(.masonry-item:focus-within) { outline-color: var(--hud); }
+  .hint { color: var(--page-dim); margin: .9rem 0 0; font-size: .65rem; }
+
+  /* About */
+  .about { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .about-img { --label-bg: rgba(0, 0, 0, .65); --label-fg: var(--on-accent); position: relative; margin: 0; border-radius: 6px; overflow: hidden; }
+  .about-img img { width: 100%; aspect-ratio: 3/2; object-fit: cover; }
+  .face { position: absolute; left: 46%; top: 7%; width: 13%; height: 22%; border: 2px solid var(--hud-ok); border-radius: 4px; }
+  .face span { position: absolute; top: -1.45rem; left: -2px; background: var(--hud-ok); color: var(--on-hud); padding: .1rem .35rem; font-size: .6rem; white-space: nowrap; }
+  .about p:not(.label) { font-size: 1.08rem; max-width: 36rem; }
+  @media (max-width: 860px) { .about { grid-template-columns: 1fr; } }
+
+  /* Gear menu */
+  .gear { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .gear p:not(.label) { max-width: 30rem; }
+  .menu { color: var(--screen-fg); background: var(--screen-bg); border: 1px solid var(--screen-line); border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 6px var(--screen-bg-2), var(--screen-shadow); }
+  .menu-tabs { display: flex; background: var(--screen-raised); }
+  .menu-tabs span { flex: 1; text-align: center; padding: .6rem; color: var(--screen-dim); }
+  .menu-tabs .on { background: var(--screen-tab-active); color: var(--on-accent); }
+  .menu-tabs.sub span { flex: none; padding: var(--space-2) 1.1rem; text-align: left; background: var(--screen-raised); color: var(--screen-dim); }
+  .menu dl { margin: 0; }
+  .menu-row { display: flex; justify-content: space-between; gap: var(--space-4); padding: .85rem 1.1rem; border-bottom: 1px solid var(--screen-row-line); transition: background .15s, box-shadow .15s; }
+  .menu-row dt { font-size: var(--text-md); }
+  .menu-row dd { margin: 0; color: var(--screen-dim); text-align: right; text-transform: none; letter-spacing: .02em; }
+  .menu-row:hover { background: var(--screen-hover); box-shadow: inset 3px 0 0 var(--hud); }
+  .menu-row:hover dd { color: var(--hud); }
+  @media (max-width: 860px) { .gear { grid-template-columns: 1fr; } }
+
+  /* Shutter CTA */
+  .cta { text-align: center; padding-bottom: clamp(4rem, 8vw, 6rem); }
+  .cta h2 { margin-bottom: var(--space-3); }
+  .cta p { margin: 0 0 var(--space-8); }
+  .shutter { position: relative; display: inline-grid; place-items: center; width: 10.5rem; height: 10.5rem; margin-bottom: var(--space-8); border-radius: 50%; text-decoration: none;
+    background: radial-gradient(circle at 35% 30%, var(--body-light), var(--body-dark) 70%); box-shadow: 0 0 0 6px var(--body-ring), 0 0 0 7px var(--body-ring-2), 0 20px 50px rgba(0, 0, 0, .7); transition: transform .12s ease-out; }
+  .shutter:active { transform: scale(.94); }
+  .ring { position: absolute; inset: 12px; border-radius: 50%; border: 2px solid var(--body-ring-3); transition: border-color .2s; }
+  .shutter:hover .ring { border-color: var(--hud); }
+  .shutter .mono { line-height: 1.5; color: var(--screen-fg); }
+  .mail { display: block; font-size: clamp(.95rem, 2.2vw, 1.25rem); text-decoration: none; color: var(--track-text); text-transform: none; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .af { animation: hunt 1.4s var(--ease) both .3s; }
+  }
+  @keyframes hunt { 0% { scale: 1.6; opacity: 0; border-color: var(--on-accent); } 60% { scale: .95; opacity: 1; border-color: var(--on-accent); } 100% { scale: 1; border-color: var(--hud-ok); } }
+</style>

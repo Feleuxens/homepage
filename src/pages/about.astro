@@ -1,583 +1,251 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
-import "../styles/about.css";
-import { Image } from "astro:assets";
-import meImg from "../../public/images/me.jpg";
+// About as an athlete profile. Facts instead of self-ratings, and the career as a
+// race over the three lanes: one row per lane, bars spanning the years.
+import MainLayout from "../layouts/MainLayout.astro";
+import Portrait from "../components/Portrait.astro";
+import { CAREER, INSTRUMENTS_LINE } from "../data/career";
+import { pianoHighlights } from "../data/repertoire";
 
-const technicalSkills = [
-  { name: "Linux/System Administration", level: 80 },
-  { name: "Docker/Docker Compose", level: 85 },
-  { name: "Python", level: 80 },
-  { name: "Java", level: 60 },
-  { name: "Kubernetes", level: 50 },
-  { name: "Terraform", level: 50},
-  { name: "GitLab CI", level: 75},
-  { name: "OPNsense", level: 40},
-  { name: "Software Architecture", level: 35}
-];
+const now = new Date().getFullYear();
+const START = 2008;
+const years = Array.from({ length: now - START + 1 }, (_, i) => START + i);
 
-type timelineItem = {
-  startYear: number;
-  endYear: string | number;
-  title: string;
-  company: string;
-  description: string;
-  type: string;
-  dotPosition: number;   // px, aligned to the year marker
-  cardPosition: number;  // px, may be pushed below the dot
-  order: number;         // global stacking order (also used for mobile flex order)
-};
+type Entry = { from: number; to?: number; title: string; org?: string; note?: string; point?: boolean };
+type Lane = { n: number; name: string; entries: Entry[] };
 
-const timeline: timelineItem[] = [
+const lanes: Lane[] = [
   {
-    startYear: 2023,
-    endYear: "present",
-    title: "Working Student for DevOps and System Administration",
-    company: "intension GmbH",
-    description: "",
-    type: "tech",
-    dotPosition: 0,
-    cardPosition: 0,
-    order: 0,
+    n: 1, name: "IT",
+    entries: [
+      { from: CAREER.studyFrom, to: CAREER.bachelorUntil, title: "B.Sc. Computer Science", org: "University of Stuttgart" },
+      { from: CAREER.workFrom, title: "Working student, DevOps & SysAdmin", org: "intension GmbH" },
+      { from: CAREER.masterFrom, title: "M.Sc. Computer Science", org: "University of Stuttgart" },
+      { from: CAREER.architectCertificate, point: true, title: "iSAQB CPSA-F", org: "Certified Software Architect", note: "Basic concepts of software architecture, requirements and constraints, design and development." },
+    ],
   },
   {
-    startYear: 2024,
-    endYear: "present",
-    title: "Master's Degree in Computer Science",
-    company: "University of Stuttgart",
-    description: "",
-    type: "tech",
-    dotPosition: 0,
-    cardPosition: 0,
-    order: 0,
+    n: 2, name: "Music",
+    entries: [
+      { from: CAREER.trumpetFrom, to: CAREER.trumpetLessonsUntil, title: "Trumpet lessons" },
+      { from: CAREER.pianoFrom, to: CAREER.pianoLessonsUntil, title: "Piano lessons" },
+      { from: CAREER.liveFrom, title: "Live performances", org: "Weddings, memorials" },
+      { from: CAREER.musicExam, point: true, title: "Music exam, A-levels", note: "Clarke Suite in D major, Rachmaninoff Prelude in C♯ minor, Neruda Trumpet Concerto in E♭ major: I. Allegro." },
+    ],
   },
   {
-    startYear: 2020,
-    endYear: 2024,
-    title: "Bachelor's Degree in Computer Science",
-    company: "University of Stuttgart",
-    description: "",
-    type: "tech",
-    dotPosition: 0,
-    cardPosition: 0,
-    order: 0,
-  },
-  {
-    startYear: 2025,
-    endYear: 2025,
-    title: "Certified Professional for Software Architecture - Foundation Level",
-    company: "iSAQB",
-    description: "Basic Concepts of Software Architecture, Requirements and Constraints, Design and Development, etc.",
-    type: "tech",
-    dotPosition: 0,
-    cardPosition: 0,
-    order: 0,
-  },
-  {
-    startYear: 2020,
-    endYear: 2020,
-    title: "Music exam in A-levels",
-    company: "",
-    description: "Played Clarke Suite in D major (Bourrée, Ecossaise, Prince of Denmark's March), Rachmaninoff Prelude in C# minor and Neruda Trumpet Concerto in E♭ major: I. Allegro",
-    type: "music",
-    dotPosition: 0,
-    cardPosition: 0,
-    order: 0,
-  },
-  {
-    startYear: 2008,
-    endYear: 2020,
-    title: "Trumpet lessons",
-    company: "",
-    description: "",
-    type: "music",
-    dotPosition: 0,
-    cardPosition: 0,
-    order: 0,
-  },
-  {
-    startYear: 2016,
-    endYear: 2023,
-    title: "Piano lessons",
-    company: "",
-    description: "",
-    type: "music",
-    dotPosition: 0,
-    cardPosition: 0,
-    order: 0,
+    n: 3, name: "Photography",
+    entries: [
+      { from: CAREER.photographyFrom, title: "Photography", org: "Sport, drone, portraits" },
+    ],
   },
 ];
 
-const currentYear = new Date().getFullYear();
-
-function getEndYear(endYear: string | number): number {
-  return typeof endYear === "string" ? currentYear : endYear;
-}
-
-function isOngoing(item: timelineItem): boolean {
-  return typeof item.endYear === "string";
-}
-
-const timelineStartYear = 2002;
-const timelineEndYear = Math.max(...timeline.map(item => getEndYear(item.endYear)));
-
-const TIMELINE_HEIGHT = 1000;  // px
-const CARD_GAP = 10;  // px
-const FALLBACK_CARD_HEIGHT = 150;  // px, only used for the pre-hydration render
-
-function yearToPx(year: number): number {
-  const progress = (timelineEndYear - year) / (timelineEndYear - timelineStartYear);
-  return progress * TIMELINE_HEIGHT;
-}
-
-/**
- * Ongoing entries first (newest start year on top), then finished entries
- * by end year descending, start year descending as tiebreaker.
- */
-function compareTimelineItems(a: timelineItem, b: timelineItem): number {
-  if (isOngoing(a) !== isOngoing(b)) return isOngoing(a) ? -1 : 1;
-  if (a.endYear !== b.endYear) return getEndYear(b.endYear) - getEndYear(a.endYear)
-  return b.startYear - a.startYear;
-}
-
-/**
- * Single monotonic pass: a card sits at its year marker unless the card
- * above it is in the way, in which case it is pushed down.
- *
- * The client re-runs the identical algorithm with measured heights.
- */
-function layoutTimelineItems(items: timelineItem[]): timelineItem[] {
-  const sorted = [...items].sort(compareTimelineItems);
-  let cursor = Number.NEGATIVE_INFINITY;
-
-  for (const item of sorted) {
-    const anchor = yearToPx(getEndYear(item.endYear));
-    const top = Math.max(anchor, cursor);
-
-    item.dotPosition = anchor;
-    item.cardPosition = top;
-
-    cursor = top + FALLBACK_CARD_HEIGHT + CARD_GAP;
-  }
-
-  return sorted;
-}
-
-// Global order across both columns
-[...timeline].sort(compareTimelineItems).forEach((item, index) => {
-  item.order = index;
+// Stack overlapping bars into sub-rows so nothing collides
+const positioned = lanes.map(lane => {
+  const rowsEnd: number[] = [];
+  const items = [...lane.entries].sort((a, b) => a.from - b.from).map(e => {
+    const end = e.point ? e.from : (e.to ?? now);
+    let row = rowsEnd.findIndex(r => r < e.from);
+    if (row === -1) { row = rowsEnd.length; rowsEnd.push(end); } else rowsEnd[row] = end;
+    const colStart = e.from - START + 1;
+    const colEnd = (e.point ? e.from : (e.to ?? now)) - START + 2;
+    return { ...e, row: row + 1, colStart, colEnd, ongoing: !e.point && e.to === undefined };
+  });
+  return { ...lane, items, rows: rowsEnd.length };
 });
 
-const positionedTechItems = layoutTimelineItems(timeline.filter(item => item.type === "tech"));
-const positionedMusicItems = layoutTimelineItems(timeline.filter(item => item.type === "music"));
+const track = [
+  { label: "Club", value: "LG Filder" },
+  { label: "Main event", value: "800 m" },
+  { label: "Coaching", value: "U14 and U16" },
+  { label: "Licence", value: "C-Trainer Lizenz" },
+];
 
-const yearMarkers = [];
-for (let year = timelineEndYear; year >= timelineStartYear; year--) {
-  yearMarkers.push({ year, position: yearToPx(year) });
-}
-
-const techDotYears = [...new Set(positionedTechItems.map(item => getEndYear(item.endYear)))];
-const musicDotYears = [...new Set(positionedMusicItems.map(item => getEndYear(item.endYear)))];
+const instruments = [
+  {
+    name: "Piano", since: CAREER.pianoFrom,
+    text: "Classical and contemporary repertoire, with a focus on performance and music theory.",
+    pieces: pianoHighlights,
+  },
+  {
+    name: "Trumpet", since: CAREER.trumpetFrom,
+    text: "Classical trumpet in several orchestras, solo performances and competitions.",
+    pieces: ["Neruda · Trumpet Concerto in E♭: I. Allegro", "Bach · Christmas Oratorio: Großer Herr und starker König", "Albinoni · Concerto in B♭, Op. 7 No. 3: I. Allegro"],
+  },
+  {
+    name: "Theory & craft", since: CAREER.theoryFrom,
+    text: "Music theory, sight reading, arrangement and transcription.",
+    pieces: [],
+  },
+];
 ---
 
-<MainLayout title="About Me" description="About Felix Grüb: computer science, DevOps and system administration, piano and trumpet, and track and field.">
-  <section class="bg-gray-100 pt-24 pb-8">
-    <div class="container">
-      <h1 class="section-title text-center mb-12 enter">About Me</h1>
+<MainLayout title="About Me" lane={0}
+  description="About Felix Grüb: computer science, DevOps and system administration, piano and trumpet, photography, and track and field.">
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-        <div class="about-image justify-self-center enter" style="--enter-index: 1">
-          <Image src={meImg} alt="Portrait of Felix Grüb" class="profile-photo" width="500" height="500" position="top" />
-        </div>
+  <div class="ab">
+    <!-- Profile -->
+    <section class="profile wrap">
+      <Portrait widths={[400, 700, 1000]} sizes="(min-width: 960px) 32vw, 80vw" loading="eager" />
 
-        <div class="about-content space-y-6">
-          <h2 class="text-3xl enter" style="--enter-index: 1">Hello, I'm Felix</h2>
+      <div class="intro">
+        <p class="eyebrow">About · athlete profile</p>
+        <h1>Hello, I'm <em class="accent">Felix.</em></h1>
+        <p class="lede">
+          I'm a computer science student interested in cryptography and system and web security.
+          When I'm not working on infrastructure, you'll find me at the piano, on the track, or behind
+          a camera. Technical precision and creative expression turn out to complement each other,
+          whether it's debugging a pipeline or practising a Rachmaninoff prelude.
+        </p>
 
-          <p class="text-gray-700 enter" style="--enter-index: 2">
-            I'm Felix, a computer science student specializing in IT security and distributed systems.
-            When I'm not diving into system administration or exploring IT security, you'll find me at the piano or
-            capturing moments through my camera lens. I love how technical precision and creative expression complement
-            each other—whether debugging infrastructure or perfecting a Rachmaninoff prelude. Want to see how these
-            passions have shaped my path? Keep scrolling.
-          </p>
-
-          <div class="flex flex-col sm:flex-row gap-4 enter" style="--enter-index: 3">
-            <a href="/contact" class="btn theme">Contact Me</a>
-          </div>
-        </div>
+        <dl class="card">
+          <div><dt>Based in</dt><dd>Filderstadt, near Stuttgart</dd></div>
+          <div><dt>Studying</dt><dd>M.Sc. Computer Science, University of Stuttgart <span class="tag-live">in progress</span></dd></div>
+          <div><dt>Working</dt><dd>DevOps &amp; system administration, intension GmbH, since {CAREER.workFrom}</dd></div>
+          <div><dt>Playing</dt><dd>{INSTRUMENTS_LINE}</dd></div>
+          <div><dt>Shooting</dt><dd>Sports photography since {CAREER.photographyFrom}</dd></div>
+          <div><dt>Running</dt><dd>Track &amp; field athlete and youth coach</dd></div>
+        </dl>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Skills Section -->
-  <section class="py-12 bg-white">
-    <div class="container">
-      <h2 class="section-title text-center">My Skills</h2>
+    <!-- Career as a race over the lanes -->
+    <section class="race on-track">
+      <div class="wrap">
+        <p class="eyebrow light">Race history</p>
+        <h2>Three lanes, one race.</h2>
+        <p class="race-sub">Every bar is something I did; bars that run off the right edge are still going.</p>
+      </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-12">
-        <!-- Technical Skills -->
-        <div class="skills-category">
-          <h3 class="text-2xl mb-8 text-center">Technical Skills</h3>
+      <div class="race-track" role="list" aria-label="Timeline">
+        <div class="years" aria-hidden="true" style={`--cols:${years.length}`}>
+          <span class="lane-label"></span>
+          {years.map(y => <span class:list={["yr", { major: y % 4 === 0 || y === now }]}>{y % 4 === 0 || y === now ? y : ""}</span>)}
+        </div>
+        {positioned.map(lane => (
+          <div class="race-lane" style={`--cols:${years.length}; --rows:${lane.rows}`} role="listitem" aria-label={`Lane ${lane.n}: ${lane.name}`}>
+            <span class="lane-label"><span class="chip chip-white lane-block">{lane.n}</span><span class="lane-name">{lane.name}</span></span>
+            <ul class="bars list-reset">
+              {lane.items.map(e => (
+                <li class:list={["bar", { point: e.point, ongoing: e.ongoing }]}
+                    style={`--col:${e.colStart} / ${e.colEnd}; --row:${e.row}`}
+                    title={e.note}>
+                  <span class="bar-title">{e.title}</span>
+                  <span class="bar-meta">{e.point ? e.from : `${e.from}–${e.to ?? "now"}`}{e.org ? ` · ${e.org}` : ""}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
 
-          <div class="space-y-6">
-            {technicalSkills.map(skill => (
-                <div class="skill-item">
-                  <div class="flex justify-between mb-2">
-                    <span class="font-medium">{skill.name}</span>
-                    <span class="text-gray-500">{skill.level}%</span>
-                  </div>
-                  <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                        class="skill-progress bg-primary h-full rounded-full appear-grow"
-                        style={`width: ${skill.level}%`}
-                    ></div>
-                  </div>
-                </div>
+    <!-- Skills -->
+    <section class="skills wrap">
+      <div class="sk-track">
+        <p class="eyebrow">Track &amp; field</p>
+        <h2>Two laps, mostly.</h2>
+        <table>
+          <tbody>
+            {track.map(t => (
+              <tr><th scope="row">{t.label}</th><td>{t.value}</td></tr>
             ))}
-          </div>
-        </div>
-
-        <!-- Musical Skills -->
-        <div class="skills-category">
-          <h3 class="text-2xl mb-8 text-center">Musical Background</h3>
-
-          <div class="space-y-6">
-            <!-- Piano Card -->
-            <div class="instrument-card group appear">
-              <div class="instrument-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 19h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                  <path d="M8 7v10M12 7v10M16 7v10"/>
-                  <path d="M6 11h12"/>
-                </svg>
-              </div>
-
-              <div class="instrument-content">
-                <div class="instrument-header">
-                  <h4 class="instrument-name">Piano</h4>
-                  <span class="instrument-years">from 2016</span>
-                </div>
-
-                <p class="instrument-description">
-                  Classical and contemporary repertoire with focus on performance and music theory
-                </p>
-                <div class="instrument-highlight">
-                  <strong>Pieces:</strong> Rachmaninoff - Prelude in C# minor,<br>
-                  Rachmaninoff - Prelude in G# minor,<br>
-                  Schubert - 4 Impromptus, Op. 90, D. 899: No. 2 in E♭ major
-                </div>
-
-                <div class="instrument-specialties">
-                  <span class="specialty-tag">Classical</span>
-                  <span class="specialty-tag">Contemporary</span>
-                  <span class="specialty-tag">Performance</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Trumpet Card -->
-            <div class="instrument-card group appear">
-              <div class="instrument-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 12h6l2 2v4l-2 2H9l-2-2v-4l2-2z"/>
-                  <path d="M7 12H3a1 1 0 01-1-1V9a1 1 0 011-1h4"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="18" cy="12" r="1"/>
-                  <circle cx="21" cy="12" r="1"/>
-                </svg>
-              </div>
-
-              <div class="instrument-content">
-                <div class="instrument-header">
-                  <h4 class="instrument-name">Trumpet</h4>
-                  <span class="instrument-years">from 2008</span>
-                </div>
-
-                <p class="instrument-description">
-                  Classical trumpet in multiple orchestras as well as solo performances and competitions.
-                </p>
-                <div class="instrument-highlight">
-                  <strong>Pieces:</strong> Neruda - Trumpet Concerto in E♭ major: I. Allegro,<br>
-                  Bach - Weihnachtsoratorium: Großer Herr und starker König,<br>
-                  Albinoni - Concerto in B♭, Op. 7 No. 3: I. Allegro
-                </div>
-
-                <div class="instrument-specialties">
-                  <span class="specialty-tag">Classical</span>
-                  <span class="specialty-tag">Competitions</span>
-                  <span class="specialty-tag">Performance</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Music Theory & General Skills Card -->
-            <div class="instrument-card group appear">
-              <div class="instrument-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 18V5l12-2v13"/>
-                  <circle cx="7" cy="18" r="2" fill="currentColor"/>
-                  <circle cx="19" cy="16.5" r="2" fill="currentColor"/>
-                  <path d="M17 7 L 20 6.5"/>
-                  <circle cx="12.5" cy="16" r="0.5" fill="currentColor" />
-                </svg>
-              </div>
-
-              <div class="instrument-content">
-                <div class="instrument-header">
-                  <h4 class="instrument-name">Music Theory & Skills</h4>
-                  <span class="instrument-years">from 2008</span>
-                </div>
-
-                <p class="instrument-description">
-                  Comprehensive understanding of music theory, composition, and arrangement.
-                </p>
-
-                <div class="instrument-specialties">
-                  <span class="specialty-tag">Theory</span>
-                  <span class="specialty-tag">Sight Reading</span>
-                  <span class="specialty-tag">Arrangement</span>
-                  <span class="specialty-tag">Transcription</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          </tbody>
+        </table>
+        <h3>What else?</h3>
+        <p class="reading">When I'm not on the track, I enjoy reading books on technology, mathematics, physics and psychology.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- Timeline Section -->
-  <section class="py-12 bg-gray-100">
-    <div class="container">
-      <h2 class="text-3xl md:text-4xl text-center mb-12">My Journey</h2>
-
-      <div class="relative">
-        <!-- Center line -->
-        <div id="timeline-line"
-             class="absolute left-1/2 -translate-x-1/2 w-1 bg-gray-300 hidden md:block"
-             style={`height: ${TIMELINE_HEIGHT + 25}px;`}></div>
-
-        <!-- Year markers -->
-        <div class="hidden md:block">
-          {yearMarkers.map(({ year, position }) => (
-              <div class="absolute left-1/2 flex items-center"
-                   style={`top: ${position}px; transform: translate(-5rem, -50%);`}>
-                <div class="text-sm font-medium text-gray-600">{year}</div>
-                <div class="w-6 h-px bg-gray-400 ml-2"></div>
-              </div>
+      <div class="sk-music">
+        <p class="eyebrow">Music</p>
+        <h2>Instruments.</h2>
+        <ul class="inst list-reset">
+          {instruments.map(i => (
+            <li>
+              <p class="inst-head"><strong>{i.name}</strong><span>since {i.since}</span></p>
+              <p class="inst-text">{i.text}</p>
+              {i.pieces.length > 0 && <ul class="inst-pieces list-reset list-notes">{i.pieces.map(p => <li>{p}</li>)}</ul>}
+            </li>
           ))}
-        </div>
-
-        <!-- Timeline items container -->
-        <div id="timeline-items"
-             class="relative"
-             data-base-height={TIMELINE_HEIGHT}
-             style={`height: ${TIMELINE_HEIGHT}px;`}>
-
-          <!-- Dots, tech side -->
-          {techDotYears.map(year => (
-              <div class="absolute w-4 h-4 rounded-full bg-primary border-2 border-white shadow-md hidden md:block z-20"
-                   style={`top: ${yearToPx(year)}px; right: calc(50% - 8px); transform: translateY(-50%);`}></div>
-          ))}
-
-          <!-- Dots, music side -->
-          {musicDotYears.map(year => (
-              <div class="absolute w-4 h-4 rounded-full bg-secondary border-2 border-white shadow-md hidden md:block z-20"
-                   style={`top: ${yearToPx(year)}px; left: calc(50% - 8px); transform: translateY(-50%);`}></div>
-          ))}
-
-          <!-- Tech Items (Left) -->
-          {positionedTechItems.map(item => (
-              <div class="absolute left-0 md:w-[calc(50%-90px)] w-full timeline-item tech-item appear appear-from-right"
-                   data-side="tech"
-                   data-order={item.order}
-                   data-anchor={item.dotPosition}
-                   style={`top: ${item.cardPosition}px; --order: ${item.order};`}>
-                <div class="relative">
-                  <div class="timeline-card card bg-white rounded-lg shadow-md p-4 border-l-4 border-primary hover:shadow-lg transition-shadow">
-                    <div class="flex justify-between items-center mb-3">
-                      <div class="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
-                        {item.startYear === item.endYear ? item.startYear : `${item.startYear} - ${item.endYear}`}
-                      </div>
-
-                      {item.endYear === "present" && (
-                          <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">Current</span>
-                      )}
-                      {(item.endYear !== item.startYear && typeof item.endYear !== "string") && (
-                          <span class="text-xs text-gray-500">{item.endYear - item.startYear} years</span>
-                      )}
-                    </div>
-
-                    <h3 class="text-xl">{item.title}</h3>
-                    {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
-                    {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
-                  </div>
-                </div>
-              </div>
-          ))}
-
-          <!-- Music Items (Right) -->
-          {positionedMusicItems.map(item => (
-              <div class="absolute right-0 md:w-[calc(50%-20px)] w-full timeline-item music-item appear appear-from-left"
-                   data-side="music"
-                   data-order={item.order}
-                   data-anchor={item.dotPosition}
-                   style={`top: ${item.cardPosition}px; --order: ${item.order};`}>
-                <div class="relative">
-                  <div class="timeline-card card bg-white rounded-lg shadow-md p-4 border-l-4 border-secondary hover:shadow-lg transition-shadow">
-                    <div class="flex justify-between items-center mb-3">
-                      <div class="px-3 py-1 text-sm font-medium bg-secondary/10 text-secondary rounded-full">
-                        {item.startYear === item.endYear ? item.startYear : `${item.startYear} - ${item.endYear}`}
-                      </div>
-
-                      {item.endYear === "present" && (
-                          <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">Current</span>
-                      )}
-                      {(item.endYear !== item.startYear && typeof item.endYear !== "string") && (
-                          <span class="text-xs text-gray-500">{item.endYear - item.startYear} years</span>
-                      )}
-                    </div>
-
-                    <h3 class="text-xl">{item.title}</h3>
-                    {item.company && <p class="text-gray-600 font-medium text-sm mt-1">{item.company}</p>}
-                    {item.description && <p class="text-gray-700 mt-2">{item.description}</p>}
-                  </div>
-                </div>
-              </div>
-          ))}
-        </div>
+        </ul>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Personal Interests -->
-  <section class="py-12 bg-white">
-    <div class="container">
-      <h2 class="section-title text-center">Personal Interests</h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 interests-items">
-        <div class="card p-6 text-center interests-item appear">
-          <div class="w-16 h-16 mx-auto mb-4 text-primary">
-            <svg viewBox="0 0 550 550" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m503.306 111.184-.883-.883c-11.476-11.476-31.779-11.476-43.255 0l-45.903 46.786c-2.648 2.648-6.179 2.648-8.828 0L339.995 97.06c-6.179-5.297-14.124-8.828-22.952-8.828h-96.221c-2.648 0-4.414.883-5.297 1.766l-81.214 77.683c-11.476 12.359-12.359 31.779-1.766 43.255 5.297 6.179 13.241 9.71 22.069 9.71s16.772-3.531 22.069-9.71l57.379-60.91h20.303L120.188 300.094H37.209c-20.303 0-36.193 15.007-37.076 33.545-.883 9.71 2.648 19.421 9.71 26.483 7.062 6.179 15.89 10.593 25.6 10.593H159.03c2.648 0 4.414-.883 6.179-2.648l63.559-67.972 52.965 55.614-15.89 102.4c-4.414 17.655 4.414 34.428 19.421 41.49 5.297 2.648 9.71 3.531 15.007 3.531s10.593-.883 15.89-3.531c8.828-4.414 15.89-13.241 18.538-23.835l27.365-147.421c0-2.648-.883-6.179-2.648-7.945l-73.269-73.269 58.262-58.262 40.607 40.607c11.476 11.476 30.897 11.476 42.372 0l75.917-75.917c11.477-11.477 11.477-30.897.001-42.373m-12.359 30.014-75.917 75.917c-5.297 4.414-13.241 4.414-17.655 0l-46.786-46.786c-3.531-3.531-8.828-3.531-12.359 0l-70.621 70.621c-1.766 1.766-2.648 3.531-2.648 6.179s.883 4.414 3.531 7.062l75.917 75.917-26.483 142.124c-1.766 4.414-5.297 8.828-9.71 11.476-4.414 1.766-9.71 2.648-15.007 0-7.945-3.531-11.476-12.359-9.71-22.069l16.772-107.697c0-2.648-.883-5.297-2.648-7.062l-62.676-65.324c-1.766-1.766-3.531-2.648-6.179-2.648s-5.297.883-6.179 2.648l-67.09 71.503H35.444q-7.945 0-13.241-5.297c-2.648-3.531-4.414-7.945-4.414-13.241 0-9.71 8.828-16.772 19.421-16.772h86.51c2.648 0 4.414-.883 6.179-.883l150.069-167.724c2.648-2.648 2.648-6.179 1.766-9.71s-4.414-5.297-7.945-5.297h-44.138c-1.766 0-4.414.883-6.179 2.648l-60.028 63.559c-1.766 2.648-5.297 4.414-8.828 4.414s-7.062-1.766-9.71-4.414c-4.414-5.297-4.414-13.241.883-18.538l78.566-75.034h93.572c3.531 0 7.945 1.766 10.593 4.414l64.441 60.028c9.71 8.828 24.717 7.945 33.545-.883l45.904-46.786c4.414-4.414 13.241-4.414 17.655 0l.883.883c4.413 4.413 4.413 12.358-.001 16.772"/><path d="M406.202 114.715c29.131 0 52.966-23.834 52.966-52.966S435.333 8.784 406.202 8.784s-52.966 23.834-52.966 52.966 23.835 52.965 52.966 52.965m0-88.276c19.421 0 35.31 15.89 35.31 35.31s-15.89 35.31-35.31 35.31-35.31-15.89-35.31-35.31 15.89-35.31 35.31-35.31"/>
-            </svg>
-          </div>
-          <h3 class="text-xl mb-3">Track and Field</h3>
-          <p class="text-gray-600">Competing in Track and Field competitions and coaching kids.</p>
-        </div>
-
-        <div class="card p-6 text-center interests-item appear">
-          <div class="w-16 h-16 mx-auto mb-4 text-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl mb-3">Reading</h3>
-          <p class="text-gray-600">I enjoy books on technology, mathematics, physics, and psychology.</p>
-        </div>
+    <!-- CTA -->
+    <section class="ab-cta on-ink">
+      <div class="checker" aria-hidden="true"></div>
+      <div class="wrap ab-cta-inner">
+        <h2>Want to work together?</h2>
+        <p>A technical challenge or a musical performance: I'm open to both.</p>
+        <a href="/contact" class="btn btn-paper btn-lg">Get in touch</a>
       </div>
-    </div>
-  </section>
-
-  <!-- Call to Action -->
-  <section class="py-12 bg-primary text-white">
-    <div class="container text-center">
-      <h2 class="section-title text-white">Want to Work Together?</h2>
-      <p class="max-w-2xl mx-auto mb-10 text-white/90">
-        I'm always open to new opportunities, whether it's a technical challenge or a musical performance.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/contact" class="btn bg-white text-primary hover:bg-gray-100">Contact Me</a>
-      </div>
-    </div>
-  </section>
-
-  <style>
-
-    /* Below md the two columns collapse into one ordered stack.
-       !important beats the inline top/height written by the layout script. */
-    @media (max-width: 767px) {
-      #timeline-items {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        height: auto !important;
-      }
-
-      #timeline-items .timeline-item {
-        position: relative !important;
-        top: auto !important;
-        left: auto;
-        right: auto;
-        width: 100%;
-        order: var(--order, 0);
-      }
-    }
-  </style>
-
-  <script>
-    const CARD_GAP = 10; // rendered card gap
-
-    function layoutTimeline() {
-      const root = document.getElementById("timeline-items");
-      if (!root) return;
-
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-      if (!isDesktop) {
-        root.style.height = "";
-        root.querySelectorAll<HTMLElement>(".timeline-item").forEach(el => {
-          el.style.top = "";
-        });
-        return;
-      }
-
-      let maxBottom = 0;
-
-      for (const side of ["tech", "music"]) {
-        const items = Array.from(
-            root.querySelectorAll<HTMLElement>(`.timeline-item[data-side="${side}"]`)
-        ).sort((a, b) => Number(a.dataset.order) - Number(b.dataset.order));
-
-        let cursor = Number.NEGATIVE_INFINITY;
-
-        for (const el of items) {
-          const card = el.querySelector<HTMLElement>(".timeline-card");
-          if (!card) continue;
-
-          // Real, rendered height.
-          const height = card.getBoundingClientRect().height;
-          const anchor = Number(el.dataset.anchor) || 0;
-          const top = Math.max(anchor, cursor);
-
-          el.style.top = `${top}px`;
-          cursor = top + height + CARD_GAP;
-          maxBottom = Math.max(maxBottom, top + height);
-        }
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      let frame = 0;
-      const scheduleLayout = () => {
-        cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(layoutTimeline);
-      };
-
-      scheduleLayout();
-      window.addEventListener("resize", scheduleLayout);
-
-      // Re-run whenever a card actually changes size (font swap, text rewrap…)
-      if ("ResizeObserver" in window) {
-        const observer = new ResizeObserver(scheduleLayout);
-        document.querySelectorAll(".timeline-card").forEach(card => observer.observe(card));
-      }
-
-      // Webfonts can land after DOMContentLoaded and change card heights.
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(scheduleLayout);
-      }
-    });
-  </script>
+    </section>
+  </div>
 </MainLayout>
+
+<style>
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0; letter-spacing: -.02em; }
+  h2 { font-size: clamp(2.2rem, 4.5vw, 3.6rem); line-height: 1.02; margin-bottom: var(--space-5); }
+
+  /* Profile */
+  .profile { --portrait-max: 42rem; display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; padding-block: clamp(2.5rem, 6vw, 5rem); }
+  .intro h1 { font-size: clamp(3rem, 7vw, 6rem); line-height: .95; letter-spacing: -.04em; margin-bottom: var(--space-6); }
+  .lede { font: 400 clamp(1.1rem, 1.6vw, 1.3rem)/1.55 var(--serif); max-width: 40rem; margin: 0 0 var(--space-8); }
+  .card { margin: 0; border-top: 3px solid var(--page-fg); }
+  .card div { display: grid; grid-template-columns: 7.5rem 1fr; gap: var(--space-4); padding: .7rem 0; border-bottom: 1px solid var(--page-line); }
+  .card dt { font: var(--text-xs)/1.6 var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--track-text); }
+  .card dd { margin: 0; font-size: .97rem; }
+  .tag-live { display: inline-block; margin-left: .4rem; padding: .05rem .45rem; border-radius: 999px; border: 1px solid var(--track); color: var(--track-text); font: .68rem/1.5 var(--mono); text-transform: uppercase; letter-spacing: .05em; vertical-align: .1em; }
+  @media (max-width: 860px) { .profile { --portrait-max: 26rem; grid-template-columns: 1fr; } }
+
+  /* Race history */
+  .race { padding-block: clamp(4rem, 8vw, 6rem); }
+  .race .eyebrow.light { color: var(--on-accent-dim); }
+  .race-sub { margin: 0 0 var(--space-10); color: var(--on-accent-dim); }
+  .race-track { max-width: 82rem; margin-inline: auto; padding-inline: var(--pad); overflow-x: auto; }
+  .years, .race-lane { display: grid; grid-template-columns: 9rem 1fr; min-width: 52rem; }
+  .years { grid-template-columns: 9rem repeat(var(--cols), 1fr); font: .72rem/1 var(--mono); color: var(--on-accent-dim); padding-bottom: var(--space-2); }
+  .yr { border-left: 1px solid rgba(255, 255, 255, .25); padding-left: .3rem; height: 1rem; }
+  .race-lane { border-top: 3px solid var(--on-accent); padding-block: .9rem; }
+  .race-lane:last-child { border-bottom: 3px solid var(--on-accent); }
+  .lane-label { display: flex; align-items: center; gap: .7rem; }
+  .lane-block { --chip-size: 2.4rem; border-radius: .3rem; font-size: 1.3rem; box-shadow: 0 3px 0 rgba(0, 0, 0, .18); }
+  .lane-name { font: 600 1.15rem/1 var(--serif); }
+  .bars { display: grid; grid-template-columns: repeat(var(--cols), 1fr); grid-template-rows: repeat(var(--rows), auto); gap: .4rem 0; }
+  .bar { grid-column: var(--col); grid-row: var(--row); position: relative; min-width: 0; margin-right: 2px; padding: .45rem .6rem; background: var(--on-accent); color: var(--page-fg); border-radius: 3px; box-shadow: 0 2px 0 rgba(0, 0, 0, .15); overflow: hidden; }
+  .bar.ongoing { border-radius: 3px 0 0 3px; margin-right: 0; background: linear-gradient(90deg, var(--on-accent) 85%, rgba(255, 255, 255, .55)); }
+  .bar.ongoing::after { content: "→"; position: absolute; right: .4rem; top: 50%; translate: 0 -50%; color: var(--track); font-weight: 700; }
+  .bar.point { background: var(--page-fg); color: var(--on-accent); width: max-content; max-width: 16rem; overflow: visible; z-index: 1; }
+  .bar.point .bar-meta { color: rgba(255, 255, 255, .7); }
+  .bar-title { display: block; font-weight: 600; font-size: var(--text-sm); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-meta { display: block; font: .68rem/1.4 var(--mono); color: var(--page-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 760px) {
+    /* Phones: the lanes become a stacked list instead of a scrolling chart */
+    .years { display: none; }
+    .years, .race-lane { min-width: 0; }
+    .race-lane { grid-template-columns: 1fr; gap: var(--space-3); }
+    .bars { display: flex; flex-direction: column; gap: .4rem; }
+    .bar, .bar.point { width: auto; max-width: none; }
+    .bar-title, .bar-meta { white-space: normal; }
+  }
+
+  /* Skills */
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2.5rem, 6vw, 6rem); padding-block: clamp(4.5rem, 9vw, 7rem); }
+  .sk-track table { width: 100%; border-collapse: collapse; margin-bottom: var(--space-7); border-top: 3px solid var(--page-fg); }
+  .sk-track th, .sk-track td { text-align: left; padding: var(--space-3) 0; border-bottom: 1px solid var(--page-line); vertical-align: top; }
+  .sk-track th { width: 8rem; font: var(--text-xs)/1.9 var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--track-text); font-weight: 400; }
+  .sk-track h3 { margin-bottom: var(--space-2); font-size: 1.6rem; }
+  .reading { margin: 0; color: var(--page-fg-2); }
+  .inst { border-top: 3px solid var(--page-fg); }
+  .inst > li { padding: var(--space-4) 0; border-bottom: 1px solid var(--page-line); }
+  .inst-head { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 .35rem; }
+  .inst-head strong { font: 600 1.3rem/1.2 var(--serif); }
+  .inst-head span { font: italic 400 var(--text-md)/1 var(--serif); color: var(--page-dim); }
+  .inst-text { margin: 0 0 var(--space-2); color: var(--page-fg-2); font-size: .97rem; }
+  .inst-pieces { font: italic 400 .93rem/1.6 var(--serif); color: var(--page-dim); }
+  @media (max-width: 900px) { .skills { grid-template-columns: 1fr; } }
+
+  /* CTA */
+  .ab-cta-inner { padding-block: clamp(4rem, 8vw, 6rem); text-align: center; }
+  .ab-cta p { color: var(--inverse-dim); margin: 0 0 var(--space-8); }
+</style>

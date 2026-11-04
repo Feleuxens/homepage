@@ -1,0 +1,30 @@
+---
+// Concert-programme rows: composer, dotted leader, piece.
+// Parents adjust spacing through --list-margin, --list-pad, --row-pad and --row-size.
+interface Props {
+  items: { composer: string; piece: string }[];
+  /** On phones, drop the leader and put the piece on its own line. */
+  stackOnPhones?: boolean;
+  class?: string;
+  [attribute: string]: unknown;
+}
+const { items, stackOnPhones = false, class: className, ...rest } = Astro.props;
+---
+<ol class:list={["rows", "list-reset", { stack: stackOnPhones }, className]} {...rest}>
+  {items.map(i => (
+    <li><span class="composer">{i.composer}</span><span class="leader" aria-hidden="true"></span><span class="piece">{i.piece}</span></li>
+  ))}
+</ol>
+
+<style>
+  .rows { margin: var(--list-margin, 0); padding: var(--list-pad, 0); }
+  li { display: flex; align-items: baseline; gap: var(--space-2); padding: var(--row-pad, var(--space-1) 0); font-size: var(--row-size, .97rem); }
+  .composer { font-family: var(--serif); font-weight: 600; }
+  .piece { font-family: var(--serif); font-style: italic; text-align: right; }
+  .leader { flex: 1; min-width: 1rem; border-bottom: 1px dotted color-mix(in oklab, currentColor 40%, transparent); translate: 0 -.25em; }
+  @media (max-width: 560px) {
+    .stack li { flex-wrap: wrap; }
+    .stack .leader { display: none; }
+    .stack .piece { width: 100%; text-align: left; }
+  }
+</style>

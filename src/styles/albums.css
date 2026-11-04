@@ -1,0 +1,20 @@
+/* Album grid. A file rather than scoped styles, because the grid is rendered in two places:
+   the server island (AlbumPlayback) and its loading placeholder (AlbumSkeleton). */
+.albums { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-3); }
+.album { display: block; text-decoration: none; }
+.album-img { position: relative; display: block; aspect-ratio: 1; overflow: hidden; border-radius: 4px; background: var(--surface-2); outline: 2px solid transparent; transition: outline-color .15s; }
+.album-img img { width: 100%; height: 100%; object-fit: cover; }
+a.album:hover .album-img { outline-color: var(--track); }
+/* Two classes: these must beat the shared .mono, whichever stylesheet loads first */
+.album-img .album-idx { font-size: .65rem; position: absolute; left: .4rem; top: .4rem; padding: .1rem .35rem; background: rgba(0, 0, 0, .7); color: var(--on-accent); }
+.album-name { display: block; margin-top: .6rem; font-weight: 600; font-size: var(--text-md); line-height: 1.25; }
+.album .album-meta { display: block; margin-top: .2rem; color: var(--page-dim); font-size: .65rem; }
+.albums-empty { color: var(--page-dim); padding: var(--space-8); border: 1px dashed var(--page-line); text-align: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .skel { animation: skel 1.4s ease-in-out infinite; }
+}
+.skel-line { display: block; height: .8rem; margin-top: .6rem; border-radius: 2px; background: var(--surface-2); width: 80%; }
+.skel-line.short { width: 50%; }
+@keyframes skel { 50% { opacity: .5; } }
+@media (max-width: 1000px) { .albums { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .albums { grid-template-columns: repeat(2, 1fr); } }

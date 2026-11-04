@@ -1,0 +1,17 @@
+---
+// A coloured dot with a short label, like the status of a monitored service.
+import StatusDot from "./StatusDot.astro";
+
+interface Props {
+  tone?: "ok" | "info";
+  pulse?: boolean;
+}
+const { tone = "ok", pulse = false, ...rest } = Astro.props;
+---
+<span class:list={["status", "mono", tone]} {...rest}><StatusDot tone={tone} pulse={pulse} /><slot /></span>
+
+<style>
+  .status { display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; }
+  .ok { color: var(--ok); }
+  .info { color: var(--info); }
+</style>

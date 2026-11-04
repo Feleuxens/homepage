@@ -1,188 +1,401 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
-import "../styles/about.css"
+// Homepage "Three Lanes". Each lane leads to a page with its own world:
+// 1 IT = monitoring dashboard, 2 Music = sheet music, 3 Photography = viewfinder.
+import MainLayout from "../layouts/MainLayout.astro";
 import { Image } from "astro:assets";
-import meImg from "../../public/images/me.jpg";
-import backgroundImg from "../../public/images/hero-bg.jpg";
-import weddingImg from "../../public/images/wedding1.jpg";
+import Panel from "../components/Panel.astro";
+import Portrait from "../components/Portrait.astro";
+import ProgrammeList from "../components/ProgrammeList.astro";
+import Status from "../components/Status.astro";
+import JobIcon from "../components/JobIcon.astro";
+import PhotoCredit from "../components/PhotoCredit.astro";
+import heroImg from "../../public/images/hero-bg.jpg";
+import pianoImg from "../../public/images/wedding1.jpg";
 import photographerImg from "../../public/images/photographer2.jpg";
-import sharp from "sharp";
-import path from "node:path";
+import { getFavoritePhotos, newestFirst, photoSettings, FAVORITES_FOLDER } from "../lib/favorites";
+import { CAREER } from "../data/career";
+import { pipeline } from "../data/pipeline";
+import { programmeExcerpt } from "../data/repertoire";
+import { services } from "../data/services";
+import { exifData } from "../data/exif-data";
+import { EMAIL, LANES, SOCIAL } from "../lib/site";
 
-// Tiny blurred stand-in, inlined so the hero is never empty while the real image loads
-const heroPlaceholderBuffer = await sharp(path.join(process.cwd(), "public/images/hero-bg.jpg"))
-    .resize(32)
-    .webp({ quality: 50 })
-    .toBuffer();
-const heroPlaceholder = `data:image/webp;base64,${heroPlaceholderBuffer.toString("base64")}`;
+const favorites = getFavoritePhotos()
+  .sort(newestFirst)
+  .slice(0, 8)
+  .map(photo => ({ ...photo, meta: photoSettings(exifData["public" + FAVORITES_FOLDER + photo.filename] ?? {}) }));
 
-const currentYear = new Date().getFullYear();
+// The lanes come from site.ts; the homepage adds a pitch and one fact for each
+const lanes = [
+  { ...LANES[0], pitch: "DevOps, system administration, containers and cloud. Kept boring, on purpose.", meta: `Since ${CAREER.studyFrom}` },
+  { ...LANES[1], title: "Live Music", pitch: "Piano or trumpet for weddings, memorials and celebrations. Plus arrangements.", meta: `Since ${CAREER.trumpetFrom}` },
+  { ...LANES[2], pitch: "Competitive sport first. Also drone, portraits, and the occasional commission.", meta: "Canon R6 III" },
+];
 
-// Taken from /tech-services, so the homepage promises exactly what that page offers
-const itServices = [
-  {
-    title: "DevOps Implementation",
-    description: "CI/CD pipelines, automation and infrastructure as code.",
-  },
-  {
-    title: "System Administration",
-    description: "System management, monitoring and optimization for peak performance.",
-  },
-  {
-    title: "Containerization",
-    description: "Docker and Kubernetes for scalable, portable deployments.",
-  },
-  {
-    title: "Cloud Architecture",
-    description: "Scalable, secure cloud infrastructure tailored to your needs.",
-  },
+// Sneak peeks: each is a subset of what the lane's own page shows
+
+const movements = ["Weddings", "Memorials", "Arrangements", "Transcription"];
+const totalFavourites = getFavoritePhotos().length;
+
+const splits = [
+  { year: CAREER.trumpetFrom, label: "First trumpet lesson" },
+  { year: CAREER.pianoFrom, label: "First piano lesson" },
+  { year: CAREER.studyFrom, label: "Started B.Sc. Computer Science, Stuttgart" },
+  { year: CAREER.workFrom, label: "Working student, DevOps & SysAdmin" },
+  { year: CAREER.masterFrom, label: "Started M.Sc. Computer Science" },
+  { year: CAREER.architectCertificate, label: "iSAQB Certified Software Architect" },
 ];
 ---
-<MainLayout title="Home" description="Felix Grüb: IT services and consulting, live music on piano and trumpet, and sports photography.">
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden h-svh">
-    <div class="absolute inset-0 bg-black/40 z-10"></div>
-    <div class="absolute inset-0 bg-cover bg-center scale-110 blur-xl" style={`background-image: url(${heroPlaceholder});`}></div>
-    <Image
-        src={backgroundImg}
-        alt=""
-        width={2400}
-        height={1600}
-        widths={[640, 1024, 1600, 2400]}
-        sizes="100vw"
-        quality={80}
-        loading="eager"
-        fetchpriority="high"
-        class="absolute inset-0 w-full h-full object-cover"
-    />
 
-    <!-- Hero Content -->
-    <div class="container relative z-20 h-full flex items-center justify-center pt-20">
-      <div class="text-center">
-        <h1 class="text-display mb-6 text-white enter">Felix Grüb</h1>
-        <p class="font-serif text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white enter" style="--enter-index: 1">
-          IT Services & Consulting, Live Music and Photography
+<MainLayout title="Home" lane={0} description="Felix Grüb: IT services and consulting, live music on piano and trumpet, and sports photography.">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-text">
+        <p class="kicker rise">Stuttgart · Computer science · Piano & trumpet · Track & field</p>
+        <h1 class="rise" style="--i:1">Felix<br /><em class="accent">Grüb</em></h1>
+        <p class="lede rise" style="--i:2">
+          I keep servers up, play the moments that matter, and photograph people at full speed.
+          One person, three lanes.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center enter" style="--enter-index: 2">
-          <a href="/tech-services" class="btn theme theme-primary">IT Services</a>
-          <a href="/music" class="btn theme theme-secondary">Live Music</a>
-          <a href="/photography" class="btn theme theme-accent">Photography</a>
+        <div class="rise hero-cta" style="--i:3">
+          <a href="#lanes" class="btn btn-ink btn-lg">Pick a lane <span aria-hidden="true">↓</span></a>
+          <a href="/contact" class="link-arrow">Or just say hello</a>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- IT: the main topic, on the page's home colour -->
-  <section class="py-24 md:py-32 bg-white theme-primary">
-    <div class="container grid grid-cols-1 lg:grid-cols-12 gap-12">
-      <div class="lg:col-span-5 appear">
-        <h2 class="text-headline font-serif font-bold mb-6">IT Services & Consulting</h2>
-        <p class="text-lg mb-8 max-w-prose">
-          Professional infrastructure setup, CI/CD pipelines, system administration, and system automation tailored to your business needs.
-        </p>
-        <a href="/tech-services" class="btn theme">Explore IT Services</a>
+      <figure class="hero-photo rise" style="--i:1">
+        <Image
+          src={heroImg}
+          alt="Sprinters exploding out of the starting blocks on a red track"
+          widths={[640, 960, 1400]}
+          sizes="(min-width: 960px) 46vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <figcaption class="mono photo-label"><span class="hero-tag">ON YOUR MARKS · </span><PhotoCredit by="silas" /></figcaption>
+      </figure>
+    </section>
+
+    <!-- THE TRACK: three lanes as the main navigation -->
+    <section id="lanes" class="track on-track" aria-label="What I do">
+      {lanes.map(l => (
+        <a href={l.href} class="lane reveal">
+          <span class="chip chip-white lane-block" aria-hidden="true">{l.n}</span>
+          <span class="lane-title">{l.title}</span>
+          <span class="lane-pitch">{l.pitch}</span>
+          <span class="lane-meta mono">{l.meta}</span>
+          <span class="lane-arrow" aria-hidden="true">→</span>
+          <span class="lane-sprint" aria-hidden="true"></span>
+        </a>
+      ))}
+    </section>
+
+    <!-- LANE 1 preview: a slice of the IT dashboard -->
+    <section id="infrastructure" class="peek peek-it">
+      <div class="wrap split">
+        <div class="reveal">
+          <p class="eyebrow"><span class="chip chip-white">1</span> IT Services</p>
+          <h2>Infrastructure that stays <em class="accent">boring.</em></h2>
+          <p class="body">
+            Good operations are the ones nobody notices. I build pipelines, automate servers and
+            set up monitoring so your systems deploy themselves and tell you before something breaks.
+          </p>
+          <a href="/tech-services" class="btn btn-ink btn-lg">Open the dashboard</a>
+          <p class="peek-more mono">+ service details · project pipeline · tool stack</p>
+        </div>
+
+        <div class="reveal">
+          <Panel as="div" flush title="Service status" class="preview-panel">
+            <Status slot="status">All available</Status>
+            <ul class="dlist list-reset">
+              {services.map(s => (
+                <li><div><strong>{s.title}</strong><span>{s.short}</span></div><Status>available</Status></li>
+              ))}
+            </ul>
+            <div class="uptime" aria-hidden="true">{Array.from({ length: 48 }).map(() => <i></i>)}</div>
+          </Panel>
+          <Panel as="div" flush class="preview-panel mini-pipe" aria-label="Project process">
+            {pipeline.map(p => (
+              <span class:list={["mini-job", { running: p.running }]}><JobIcon running={p.running} />{p.stage}</span>
+            ))}
+          </Panel>
+        </div>
+      </div>
+    </section>
+
+    <!-- LANE 2 preview: a page from the score -->
+    <section id="music" class="peek peek-music">
+      <div class="wrap">
+        <p class="eyebrow reveal"><span class="chip chip-white">2</span> Music</p>
+        <h2 class="reveal">For the moments<br />you only get <em class="accent">once.</em></h2>
+        <ol class="mv-line list-reset reveal">
+          {movements.map((m, i) => <li><span>{["I", "II", "III", "IV"][i]}.</span> {m}</li>)}
+        </ol>
       </div>
 
-      <ul class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-12 content-start">
-        {itServices.map(service => (
-          <li class="appear">
-            <h3 class="text-2xl mb-3 text-(--theme-color)">{service.title}</h3>
-            <p class="text-lg">{service.description}</p>
-          </li>
+      <div class="wrap music-grid">
+        <figure class="music-photo reveal">
+          <Image src={pianoImg} alt="Hands on a piano at a wedding reception" widths={[640, 960, 1400]} sizes="(min-width: 960px) 58vw, 100vw" />
+          <figcaption class="mono photo-label"><PhotoCredit by="oliver" /></figcaption>
+        </figure>
+
+        <aside class="programme reveal" aria-label="Programme excerpt">
+          <p class="programme-head">Programme</p>
+          <p class="programme-sub">an excerpt</p>
+          <ProgrammeList items={programmeExcerpt} class="programme-rows" />
+          <p class="programme-foot">The full programme, booking steps and arrangements are on the music page.</p>
+          <a href="/music" class="btn btn-ink btn-lg">Read the score</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- LANE 3 preview: playback mode from the viewfinder -->
+    <section id="photography" class="peek peek-photo">
+      <div class="wrap split photo-intro">
+        <div class="reveal">
+          <p class="eyebrow"><span class="chip chip-white">3</span> Photography</p>
+          <h2>Fast things,<br />held still.</h2>
+        </div>
+        <div class="reveal">
+          <p class="body">
+            As an athlete myself I know where the moment is going to happen, and I'm usually
+            already lying on the floor next to it. Mostly passion, also available for commissions.
+          </p>
+          <a href="/photography" class="btn btn-ink btn-lg btn-square">Open the viewfinder</a>
+          <p class="peek-more mono">+ {totalFavourites} favourites · latest albums · visual stories · gear</p>
+        </div>
+      </div>
+
+      <div class="pb-bar mono" aria-hidden="true"><span>▶ Playback</span><span>{favorites.length + 1} / {totalFavourites + 1}</span></div>
+      <div class="sheet" tabindex="0" aria-label="Recent favourite photographs, scroll horizontally">
+        <figure class="frame frame-self">
+          <Image src={photographerImg} alt="Felix photographing at the indoor track and field championships" widths={[480, 800]} sizes="clamp(21rem, 60vh, 36rem)" />
+          <figcaption class="mono"><span>000</span>Behind the lens</figcaption>
+        </figure>
+        {favorites.map((p, i) => (
+          <figure class="frame">
+            <Image src={p.src} alt="" widths={[480, 800]} sizes="clamp(21rem, 60vh, 36rem)" loading="lazy" />
+            <figcaption class="mono"><span>{String(i + 1).padStart(3, "0")}</span>{p.meta}</figcaption>
+          </figure>
         ))}
-      </ul>
-    </div>
-  </section>
-
-  <!-- Music: one large picture, text beside it -->
-  <section class="py-24 md:py-32 bg-secondary/5 theme-secondary">
-    <div class="container grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-      <a href="/music" class="md:col-span-7 card card-link group appear">
-        <div class="aspect-[3/2] overflow-hidden">
-          <Image
-              src={weddingImg}
-              alt="Playing the piano at a wedding"
-              widths={[640, 960, 1280]}
-              sizes="(min-width: 768px) 58vw, 100vw"
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </div>
-      </a>
-
-      <div class="md:col-span-5 appear">
-        <h2 class="text-headline font-serif font-bold mb-6">Music for Your Occasion</h2>
-        <p class="text-lg mb-6 max-w-prose">
-          Piano or trumpet, solo or with playback, for the moments that matter: weddings, funerals and private celebrations.
-        </p>
-        <p class="text-lg mb-8 max-w-prose">
-          Featured: a wedding with soundtrack and modern music, played to self-arranged playback.
-        </p>
-        <a href="/music" class="btn theme">Explore Live Music</a>
+        <a href="/photography#favourites" class="frame frame-more"><span class="mono">+{totalFavourites - favorites.length} more</span><span>See all →</span></a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Photography: mirrors the music section, picture on the right -->
-  <section class="py-24 md:py-32 bg-white theme-accent">
-    <div class="container grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-      <!-- First in the markup so phones show the picture first, as in the music section -->
-      <a href="/photography" class="md:col-span-7 md:order-last card card-link group appear">
-        <div class="aspect-[3/2] overflow-hidden">
-          <Image
-              src={photographerImg}
-              alt="Photographing at the Track and Field National Championships"
-              widths={[640, 960, 1280]}
-              sizes="(min-width: 768px) 58vw, 100vw"
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </div>
-      </a>
+    <!-- ABOUT with split times -->
+    <section id="about" class="section about">
+      <div class="wrap about-grid">
+        <Portrait class="reveal" widths={[400, 700]} sizes="(min-width: 960px) 30vw, 70vw" />
 
-      <div class="md:col-span-5 appear">
-        <h2 class="text-headline font-serif font-bold mb-6">Photography</h2>
-        <p class="text-lg mb-6 max-w-prose">
-          Mostly a passion, also available for commercial work. As an athlete myself, I'm drawn above all to the intensity of competitive sports.
-        </p>
-        <p class="text-lg mb-8 max-w-prose">
-          Featured: photographing at the Track and Field National Championships Indoor.
-        </p>
-        <a href="/photography" class="btn theme">View the Portfolio</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Preview Section -->
-  <section class="py-24 md:py-32 bg-gray-100">
-    <div class="container">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div class="about-image appear">
-          <Image src={meImg} alt="Portrait of Felix Grüb" class="profile-photo" width="500" height="500" position='top' />
-        </div>
-
-        <div class="about-content appear">
-          <h2 class="section-title text-headline">About Me</h2>
-          <p class="text-lg mb-6 max-w-prose">
-            I love variety and have a whole range of different interests. This allows me to combine different perspectives and solve problems with a unique approach.
+        <div class="reveal">
+          <p class="eyebrow">About</p>
+          <h2>Precision and <em class="accent">feel</em>, in the same person.</h2>
+          <p class="body">
+            I study computer science with an interest in cryptography and system and web security, work in DevOps,
+            and spend the rest of my time at the piano, on the track or behind a camera. Debugging
+            infrastructure and practising Rachmaninoff turn out to need the same patience.
           </p>
-          <p class="text-lg mb-8 max-w-prose">
-            With over { currentYear-2022 } years in the IT industry and a lifelong passion for music, I bring both analytical precision and creative expression to everything I do.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a href="/about" class="btn theme">Learn More About Me</a>
-          </div>
+          <a href="/about" class="link-arrow">The longer version</a>
+        </div>
+
+        <div class="splits reveal">
+          <p class="mono splits-head"><span>Split times</span><span>Felix Grüb</span></p>
+          <ol class="list-reset">
+            {splits.map(s => (
+              <li><span class="mono">{s.year}</span><span>{s.label}</span></li>
+            ))}
+          </ol>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact Preview -->
-  <section class="py-24 md:py-32 bg-primary text-white">
-    <div class="container text-center appear">
-      <h2 class="section-title text-headline text-white">Let's Work Together</h2>
-      <p class="text-lg max-w-2xl mx-auto mb-10 text-white">
-        Whether you need technical expertise for your infrastructure or live music for your event, I'm here to help.
-      </p>
-      <a href="/contact" class="btn white">Contact Me</a>
-    </div>
-  </section>
+    <!-- FINISH -->
+    <section class="finish on-ink">
+      <div class="checker" aria-hidden="true"></div>
+      <div class="wrap finish-inner reveal">
+        <p class="eyebrow">Finish line</p>
+        <h2>Got something that&nbsp;doing?<br />needs <em class="accent">doing?</em></h2>
+        <a href={`mailto:${EMAIL}`} class="mail">{EMAIL}</a>
+        <div class="finish-cta">
+          <a href="/contact" class="btn btn-paper btn-lg">Use the contact form</a>
+          {SOCIAL.map(l => <a href={l.href} class="link-arrow">{l.name}</a>)}
+        </div>
+      </div>
+    </section>
 </MainLayout>
+
+<style>
+  h1, h2 { font-family: var(--serif); font-weight: 600; margin: 0; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(2.4rem, 5.5vw, 4.75rem); line-height: 1.02; margin-bottom: var(--space-6); }
+  .section { padding-block: clamp(5rem, 11vw, 9rem); }
+  .body { max-width: 38rem; color: var(--page-dim); font-size: 1.125rem; margin: 0 0 var(--space-8); }
+  .eyebrow { gap: 0; margin-bottom: var(--space-5); font-size: .8rem; line-height: 1.6; }
+  .eyebrow .chip { --chip-size: 1.5em; margin-right: .5em; font-size: .8em; box-shadow: 0 1px 0 rgba(0, 0, 0, .15); }
+
+  /* Hero */
+  .hero {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(2rem, 5vw, 5rem);
+    align-items: end;
+    padding: clamp(3rem, 8vw, 6rem) var(--pad) clamp(3rem, 6vw, 5rem);
+    max-width: 92rem; margin-inline: auto;
+  }
+  .kicker { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--page-dim); margin: 0 0 var(--space-8); }
+  .hero h1 { font-size: clamp(4.5rem, 13vw, 12rem); line-height: .86; letter-spacing: -.045em; margin-bottom: 2.25rem; }
+  .hero h1 em { padding-left: .4em; }
+  .lede { font: 400 clamp(1.25rem, 2vw, 1.6rem)/1.4 var(--serif); max-width: 32rem; margin: 0 0 var(--space-10); }
+  .hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-7); }
+  .hero-photo { margin: 0; position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 2px; }
+  .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 35% 50%; }
+  /* Narrowest phones: only the credit, so the caption stays on one line */
+  @media (max-width: 22rem) { .hero-tag { display: none; } }
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-photo { aspect-ratio: 3 / 2; order: -1; }
+  }
+
+  /* Track: three lanes */
+  .track { border-block: 3px solid var(--on-accent); }
+  .lane {
+    position: relative; overflow: hidden;
+    display: grid; grid-template-columns: auto minmax(10rem, 1fr) 2fr auto auto;
+    align-items: center; gap: clamp(1rem, 3vw, 3rem);
+    padding: clamp(1.5rem, 3.5vw, 2.75rem) var(--pad);
+    text-decoration: none;
+    border-bottom: 3px solid var(--on-accent);
+  }
+  .lane:last-child { border-bottom: 0; }
+  .lane-block { --chip-size: clamp(3rem, 5vw, 4.25rem); border-radius: .35rem; font-size: clamp(1.6rem, 3vw, 2.4rem); box-shadow: 0 4px 0 rgba(0, 0, 0, .18); }
+  .lane-title { font: 600 clamp(1.75rem, 3.5vw, 3rem)/1 var(--serif); letter-spacing: -.02em; }
+  .lane-pitch { color: var(--on-accent-dim); max-width: 34rem; }
+  .lane-meta { color: var(--on-accent-dim); white-space: nowrap; }
+  .lane-arrow { font-size: 1.75rem; transition: translate .3s var(--ease); }
+  .lane-sprint {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+    background: var(--page-fg); transform: scaleX(0); transform-origin: left;
+    transition: transform .6s var(--ease);
+  }
+  .lane:hover { background: var(--track-deep); }
+  .lane:hover .lane-arrow { translate: 8px 0; }
+  .lane:hover .lane-sprint { transform: scaleX(1); }
+  @media (max-width: 860px) {
+    .lane { grid-template-columns: auto 1fr auto; }
+    .lane-pitch { grid-column: 2 / -1; grid-row: 2; }
+    .lane-meta { display: none; }
+  }
+
+  /* Peeks: each preview borrows its page's world */
+  .peek { padding-block: clamp(5rem, 11vw, 8.5rem); }
+  .peek + .peek { border-top: 1px solid var(--page-line); }
+  .peek-more { margin: var(--space-4) 0 0; color: var(--page-dim); text-transform: none; letter-spacing: .02em; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
+  @media (max-width: 960px) { .split { grid-template-columns: 1fr; } }
+
+  /* Lane 1: dashboard slice */
+  .peek-it h2 { font: 700 clamp(2.4rem, 5vw, 4.2rem)/1 var(--sans); letter-spacing: -.035em; }
+  .peek-it h2 em { font-family: var(--serif); }
+  .peek-it .body, .peek-photo .body { color: var(--page-fg-2); }
+  .preview-panel { overflow: hidden; }
+  .dlist li { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: .8rem 1.1rem; border-bottom: 1px solid var(--surface-line); }
+  .dlist strong { display: block; font-weight: 500; font-size: var(--text-md); }
+  .dlist div span { font-size: var(--text-sm); color: var(--page-dim); }
+  .uptime { display: grid; grid-template-columns: repeat(48, 1fr); gap: 2px; padding: var(--space-4) 1.1rem 1.1rem; }
+  .uptime i { height: 1.5rem; border-radius: 1px; background: var(--ok); opacity: .75; }
+  .mini-pipe { --panel-pad: .8rem; display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+  .mini-job { --job-icon-size: 1.1rem; --job-icon-font: .65rem; display: inline-flex; align-items: center; gap: .45rem; padding: .35rem var(--space-3) .35rem .4rem; border: 1px solid var(--surface-line); border-radius: 999px; background: var(--surface-2); font: .78rem/1 var(--mono); }
+  .mini-job:not(:last-child)::after { content: "→"; margin-left: var(--space-2); color: var(--page-dim); }
+  @media (max-width: 520px) { .uptime { grid-template-columns: repeat(24, 1fr); } .uptime i:nth-child(n+25) { display: none; } }
+
+  /* Lane 2: score page */
+  /* The programme card slides in from the right; it must not widen the page meanwhile */
+  .peek-music { position: relative; overflow-x: clip; }
+  .mv-line { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-7); margin: -.25rem 0 0; font: italic 400 1.1rem/1.4 var(--serif); color: var(--page-dim); }
+  .mv-line span { font-style: normal; font-weight: 700; color: var(--score-red); }
+  .music-grid { display: grid; grid-template-columns: 1.45fr 1fr; gap: clamp(2rem, 4vw, 4rem); align-items: center; margin-top: var(--space-8); }
+  .music-photo { position: relative; margin: 0; overflow: hidden; border-radius: 2px; }
+  .music-photo img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+  .programme {
+    background: var(--surface); padding: clamp(1.75rem, 3vw, 2.75rem);
+    border: 1px solid var(--page-line);
+    box-shadow: 0 1px 0 var(--page-line), var(--shadow-sheet);
+    rotate: 1.2deg; margin-left: -4rem; position: relative;
+  }
+  .programme-head { font: 600 var(--text-2xl)/1 var(--serif); text-align: center; margin: 0; letter-spacing: .02em; }
+  .programme-sub { font: italic 400 1rem/1 var(--serif); text-align: center; color: var(--page-dim); margin: var(--space-2) 0 var(--space-7); }
+  .programme-rows { --list-margin: 0 0 var(--space-7); --list-pad: var(--space-5) 0; --row-pad: .35rem 0; --row-size: .98rem; border-block: 1px solid var(--page-line); }
+  .programme-foot { font-size: .875rem; color: var(--page-dim); text-align: center; margin: 0 0 var(--space-6); }
+  .programme .btn { width: 100%; justify-content: center; }
+  @media (max-width: 960px) {
+    /* The programme card overlaps the bottom of the photo here, so the label sits above it */
+    .music-grid { --label-bottom: 3.75rem; grid-template-columns: 1fr; }
+    .programme { margin: -3rem var(--space-4) 0; rotate: -1deg; }
+  }
+
+  /* Lane 3: viewfinder playback */
+  .peek-photo h2 { font: 800 clamp(2.4rem, 5.5vw, 4.5rem)/.98 var(--sans); letter-spacing: -.035em; }
+  .photo-intro { align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  /* The playback strip is a screen: a dark object on the paper */
+  .pb-bar { display: flex; justify-content: space-between; max-width: 82rem; margin: 0 auto; padding: .7rem var(--space-4) .2rem; background: var(--screen-bg); color: var(--screen-dim); border-radius: 8px 8px 0 0; }
+  .pb-bar span:first-child { color: var(--hud-ok); }
+  .sheet {
+    display: flex; gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--space-4);
+    max-width: 82rem; margin: 0 auto; padding: .8rem var(--space-4) 1.1rem;
+    background: var(--screen-bg);
+    border-radius: 0 0 8px 8px;
+    box-shadow: var(--screen-shadow);
+    scrollbar-color: var(--screen-scrollbar) transparent;
+  }
+  /* Bar and strip form one screen, so they share the page's side margins on narrower windows */
+  @media (max-width: 82rem) { .pb-bar, .sheet { margin-inline: var(--pad); } }
+  .frame { margin: 0; flex: 0 0 auto; scroll-snap-align: start; }
+  .frame img { height: clamp(14rem, 40vh, 24rem); width: auto; object-fit: cover; border-radius: 2px; transition: filter .3s; }
+  .sheet:hover .frame img { filter: grayscale(.6) brightness(.7); }
+  .sheet .frame:hover img { filter: none; }
+  .sheet .frame { outline: 2px solid transparent; outline-offset: 3px; transition: outline-color .15s; }
+  .sheet .frame:hover { outline-color: var(--hud); }
+  .frame figcaption { margin-top: .6rem; color: var(--screen-caption); display: flex; gap: var(--space-3); text-transform: none; }
+  .frame figcaption span { color: var(--hud); }
+  .frame-self img { aspect-ratio: 3/2; }
+  .frame-more { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .6rem; width: 14rem; height: clamp(14rem, 40vh, 24rem);
+    border: 1px dashed var(--screen-edge); border-radius: 2px; text-decoration: none; color: var(--screen-text); transition: border-color .2s; }
+  .frame-more:hover { border-color: var(--hud); }
+  .frame-more .mono { color: var(--hud); }
+
+  /* About */
+  .about-grid { --portrait-max: 34rem; display: grid; grid-template-columns: .8fr 1.2fr 1fr; gap: clamp(2rem, 4vw, 4rem); align-items: center; }
+  .about h2 { font-size: clamp(2.2rem, 4vw, 3.5rem); }
+  .splits { border-top: 3px solid var(--page-fg); }
+  .splits-head { display: flex; justify-content: space-between; padding: var(--space-3) 0; margin: 0; border-bottom: 1px solid var(--page-line); color: var(--page-dim); }
+  .splits li { display: grid; grid-template-columns: 4rem 1fr; gap: var(--space-4); padding: .8rem 0; border-bottom: 1px solid var(--page-line); font-size: var(--text-md); }
+  .splits li .mono { font-size: var(--text-sm); color: var(--track-text); padding-top: .15rem; }
+  @media (max-width: 1100px) {
+    .about-grid { grid-template-columns: 1fr 1.3fr; }
+    .splits { grid-column: 1 / -1; }
+  }
+  @media (max-width: 700px) { .about-grid { --portrait-max: 24rem; grid-template-columns: 1fr; } }
+
+  /* Finish */
+  .finish .eyebrow { color: var(--inverse-dim); }
+  .finish-inner { padding-block: clamp(5rem, 10vw, 8rem); }
+  .finish h2 { font-size: clamp(2.8rem, 7vw, 6.5rem); }
+  @media (max-width: 600px) { .finish h2 br { display: none; } }
+  .mail {
+    display: inline-block; font: 500 clamp(1.5rem, 4vw, 3rem)/1.1 var(--serif); font-style: italic;
+    text-decoration: none; color: var(--inverse-accent); margin-bottom: var(--space-10);
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat;
+    transition: background-size .4s var(--ease);
+  }
+  .mail:hover { background-size: 100% 2px; }
+  .finish-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6) var(--space-8); }
+  .finish-cta .link-arrow { color: var(--inverse-link); }
+
+  /* Motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise { animation: rise .9s var(--ease) both; animation-delay: calc(var(--i, 0) * 110ms); }
+    :global(.js-reveal) .programme.reveal { translate: 40px 0; }
+    :global(.js-reveal) .programme.reveal.in { translate: 0 0; }
+  }
+  @keyframes rise { from { opacity: 0; translate: 0 28px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .lane-sprint { transition: none; }
+  }
+</style>

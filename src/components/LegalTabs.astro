@@ -1,0 +1,52 @@
+---
+// Language switch for the Impressum and the privacy policy. It expects the page to contain
+// #german-content and #english-content (class "tab-content"); styles are in legal.css.
+---
+<div class="legal-tabs">
+    <div class="legal-tabs-row">
+        <div class="legal-tabs-bar">
+            <button class="tab-button active" data-tab="german" id="german-tab">
+                <span class="tab-flag">🇩🇪</span>
+                <span lang="de">Deutsch</span>
+            </button>
+            <button class="tab-button" data-tab="english" id="english-tab">
+                <span class="tab-flag">🇬🇧</span>
+                <span>English</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // The stored key keeps its historic name, so visitors' saved choice still applies.
+    const STORAGE_KEY = "preferred-impressum-language";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const tabButtons = document.querySelectorAll<HTMLElement>(".tab-button");
+        const tabContents = document.querySelectorAll<HTMLElement>(".tab-content");
+
+        function switchTab(targetTab: string) {
+            tabButtons.forEach(button => button.classList.toggle("active", button.dataset.tab === targetTab));
+            tabContents.forEach(content => content.classList.toggle("active", content.id === `${targetTab}-content`));
+            // Some text outside the tabs, like the page footer, also depends on the language
+            document.body.classList.toggle("english-active", targetTab === "english");
+            localStorage.setItem(STORAGE_KEY, targetTab);
+        }
+
+        tabButtons.forEach((button, index) => {
+            button.addEventListener("click", () => switchTab(button.dataset.tab ?? "german"));
+
+            // Keyboard navigation for accessibility
+            button.addEventListener("keydown", event => {
+                if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+                event.preventDefault();
+                const step = event.key === "ArrowRight" ? 1 : -1;
+                const next = tabButtons[(index + step + tabButtons.length) % tabButtons.length];
+                next.focus();
+                switchTab(next.dataset.tab ?? "german");
+            });
+        });
+
+        switchTab(localStorage.getItem(STORAGE_KEY) ?? "german");
+    });
+</script>

@@ -1,141 +1,207 @@
-/* src/styles/global.css */
-@import "tailwindcss";
+/* Site-wide CSS: design tokens, base styles and the few classes shared across pages.
+   Anything used by a single page or component belongs in that file's scoped <style>.
 
-@theme {
-  --color-primary: #3a5db8;
-  --color-secondary: #5a287d;
-  --color-accent: #bb5a03;
-  --color-dark: #23272e;
+   Shared classes keep a single class's specificity on purpose, so a scoped rule in a page
+   always beats them, whatever order the stylesheets load in. Variants and overrides go
+   through custom properties (--btn-bg, --chip-size, ...). */
+
+/* ---------- Tokens ----------
+   Every page sits on the same paper; each lane's world comes from type, components and
+   accents, not from the page colour. A dark theme overrides the page, surface, status and
+   inverse tokens under [data-theme="dark"]. Screen and camera tokens stay dark in both
+   themes, because those objects are dark in real life. */
+:root {
+  /* Type, motion, layout */
+  --serif: "Playfair Display Variable", Georgia, serif;
+  --sans: "Roboto Variable", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pad: clamp(1.25rem, 4vw, 3.5rem);
+
+  /* Spacing scale for margin, padding and gap: the number is multiples of .25rem */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Type scale. Display headings stay fluid with clamp() in their own page. */
+  --text-xs: .75rem;
+  --text-sm: .85rem;
+  --text-md: .95rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+
+  /* Track: the brand red, and what sits on it (also used for text on photos) */
+  --track: #c4452d;
+  --track-deep: #a63823;
+  --on-accent: #fff;
+  /* Text on the track: nearly white, dimmed only as far as 4.5:1 contrast allows */
+  --on-accent-dim: rgba(255, 255, 255, .95);
+  /* The brand red for small text on paper, where --track falls short of 4.5:1 */
+  --track-text: #bd4029;
+
+  /* Page */
+  --page-bg: #f3eee5;
+  --page-fg: #17150f;
+  --page-fg-2: #3b362f;
+  --page-dim: #6a6357;
+  --page-line: rgba(23, 21, 15, .14);
+  --placeholder: #756d5e;
+
+  /* Surfaces on the page: panels, cards, inputs */
+  --surface: #fbf8f2;
+  --surface-2: #efe8dc;
+  --surface-raised: #fff;
+  --surface-line: rgba(23, 21, 15, .16);
+  --shadow-panel: 0 1px 0 rgba(23, 21, 15, .04);
+  --shadow-tab: 0 1px 2px rgba(23, 21, 15, .1);
+  --shadow-sheet: 0 30px 60px -30px rgba(23, 21, 15, .35);
+
+  /* Status */
+  --ok: #237742;
+  --ok-glow: rgba(35, 119, 66, .45);
+  --ok-glow-end: rgba(35, 119, 66, 0);
+  --info: #2863c4;
+  --danger: #b3261e;
+  --danger-glow: rgba(179, 38, 30, .15);
+  --notice-ok-fg: #1e6b3a;
+  --notice-ok-bg: #e3f1e7;
+  --notice-error-fg: #9b1c1c;
+  --notice-error-bg: #f8e3e1;
+
+  /* Inverse: dark bands on the light page */
+  --inverse-bg: var(--page-fg);
+  --inverse-fg: var(--page-bg);
+  --inverse-dim: #b9b1a3;
+  --inverse-link: #cfc7b9;
+  --inverse-accent: #e8694f;
+
+  /* Footer */
+  --foot-bg: #0b0a08;
+  --foot-fg: #a49d90;
+
+  /* Score: the music lane's printed page */
+  --score-ink: #1d1a16;
+  --score-dim: #6e665a;
+  --score-red: #8f1d1d;
+  --score-staff: rgba(29, 26, 22, .6);
+  --score-staff-soft: rgba(29, 26, 22, .3);
+  --score-shadow: 0 40px 70px -40px rgba(29, 26, 22, .45);
+
+  /* Screens: camera display, playback frame */
+  --screen-bg: #0e0e0f;
+  --screen-bg-2: #1a1a1c;
+  --screen-raised: #1c1c1c;
+  --screen-hover: #2a2a2a;
+  --screen-fg: #ecebe6;
+  --screen-text: #f1f1ee;
+  --screen-dim: #8c8c86;
+  --screen-caption: #8f877a;
+  --screen-line: #2a2a2d;
+  --screen-row-line: #1f1f1f;
+  --screen-edge: #3a3a3a;
+  --screen-scrollbar: #4a4a4a;
+  --screen-tab-active: #c4161c;
+  --screen-shadow: 0 24px 60px -24px rgba(0, 0, 0, .45);
+  --hud: #ffd400;
+  --hud-ok: #5ee08b;
+  --on-hud: #0b0b0b;
+  --lightbox-fg: #ddd;
+
+  /* Camera body: the shutter button */
+  --body-light: #3a3a3a;
+  --body-dark: #111;
+  --body-ring: #222;
+  --body-ring-2: #444;
+  --body-ring-3: #555;
 }
+/* Future: [data-theme="dark"] { --page-bg: …; --page-fg: …; --surface: …; … } */
 
-@layer base {
-  :root {
-    --theme-color: var(--color-primary);
-  }
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body { margin: 0; background: var(--page-bg); color: var(--page-fg); font: 400 var(--text-base)/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--track); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@keyframes spin { to { rotate: 360deg; } }
+
+/* ---------- Layout and text helpers ---------- */
+.wrap { max-width: 82rem; margin-inline: auto; padding-inline: var(--pad); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.list-reset { list-style: none; margin: 0; padding: 0; }
+.list-notes li::before { content: "♪ "; color: var(--score-red); font-style: normal; }
+.accent { font-style: italic; font-weight: 500; color: var(--track); }
+
+/* Each world sets its own casing and tracking on its root element */
+.mono { font-family: var(--mono); font-size: var(--text-xs); letter-spacing: var(--mono-tracking, .06em); text-transform: var(--mono-case, uppercase); }
+
+/* Caption on top of a photo, always at its bottom left. The figure needs position: relative. */
+.photo-label { position: absolute; left: .6rem; bottom: var(--label-bottom, .6rem); padding: .15rem .45rem; background: var(--label-bg, var(--page-bg)); color: var(--label-fg, inherit); font-size: .65rem; }
+
+.eyebrow { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 1.1rem; color: var(--page-dim); font: .78rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+
+/* ---------- Lane number chip, from the lane blocks on the track ---------- */
+.chip {
+  display: inline-grid; place-items: center; flex: none;
+  width: var(--chip-size, 1.45em); height: var(--chip-size, 1.45em);
+  border-radius: .25em;
+  background: var(--chip-bg, var(--page-fg)); color: var(--chip-fg, var(--page-bg));
+  font: 700 .8rem/1 var(--sans);
 }
+.chip-track { --chip-bg: var(--track); --chip-fg: var(--on-accent); }
+.chip-white { --chip-bg: var(--on-accent); --chip-fg: var(--page-fg); }
 
-@layer components {
-  .theme-primary {
-    --theme-color: var(--color-primary);
-  }
-
-  .theme-secondary {
-    --theme-color: var(--color-secondary);
-  }
-
-  .theme-accent {
-    --theme-color: var(--color-accent);
-  }
+/* ---------- Buttons and links ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: var(--btn-pad, .85rem 1.4rem);
+  border: var(--btn-border, 0);
+  border-radius: var(--btn-radius, 999px);
+  background: var(--btn-bg, transparent); color: var(--btn-fg, inherit);
+  font-weight: 500; text-decoration: none;
+  transition: background-color .2s ease-out, color .2s ease-out, border-color .2s ease-out, transform .15s ease-out;
 }
+.btn:hover { background: var(--btn-hover-bg, var(--btn-bg, transparent)); color: var(--btn-hover-fg, var(--btn-fg, inherit)); }
+.btn:active { transform: scale(.97); }
+.btn-ink { --btn-bg: var(--page-fg); --btn-fg: var(--page-bg); --btn-hover-bg: var(--track); }
+.btn-paper { --btn-bg: var(--page-bg); --btn-fg: var(--page-fg); --btn-hover-bg: var(--surface-raised); }
+.btn-accent { --btn-bg: var(--track); --btn-fg: var(--on-accent); --btn-hover-bg: var(--track-deep); }
+.btn-ghost { --btn-bg: var(--surface-2); --btn-border: 1px solid var(--surface-line); }
+.btn-ghost:hover { border-color: var(--page-dim); }
+.btn-lg { --btn-pad: .95rem var(--space-6); }
+.btn-square { --btn-radius: 4px; }
 
-/*noinspection CssInvalidAtRule*/
-@theme {
-  --font-sans: 'Roboto Variable', 'sans-serif';
-  --font-serif: 'Playfair Display Variable', 'serif';
+.link-arrow { text-decoration: none; font-weight: 500; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+.link-arrow::after { content: " →"; display: inline-block; transition: translate .2s var(--ease); }
+.link-arrow:hover::after { translate: 4px 0; }
 
-  /* Type scale: two large steps do the visible work, body text stays 16-18px.
-     Generates the text-display (hero name) and text-headline (section headings) utilities. */
-  --text-display: clamp(3rem, 9vw, 8.5rem);
-  --text-display--line-height: 0.95;
-  --text-display--letter-spacing: -0.02em;
-  --text-headline: clamp(2.25rem, 4.5vw, 4rem);
-  --text-headline--line-height: 1.05;
-  --text-headline--letter-spacing: -0.015em;
+/* ---------- Track motifs ---------- */
+.on-track { background: var(--track) radial-gradient(rgba(0, 0, 0, .08) 1px, transparent 1px) 0 0 / 4px 4px; color: var(--on-accent); }
+/* The usual red focus ring would vanish on the red track */
+.on-track :focus-visible { outline-color: var(--on-accent); }
+.on-ink { background: var(--inverse-bg); color: var(--inverse-fg); }
+
+/* The finish line. --checker-a is the first square of the pattern. */
+.checker {
+  height: 2.5rem;
+  background: repeating-conic-gradient(var(--checker-a, var(--page-bg)) 0 25%, var(--checker-b, var(--page-fg)) 0 50%) 0 0 / 1.25rem 1.25rem;
 }
+.checker-invert { --checker-a: var(--page-fg); --checker-b: var(--page-bg); }
 
-/*noinspection CssInvalidAtRule*/
-@theme {
-  @keyframes astroFadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-}
-
-/* Custom utilities */
-@layer components {
-  .container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-
-  .section-title {
-    @apply font-serif text-3xl md:text-4xl font-bold mb-6 md:mb-10;
-  }
-  
-  .card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden;
-  }
-
-  /* A card that is a link as a whole: lifts on hover, presses on click */
-  .card-link {
-    @apply block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-(--theme-color);
-    transition:
-      box-shadow var(--motion-duration-base) var(--motion-ease-out),
-      transform var(--motion-duration-base) var(--motion-ease-out);
-
-    @media (hover: hover) {
-      &:hover {
-        @apply shadow-lg;
-      }
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      @media (hover: hover) {
-        &:hover {
-          transform: translateY(-4px);
-        }
-      }
-
-      &:active {
-        transform: translateY(-1px);
-        transition-duration: var(--motion-duration-fast);
-      }
-    }
-  }
-}
-
-/* Mobile menu button active state */
-#menuButton.active span:first-child {
-  @apply transform rotate-45 translate-y-2;
-}
-
-#menuButton.active span:nth-child(2) {
-  @apply opacity-0;
-}
-
-#menuButton.active span:last-child {
-  @apply transform -rotate-45 -translate-y-2;
-}
-
-/* Additional custom styles */
-html {
-  scroll-behavior: smooth;
-  /* Keeps anchored headings clear of the fixed header */
-  scroll-padding-top: 5rem;
-}
-
-
-/* loading spinner styling */
-.loading-spinner {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: inline-block;
-  border-top: 3px solid #FFF;
-  border-right: 3px solid transparent;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+/* ---------- Reveal on scroll (the class is set by the script in MainLayout) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal .reveal { opacity: 0; translate: 0 28px; transition: opacity .7s var(--ease), translate .7s var(--ease); }
+  .js-reveal .reveal.in { opacity: 1; translate: 0 0; }
 }

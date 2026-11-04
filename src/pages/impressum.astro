@@ -1,41 +1,22 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import LegalTabs from '../components/LegalTabs.astro';
+import '../styles/legal.css';
 ---
 
 <MainLayout title="Impressum / Imprint" description="Impressum / legal notice for feleuxens.de.">
-    <section class="py-20 bg-white">
-        <div class="container max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-5xl mb-8 text-center">Impressum / Imprint</h1>
+    <section class="legal-page">
+        <div class="legal-wrap">
+            <h1 class="legal-title">Impressum / Imprint</h1>
 
             <!-- Language Tabs -->
-            <div class="mb-12">
-                <div class="flex justify-center">
-                    <div class="inline-flex bg-gray-100 rounded-lg p-1">
-                        <button
-                                class="tab-button active px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2"
-                                data-tab="german"
-                                id="german-tab"
-                        >
-                            <span class="text-lg">🇩🇪</span>
-                            <span>Deutsch</span>
-                        </button>
-                        <button
-                                class="tab-button px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2"
-                                data-tab="english"
-                                id="english-tab"
-                        >
-                            <span class="text-lg">🇬🇧</span>
-                            <span>English</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <LegalTabs />
 
             <!-- German Content -->
-            <div class="tab-content active" id="german-content">
-                <div class="text-sm text-gray-500 text-center mb-12">Angaben gemäß § 5 DDG</div>
+            <div class="tab-content active" id="german-content" lang="de">
+                <div class="legal-sub">Angaben gemäß § 5 DDG</div>
 
-                <div class="prose prose-lg max-w-none">
+                <div class="prose">
                     <section class="legal-section">
                         <div class="legal-content">
                             <p><strong>Felix Grüb</strong></p>
@@ -113,9 +94,9 @@ import MainLayout from '../layouts/MainLayout.astro';
 
             <!-- English Content -->
             <div class="tab-content" id="english-content">
-                <div class="text-sm text-gray-500 text-center mb-12">Legal Notice</div>
+                <div class="legal-sub">Legal Notice</div>
 
-                <div class="prose prose-lg max-w-none">
+                <div class="prose">
                     <!-- Service Provider Information -->
                     <section class="legal-section">
                         <h2 class="legal-heading">Content provider</h2>
@@ -200,161 +181,16 @@ import MainLayout from '../layouts/MainLayout.astro';
                 </div>
             </div>
 
-            <div class="text-center mt-12 pt-8 border-t border-gray-200">
-                <p class="text-sm text-gray-500">
-                    <span class="german-only">Stand: 01.11.2026 |
-                        <a href="/privacy" class=""> Datenschutzerklärung</a>
+            <div class="legal-foot">
+                <p class="legal-note">
+                    <span class="german-only" lang="de">Stand: 01.11.2026 |&nbsp;
+                        <a href="/privacy">Datenschutzerklärung</a>
                     </span>
-                    <span class="english-only hidden">Last updated: November 1, 2026
-                        <a href="/privacy" class="legal-link"> Privacy Policy</a>
+                    <span class="english-only">Last updated: November 1, 2026 |&nbsp;
+                        <a href="/privacy" class="legal-link">Privacy Policy</a>
                     </span>
                 </p>
             </div>
         </div>
     </section>
-
-    <style>
-        @reference "tailwindcss";
-        @reference "../styles/global.css";
-        /* Tab Styles */
-        .tab-button {
-            @apply text-gray-600 hover:text-gray-800;
-        }
-
-        .tab-button.active {
-            @apply bg-white text-primary shadow-sm;
-        }
-
-        .tab-content {
-            @apply opacity-0 invisible max-h-0 overflow-hidden transition-all duration-300;
-        }
-
-        .tab-content.active {
-            @apply opacity-100 visible max-h-none;
-        }
-
-        /* Legal Content Styles */
-        .legal-section {
-            @apply mb-8 pb-6 border-b border-gray-100 last:border-b-0;
-        }
-
-        .legal-heading {
-            @apply text-2xl mb-4 text-gray-800;
-        }
-
-        .legal-content {
-            @apply text-gray-700 leading-relaxed;
-        }
-
-        .legal-content p {
-            @apply mb-3 last:mb-0;
-        }
-
-        .legal-link {
-            @apply text-primary hover:text-primary/80 underline transition-colors duration-200;
-        }
-
-        .prose {
-            @apply text-gray-700;
-        }
-
-        .prose strong {
-            @apply text-gray-900 font-semibold;
-        }
-
-        /* Language-specific content visibility */
-        .german-only {
-            @apply block;
-        }
-
-        .english-only {
-            @apply hidden;
-        }
-
-        /* When English tab is active */
-        .english-active .german-only {
-            @apply hidden;
-        }
-
-        .english-active .english-only {
-            @apply block;
-        }
-
-        /* Smooth tab content transitions */
-        .tab-content {
-            transform: translateY(10px);
-        }
-
-        .tab-content.active {
-            transform: translateY(0);
-        }
-
-        /* Mobile responsive tabs */
-        @media (max-width: 640px) {
-            .tab-button {
-                @apply px-4 py-2 text-sm;
-            }
-
-            .tab-button span:first-child {
-                @apply text-base;
-            }
-        }
-    </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const body = document.body;
-
-            // Function to switch tabs
-            function switchTab(targetTab) {
-                // Remove active class from all buttons and contents
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-
-                // Add active class to clicked button and corresponding content
-                document.querySelector(`[data-tab="${targetTab}"]`).classList.add('active');
-                document.getElementById(`${targetTab}-content`).classList.add('active');
-
-                // Update body class for language-specific content
-                if (targetTab === 'english') {
-                    body.classList.add('english-active');
-                } else {
-                    body.classList.remove('english-active');
-                }
-
-                // Store preference
-                localStorage.setItem('preferred-impressum-language', targetTab);
-            }
-
-            // Add click event listeners to tab buttons
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetTab = button.getAttribute('data-tab');
-                    switchTab(targetTab);
-                });
-            });
-
-            // Load saved preference or default to german
-            const savedLanguage = localStorage.getItem('preferred-impressum-language') || 'german';
-            switchTab(savedLanguage);
-
-            // Keyboard navigation for accessibility
-            tabButtons.forEach((button, index) => {
-                button.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                        e.preventDefault();
-                        const nextIndex = e.key === 'ArrowRight' ?
-                            (index + 1) % tabButtons.length :
-                            (index - 1 + tabButtons.length) % tabButtons.length;
-
-                        tabButtons[nextIndex].focus();
-                        const targetTab = tabButtons[nextIndex].getAttribute('data-tab');
-                        switchTab(targetTab);
-                    }
-                });
-            });
-        });
-    </script>
 </MainLayout>

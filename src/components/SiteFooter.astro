@@ -1,0 +1,38 @@
+---
+import { EMAIL, LANES, SOCIAL } from "../lib/site";
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="lanes">
+    {LANES.map(l => (
+      <a href={l.href}><span class="chip chip-white" aria-hidden="true">{l.n}</span>{l.title}</a>
+    ))}
+  </div>
+  <div class="meta">
+    <span>© {year} Felix Grüb</span>
+    <span>
+      <a href={`mailto:${EMAIL}`}>{EMAIL}</a>{SOCIAL.map(s => <> · <a href={s.href}>{s.name}</a></>)}
+    </span>
+    <span><a href="/impressum">Impressum / Imprint</a> · <a href="/privacy">Datenschutz / Privacy Policy</a></span>
+  </div>
+</footer>
+
+<style>
+  /* The red track again, so every page ends on the lanes */
+  .site-footer { background: var(--foot-bg); color: var(--foot-fg); }
+  .lanes { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--track); border-top: 3px solid var(--on-accent); }
+  .lanes a { display: flex; align-items: center; padding: var(--space-5) var(--pad); color: var(--on-accent); text-decoration: none; font: 600 var(--text-lg)/1 var(--serif); border-right: 3px solid var(--on-accent); transition: background .2s; }
+  .lanes a:focus-visible { outline-color: var(--on-accent); }
+  .lanes a:last-child { border-right: 0; }
+  .lanes a:hover { background: var(--track-deep); }
+  .chip { margin-right: .5em; font-size: var(--text-sm); }
+  .meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3) var(--space-8); padding: var(--space-6) var(--pad); font-size: var(--text-sm); }
+  .meta a { text-decoration: none; }
+  .meta a:hover { color: var(--on-accent); }
+  @media (max-width: 700px) {
+    .lanes { grid-template-columns: 1fr; }
+    .lanes a { border-right: 0; border-bottom: 3px solid var(--on-accent); }
+    .lanes a:last-child { border-bottom: 0; }
+  }
+</style>
