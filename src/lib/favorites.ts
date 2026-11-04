@@ -34,3 +34,11 @@ export function getFavoritePhotos(): FavoritePhoto[] {
 export function newestFirst(a: FavoritePhoto, b: FavoritePhoto): number {
     return b.date - a.date;
 }
+
+/** Shutter speed, aperture and focal length of a photo as one line. */
+export function photoSettings(
+    exif: { shutterSpeed?: string; aperture?: string; focalLength?: string },
+    separator = " · ",
+): string {
+    return [exif.shutterSpeed, exif.aperture, exif.focalLength].filter(Boolean).join(separator);
+}

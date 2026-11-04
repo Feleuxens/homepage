@@ -1,0 +1,37 @@
+/* Impressum and privacy policy: quiet reading pages with a language switch. */
+.legal-page { padding-block: clamp(3rem, 7vw, 5rem); }
+.legal-wrap { max-width: 50rem; margin-inline: auto; padding-inline: var(--pad); }
+.legal-title { margin: 0 0 var(--space-8); font: 600 clamp(2.2rem, 5vw, 3.4rem)/1.05 var(--serif); letter-spacing: -.02em; text-align: center; }
+.legal-tabs { margin-bottom: var(--space-12); }
+.legal-tabs-row { display: flex; justify-content: center; }
+.legal-tabs-bar { display: inline-flex; padding: var(--space-1); border-radius: 8px; background: var(--surface-2); }
+.tab-button { display: flex; align-items: center; gap: var(--space-2); padding: .7rem 1.4rem; border: 0; border-radius: 6px; background: none; color: var(--page-dim); font: 500 1rem/1 var(--sans); cursor: pointer; transition: color .15s, background .15s; }
+.tab-button:hover { color: var(--page-fg); }
+.tab-button.active { background: var(--surface); color: var(--track-text); box-shadow: var(--shadow-tab); }
+.tab-flag { font-size: 1.1rem; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.legal-sub { margin-bottom: var(--space-12); color: var(--page-dim); font-size: .88rem; text-align: center; }
+.legal-note { color: var(--page-dim); font-size: .88rem; }
+.legal-section { margin-bottom: var(--space-8); padding-bottom: var(--space-6); border-bottom: 1px solid var(--page-line); }
+.legal-section:last-child { margin-bottom: 0; border-bottom: 0; }
+.legal-heading { margin: 0 0 var(--space-4); color: var(--page-fg); font: 600 var(--text-xl)/1.2 var(--serif); }
+.legal-content { color: var(--page-fg-2); line-height: 1.65; }
+.legal-content p { margin: 0 0 var(--space-3); }
+.legal-content p:last-child { margin-bottom: 0; }
+.legal-list { margin: 0 0 var(--space-3); padding-left: var(--space-6); list-style: disc; }
+.legal-link { color: var(--track-text); text-decoration: underline; transition: color .15s; }
+.legal-link:hover { color: var(--track-deep); }
+.prose strong { color: var(--page-fg); font-weight: 600; }
+.legal-foot { margin-top: var(--space-12); padding-top: var(--space-8); border-top: 1px solid var(--page-line); text-align: center; }
+.german-only { display: block; }
+.english-only { display: none; }
+.english-active .german-only { display: none; }
+.english-active .english-only { display: block; }
+/* "Datenschutzerklärung" is one long word: scale the title so that it fits narrow phones */
+@media (max-width: 27rem) {
+  .legal-title { font-size: 7.5vw; }
+}
+@media (max-width: 640px) {
+  .tab-button { padding: .55rem var(--space-4); font-size: .88rem; }
+}

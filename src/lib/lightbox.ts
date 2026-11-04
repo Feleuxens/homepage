@@ -10,16 +10,13 @@ let requestId = 0;
 
 function build(): HTMLDialogElement {
     const d = document.createElement("dialog");
-    d.className =
-        "backdrop:bg-black/95 bg-transparent max-w-none max-h-none w-full h-full p-4 " +
-        "hidden open:flex items-center justify-center";
     d.innerHTML = `
-    <div class="relative flex flex-col items-center gap-2">
-      <img data-lb-image alt="" class="max-w-full max-h-[80dvh] object-contain rounded-lg" />
-      <div data-lb-spinner class="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+    <div>
+      <img data-lb-image alt="" />
+      <div data-lb-spinner>
         <span class="loading-spinner"></span>
       </div>
-      <p data-lb-caption class="text-gray-200 text-center"></p>
+      <p data-lb-caption></p>
     </div>`;
 
     imageEl = d.querySelector("[data-lb-image]")!;

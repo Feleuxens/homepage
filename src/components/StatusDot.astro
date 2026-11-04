@@ -1,0 +1,22 @@
+---
+interface Props {
+  tone?: "ok" | "info";
+  /** A live system pulses; a state that is merely true doesn't. */
+  pulse?: boolean;
+}
+const { tone = "ok", pulse = false } = Astro.props;
+---
+<span class:list={["dot", tone, { pulse }]} aria-hidden="true"></span>
+
+<style>
+  .dot { display: inline-block; flex: none; width: .5rem; height: .5rem; border-radius: 50%; }
+  .ok { background: var(--ok); }
+  .info { background: var(--info); }
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse { animation: dot-pulse 2.4s infinite; }
+  }
+  @keyframes dot-pulse {
+    0% { box-shadow: 0 0 0 0 var(--ok-glow); }
+    70%, 100% { box-shadow: 0 0 0 6px var(--ok-glow-end); }
+  }
+</style>

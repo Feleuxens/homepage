@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
 import { exifExtractor} from "./src/lib/exif-reader.ts";
 import node from "@astrojs/node";
 
@@ -30,10 +29,6 @@ export default defineConfig({
       ],
     },
   },
-  vite: {
-    plugins: [tailwindcss()]
-  },
-
   integrations: [
       exifExtractor({
         originalsDir: ["public/images/photography/stories", "public/images/photography/favorites"],

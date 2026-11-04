@@ -1,0 +1,22 @@
+---
+// Portrait of Felix. Parents set the size limit through --portrait-max.
+import { Image } from "astro:assets";
+import meImg from "../../public/images/me.jpg";
+
+interface Props {
+  widths: number[];
+  sizes: string;
+  loading?: "eager" | "lazy";
+  class?: string;
+}
+const { widths, sizes, loading, class: className, ...rest } = Astro.props;
+---
+<figure class:list={["portrait", className]} {...rest}>
+  <Image src={meImg} alt="Portrait of Felix Grüb" widths={widths} sizes={sizes} loading={loading} />
+</figure>
+
+<style>
+  .portrait { margin: 0; }
+  /* The photo has a white background; multiply melts it into the paper */
+  img { mix-blend-mode: multiply; width: 100%; max-height: var(--portrait-max, 34rem); object-fit: contain; }
+</style>

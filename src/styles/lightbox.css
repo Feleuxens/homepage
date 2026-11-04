@@ -1,0 +1,11 @@
+/* The lightbox dialog is built at runtime by src/lib/lightbox.ts, so its styles can't be scoped. */
+dialog:has([data-lb-image]) { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: var(--space-4); border: 0; background: transparent; }
+dialog:has([data-lb-image])[open] { display: flex; align-items: center; justify-content: center; }
+dialog:has([data-lb-image])::backdrop { background: rgba(0, 0, 0, .94); }
+dialog:has([data-lb-image]) > div { position: relative; display: flex; flex-direction: column; align-items: center; gap: .6rem; }
+[data-lb-image] { max-width: 100%; max-height: 82dvh; width: auto; height: auto; object-fit: contain; border-radius: 4px; }
+[data-lb-caption] { margin: 0; color: var(--lightbox-fg); font: .8rem/1.4 var(--mono); text-align: center; }
+[data-lb-caption] a { color: var(--hud); }
+[data-lb-spinner] { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, .3); }
+[data-lb-spinner].hidden { display: none; }
+.loading-spinner { width: 48px; height: 48px; border-radius: 50%; border-top: 3px solid var(--on-accent); border-right: 3px solid transparent; animation: spin 1s linear infinite; }

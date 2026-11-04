@@ -2,7 +2,7 @@
 
 /** Topic values sent by the form, and how they are named in the notification email. */
 export const SERVICES = {
-    it: "IT Services & Consulting",
+    it: "IT Services",
     performance: "Piano/Trumpet Performance",
     arrangement: "Arrangement or Transcription",
     photography: "Photography",

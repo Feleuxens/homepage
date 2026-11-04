@@ -6,27 +6,29 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint:css": "stylelint \"src/**/*.{astro,css}\""
   },
   "dependencies": {
     "@astrojs/check": "0.9.12",
     "@astrojs/node": "11.1.9",
     "@fontsource-variable/playfair-display": "5.3.0",
     "@fontsource-variable/roboto": "5.3.0",
-    "@tailwindcss/vite": "4.3.3",
     "altcha": "3.5.0",
     "altcha-lib": "2.8.0",
-    "astro": "7.4.4",
+    "astro": "7.4.5",
     "chokidar": "6.0.0",
-    "exifreader": "4.52.0",
+    "exifreader": "4.54.0",
     "nodemailer": "10.3.1",
-    "sharp": "0.35.5",
-    "tailwindcss": "4.3.3"
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "@types/node": "26.6.6",
     "@types/nodemailer": "8.0.2",
-    "@types/packery": "1.4.37"
+    "@types/packery": "1.4.37",
+    "postcss-html": "^2.0.0",
+    "stylelint": "^18.0.0",
+    "stylelint-config-recommended": "^19.0.0"
   },
   "allowScripts": {
     "esbuild@0.28.1": true,

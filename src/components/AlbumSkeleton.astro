@@ -1,0 +1,14 @@
+---
+// Placeholder for the album grid while the AlbumPlayback server island loads.
+import "../styles/albums.css";
+
+interface Props {
+  count?: number;
+}
+const { count = 6 } = Astro.props;
+---
+<ul class="albums list-reset" aria-hidden="true">
+  {Array.from({ length: count }).map(() => (
+    <li><span class="album"><span class="album-img skel"></span><span class="skel-line"></span><span class="skel-line short"></span></span></li>
+  ))}
+</ul>

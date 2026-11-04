@@ -20,7 +20,7 @@ export function initContactForm(form: HTMLFormElement): void {
 
     const email = form.dataset.fallbackEmail ?? "";
     const messages: Record<string, string> = {
-        sent: "Thank you! Your message has been sent. I'll get back to you within 24 hours.",
+        sent: "Thank you! Your message has been sent. I'll usually get back to you within a day or two.",
         invalid_fields: "Please check the highlighted fields.",
         rate_limited: "Too many attempts. Please wait a few minutes and try again.",
         verification_failed: `The automatic spam check didn't complete. Please try again, or write to me directly at ${email}.`,
@@ -29,14 +29,18 @@ export function initContactForm(form: HTMLFormElement): void {
 
     const show = (text: string, tone: "success" | "error") => {
         status.textContent = text;
-        status.className = `text-center text-sm ${tone === "success" ? "text-green-700" : "text-red-700"}`;
+        status.className = tone;
     };
 
     const markInvalid = (fields: string[]) => {
         for (const element of form.querySelectorAll<HTMLElement>("[aria-invalid]")) element.removeAttribute("aria-invalid");
         for (const name of fields) {
             const field = form.elements.namedItem(name);
-            if (field instanceof HTMLElement) field.setAttribute("aria-invalid", "true");
+            // A radio group comes back as a list, so each of its buttons gets marked
+            const elements = field instanceof RadioNodeList ? [...field] : [field];
+            for (const element of elements) {
+                if (element instanceof HTMLElement) element.setAttribute("aria-invalid", "true");
+            }
         }
         form.querySelector<HTMLElement>("[aria-invalid=true]")?.focus();
     };
@@ -48,7 +52,12 @@ export function initContactForm(form: HTMLFormElement): void {
         button.textContent = "Sending…";
 
         try {
-            await whenVerified(widget);
+            try {
+                await whenVerified(widget);
+            } catch {
+                show(messages.verification_failed, "error");
+                return;
+            }
             const response = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -66,7 +75,8 @@ export function initContactForm(form: HTMLFormElement): void {
                 show(messages[result.error ?? ""] ?? messages.fallback, "error");
             }
         } catch {
-            show(messages.verification_failed, "error");
+            // Timeout or no connection: the fallback already offers the email address
+            show(messages.fallback, "error");
         } finally {
             // Every challenge is accepted once, so the next attempt needs a fresh one
             widget.reset();
