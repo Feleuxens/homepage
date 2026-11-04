@@ -13,13 +13,13 @@ import { services } from "../data/services";
 import { EMAIL } from "../lib/site";
 
 const stack = [
-  { area: "Containers", tools: ["Docker", "Docker Compose", "Kubernetes"] },
-  { area: "CI/CD", tools: ["GitLab CI"] },
+  { area: "Containers", tools: ["Docker", "Kubernetes", "Helm"] },
+  { area: "CI/CD", tools: ["GitLab CI", "Github Actions"] },
   { area: "Infrastructure as code", tools: ["Terraform"] },
-  { area: "Observability", tools: ["Grafana", "Prometheus"] },
-  { area: "Networking & identity", tools: ["WireGuard", "Tailscale", "OPNsense", "Keycloak / OpenID Connect"] },
-  { area: "Operating systems", tools: ["Linux"] },
-  { area: "Languages", tools: ["Python", "Rust", "Java"] },
+  { area: "Observability", tools: ["Grafana", "Prometheus", "TheTRÄP", "Greenbone"] },
+  { area: "Networking & identity", tools: ["WireGuard", "Tailscale", "nginx", "Keycloak"] },
+  { area: "Operating systems", tools: ["Linux", "macOS", "Windows"] },
+  { area: "Languages", tools: ["Python", "Rust", "Java", "Swift"] },
 ];
 
 // Deterministic, decorative sparkline (no axis, no values)
