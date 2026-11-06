@@ -1,6 +1,6 @@
 ---
 interface Props {
-  tone?: "ok" | "info";
+  tone?: "ok" | "info" | "danger";
   /** A live system pulses; a state that is merely true doesn't. */
   pulse?: boolean;
 }
@@ -12,6 +12,7 @@ const { tone = "ok", pulse = false } = Astro.props;
   .dot { display: inline-block; flex: none; width: .5rem; height: .5rem; border-radius: 50%; }
   .ok { background: var(--ok); }
   .info { background: var(--info); }
+  .danger { background: var(--danger); }
   @media (prefers-reduced-motion: no-preference) {
     .pulse { animation: dot-pulse 2.4s infinite; }
   }

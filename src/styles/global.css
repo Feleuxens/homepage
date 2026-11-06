@@ -150,8 +150,6 @@ a { color: inherit; }
 /* Caption on top of a photo, always at its bottom left. The figure needs position: relative. */
 .photo-label { position: absolute; left: .6rem; bottom: var(--label-bottom, .6rem); padding: .15rem .45rem; background: var(--label-bg, var(--page-bg)); color: var(--label-fg, inherit); font-size: .65rem; }
 
-.eyebrow { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 1.1rem; color: var(--page-dim); font: .78rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
-
 /* ---------- Lane number chip, from the lane blocks on the track ---------- */
 .chip {
   display: inline-grid; place-items: center; flex: none;

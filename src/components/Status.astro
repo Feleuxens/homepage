@@ -3,7 +3,7 @@
 import StatusDot from "./StatusDot.astro";
 
 interface Props {
-  tone?: "ok" | "info";
+  tone?: "ok" | "info" | "danger";
   pulse?: boolean;
 }
 const { tone = "ok", pulse = false, ...rest } = Astro.props;
@@ -14,4 +14,5 @@ const { tone = "ok", pulse = false, ...rest } = Astro.props;
   .status { display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; }
   .ok { color: var(--ok); }
   .info { color: var(--info); }
+  .danger { color: var(--danger); }
 </style>

@@ -7,6 +7,7 @@ import Panel from "../components/Panel.astro";
 import Status from "../components/Status.astro";
 import StatusDot from "../components/StatusDot.astro";
 import JobIcon from "../components/JobIcon.astro";
+import ServerStatus from "../components/ServerStatus.astro";
 import { CAREER } from "../data/career";
 import { pipeline } from "../data/pipeline";
 import { services } from "../data/services";
@@ -14,7 +15,7 @@ import { EMAIL } from "../lib/site";
 
 const stack = [
   { area: "Containers", tools: ["Docker", "Kubernetes", "Helm"] },
-  { area: "CI/CD", tools: ["GitLab CI", "Github Actions"] },
+  { area: "CI/CD", tools: ["GitLab CI", "GitHub Actions"] },
   { area: "Infrastructure as code", tools: ["Terraform"] },
   { area: "Observability", tools: ["Grafana", "Prometheus", "TheTRÄP", "Greenbone"] },
   { area: "Networking & identity", tools: ["WireGuard", "Tailscale", "nginx", "Keycloak"] },
@@ -55,8 +56,8 @@ const academicWork = [
 ];
 
 const projects = [
-  { name: "Own server", text: "A rented server I run and maintain myself. System administration is a big hobby of mine; it hosts this site and my other services.", tags: ["System administration"] },
-  { name: "OnYourMarks", text: "A small iOS app that gives start commands for running.", tags: ["iOS", "Swift"], href: "https://github.com/Feleuxens/OnYourMarks" },
+  { name: "Own server", text: "A rented server I run and maintain myself. System administration is a big hobby of mine; it hosts this site and my other services.", tags: ["System administration"], live: true, link: { href: "https://status.feleuxens.de", label: "Status page ↗" } },
+  { name: "OnYourMarks", text: "A small iOS app that gives start commands for running.", tags: ["iOS", "Swift"], link: { href: "https://github.com/Feleuxens/OnYourMarks", label: "View on GitHub ↗" } },
   { name: "Photo analysis", text: "Generates photo descriptions in my gallery, based on bib numbers.", tags: ["Image analysis"] },
 ];
 
@@ -65,7 +66,7 @@ const working = CAREER.workFrom;
 ---
 
 <MainLayout title="IT Services" lane={1}
-  description="IT services and consulting by Felix Grüb: DevOps, system administration, containerization and cloud architecture.">
+  description="IT services and consulting by Felix Grüb: DevOps, system administration, containerization and software architecture.">
 
   <div class="dash">
     <!-- Dashboard toolbar -->
@@ -81,10 +82,10 @@ const working = CAREER.workFrom;
       <Panel title="Overview" class="hero-panel reveal">
         <span slot="status" class="menu" aria-hidden="true">⋮</span>
         <div class="hero-body">
-          <h1>Infrastructure that stays <em class="accent">boring.</em></h1>
+          <h1>Infrastructure that stays boring.</h1>
           <p>
-            DevOps, system administration, containers and cloud. I build pipelines, automate servers and set up
-            monitoring, so your systems deploy themselves and tell you before something breaks.
+            I've worked in DevOps since {CAREER.workFrom} and run my own server. That means regular updates, deploying
+            services in Docker containers and working out why something broke. Nothing too exciting, which is the point.
           </p>
           <div class="actions">
             <a href="/contact" class="btn btn-accent">Start a project</a>
@@ -100,8 +101,8 @@ const working = CAREER.workFrom;
 
       <Panel title="Background" class="stat reveal">
         <Status slot="status" tone="info">in progress</Status>
-        <p class="big mono sm">M.Sc. CS</p>
-        <p class="sub">University of Stuttgart, interested in cryptography and system and web security. B.Sc. {CAREER.bachelorUntil}, iSAQB certified architect.</p>
+        <p class="big mono sm">M.Sc. Computer Science</p>
+        <p class="sub">University of Stuttgart, interested in cryptography and system and web security. B.Sc. {CAREER.bachelorUntil}.</p>
       </Panel>
     </section>
 
@@ -138,16 +139,15 @@ const working = CAREER.workFrom;
     </section>
 
     <!-- Row: process as a pipeline -->
-    <h2 class="row-title"><span aria-hidden="true">▾</span> How a project runs <span class="count mono">pipeline #1 · main</span></h2>
+    <h2 class="row-title"><span aria-hidden="true">▾</span> How a project would run <span class="count mono">pipeline · not started</span></h2>
     <Panel as="section" class="pipeline reveal" aria-label="Project process">
       <ol class="stages list-reset">
         {pipeline.map((p, i) => (
           <li class="stage">
             <p class="stage-name mono">{String(i + 1).padStart(2, "0")} · {p.stage}</p>
-            <div class:list={["job", { running: p.running }]}>
-              <JobIcon running={p.running} spin />
+            <div class="job">
+              <JobIcon />
               <span class="job-name">{p.title}</span>
-              <span class="visually-hidden">{p.running ? "(ongoing)" : "(done)"}</span>
             </div>
             <p class="stage-text">{p.text}</p>
           </li>
@@ -175,30 +175,37 @@ const working = CAREER.workFrom;
         <Panel title={p.name} class="project reveal">
           <Status slot="status" pulse>running</Status>
           <p>{p.text}</p>
+          {p.live && (
+            <div class="project-live">
+              <ServerStatus server:defer><ServerStatus slot="fallback" pending /></ServerStatus>
+            </div>
+          )}
           <p class="paper-tags">{p.tags.map(t => <span class="tag">{t}</span>)}</p>
-          {p.href && <a href={p.href} target="_blank" rel="noopener" class="project-link">View on GitHub ↗</a>}
+          {p.link && <a href={p.link.href} target="_blank" rel="noopener" class="project-link">{p.link.label}</a>}
         </Panel>
       ))}
     </section>
 
     <!-- Where this is heading -->
-    <aside class="next-note reveal">
-      <p class="next-label mono"><StatusDot tone="info" /> Next</p>
+    <Panel as="aside" title="Next" class="next-note reveal">
+      <Status slot="status" tone="info">direction</Status>
       <p>IT security is where I want to take my work. My Master's modules are heading there, with cryptography and system and web security, but I'm still early in the field, so it's a direction and not a service I offer yet.</p>
-    </aside>
+    </Panel>
 
-    <!-- Alert-style call to action -->
-    <section class="alert reveal">
-      <div>
-        <p class="alert-label mono"><StatusDot pulse /> Ready when you are</p>
-        <h2>Something that needs automating?</h2>
-        <p>Tell me about your setup and what keeps breaking.</p>
+    <!-- Call to action, as a row in an alert list -->
+    <Panel as="section" title="Alerts" class="alert reveal">
+      <Status slot="status" tone="danger">1 firing</Status>
+      <div class="alert-row">
+        <div>
+          <h2>Something that needs automating?</h2>
+          <p>Tell me about your setup and what keeps breaking.</p>
+        </div>
+        <div class="actions">
+          <a href="/contact" class="btn btn-accent">Start a conversation</a>
+          <a href={`mailto:${EMAIL}`} class="btn btn-ghost">{EMAIL}</a>
+        </div>
       </div>
-      <div class="actions">
-        <a href="/contact" class="btn btn-accent">Start a conversation</a>
-        <a href={`mailto:${EMAIL}`} class="btn btn-ghost">{EMAIL}</a>
-      </div>
-    </section>
+    </Panel>
   </div>
 </MainLayout>
 
@@ -276,7 +283,6 @@ const working = CAREER.workFrom;
   .stage:not(:last-child)::after { content: ""; position: absolute; top: 3.15rem; left: calc(100% - .25rem); width: 2.75rem; height: 2px; background: var(--surface-line); }
   .stage-name { margin: 0 0 .8rem; color: var(--page-dim); text-transform: uppercase; }
   .job { display: flex; align-items: center; gap: .6rem; padding: .6rem .85rem; border: 1px solid var(--surface-line); border-radius: 999px; background: var(--surface-2); font-size: .9rem; font-weight: 500; }
-  .job.running { border-color: color-mix(in oklab, var(--info) 50%, var(--surface-line)); }
   .stage-text { margin: .9rem 0 0; color: var(--page-dim); font-size: .9rem; }
 
   /* Stack table */
@@ -296,17 +302,17 @@ const working = CAREER.workFrom;
   .project-link { color: var(--info); font-weight: 500; font-size: .92rem; text-decoration: none; }
   .project-link:hover { text-decoration: underline; }
 
-  /* Direction note */
-  .next-note { padding: 1.1rem 1.4rem; background: color-mix(in oklab, var(--info) 7%, var(--surface)); border: 1px solid color-mix(in oklab, var(--info) 35%, var(--surface-line)); border-left: 4px solid var(--info); border-radius: 6px; }
-  .next-label { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 .4rem; color: var(--info); text-transform: uppercase; }
-  .next-note p:last-child { margin: 0; max-width: 58rem; color: var(--page-fg-2); }
+  .project-live { margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px dashed var(--surface-line); }
 
-  /* Alert-style call to action */
-  .alert { display: flex; justify-content: space-between; align-items: center; gap: var(--space-8); flex-wrap: wrap; margin-top: var(--space-10); padding: var(--space-7) var(--space-7);
-    background: color-mix(in oklab, var(--ok) 7%, var(--surface)); border: 1px solid color-mix(in oklab, var(--ok) 35%, var(--surface-line)); border-left: 4px solid var(--ok); border-radius: 6px; }
-  .alert-label { margin: 0 0 .6rem; color: var(--ok); display: flex; align-items: center; gap: var(--space-2); text-transform: uppercase; }
+  /* Direction note */
+  .next-note p { margin: 0; max-width: 58rem; color: var(--page-fg-2); }
+
+  /* Call to action, as a row in an alert list */
+  .alert { margin-top: var(--space-10); }
+  .alert-row { display: flex; justify-content: space-between; align-items: center; gap: var(--space-5) var(--space-8); flex-wrap: wrap; padding-block: var(--space-2); }
   .alert h2 { margin: 0 0 .4rem; font: 700 clamp(1.5rem, 3vw, 2.2rem)/1.1 var(--sans); letter-spacing: -.02em; }
-  .alert p:not(.alert-label) { margin: 0; color: var(--page-fg-2); }
+  .alert p { margin: 0; color: var(--page-fg-2); }
+  .alert .alert-labels { margin-top: var(--space-2); color: var(--page-dim); }
 
   @media (prefers-reduced-motion: no-preference) {
     .spark polyline { stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 1.6s var(--ease) forwards .2s; }
