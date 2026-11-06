@@ -1,19 +1,9 @@
 ---
-// Pipeline job status: a tick when done, a ring while running.
-// Parents set the size through --job-icon-size and --job-icon-font.
-interface Props {
-  running?: boolean;
-  /** Turn the ring. Off for small previews. */
-  spin?: boolean;
-}
-const { running = false, spin = false } = Astro.props;
+// Pipeline job status: an empty ring, because the steps describe a plan rather than finished work.
+// Parents set the size through --job-icon-size.
 ---
-<span class:list={["icon", { running, spin }]} aria-hidden="true">{running ? "" : "✓"}</span>
+<span class="icon" aria-hidden="true"></span>
 
 <style>
-  .icon { display: inline-grid; place-items: center; flex: none; width: var(--job-icon-size, 1.3rem); height: var(--job-icon-size, 1.3rem); border-radius: 50%; background: var(--ok); color: var(--on-accent); font-size: var(--job-icon-font, var(--text-xs)); font-weight: 700; }
-  .running { background: transparent; border: 2px solid var(--info); border-right-color: transparent; }
-  @media (prefers-reduced-motion: no-preference) {
-    .running.spin { animation: spin 1s linear infinite; }
-  }
+  .icon { display: inline-block; flex: none; width: var(--job-icon-size, 1.3rem); height: var(--job-icon-size, 1.3rem); border: 2px solid var(--page-dim); border-radius: 50%; }
 </style>

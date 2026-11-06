@@ -8,20 +8,20 @@ export const services = [
   },
   {
     title: "System Administration",
-    short: "Server management, tuning, backups",
-    description: "Server management, monitoring and tuning for systems that simply keep running.",
-    features: ["Server management", "Performance tuning", "Security hardening", "Backup solutions"],
+    short: "Updates, deployments, troubleshooting",
+    description: "Regular updates, deploying services and working out what went wrong.",
+    features: ["Regular updates", "Services in Docker containers", "Investigating problems"],
   },
   {
     title: "Containerization",
     short: "Docker and Kubernetes",
     description: "Docker and Kubernetes for portable, reproducible and scalable deployments.",
-    features: ["Docker implementation", "Kubernetes orchestration", "Container security", "Microservices architecture"],
+    features: ["Docker implementation", "Kubernetes orchestration", "Container security"],
   },
   {
-    title: "Cloud Architecture",
-    short: "Scalable, secure, tailored",
-    description: "Cloud infrastructure designed around your requirements, budget and failure modes.",
-    features: ["Scalability planning", "Cost optimization", "Disaster recovery"],
+    title: "Software Architecture",
+    short: "Microservices, iSAQB certified",
+    description: "Turning requirements and constraints into a design that fits. iSAQB certified.",
+    features: ["Microservices architecture", "Requirements and constraints", "Design and development"],
   },
 ];

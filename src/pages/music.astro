@@ -15,14 +15,14 @@ const movements = [
   {
     title: "Wedding Ceremonies",
     marking: "Andante", mood: "con amore",
-    text: "The right atmosphere for your day, with live piano or trumpet during the ceremony and reception.",
-    features: ["Processional & recessional", "Cocktail hour", "Reception background music", "Custom song requests"],
+    text: "Weddings are often planned a year or more ahead, so there's usually time to learn something new. Show me the songs you have in mind. I'll tell you whether I can play them and suggest a few more.",
+    features: ["Processional & recessional", "Reception background music", "Custom song requests"],
   },
   {
     title: "Memorial Services",
     marking: "Lento", mood: "sostenuto",
-    text: "Comfort and solace through carefully chosen music for memorial and funeral services.",
-    features: ["Traditional hymns", "Contemporary favourites", "Personal selections", "Sensitive performance"],
+    text: "There's usually little time before a memorial, so I mostly suggest pieces I already play, and you choose.",
+    features: ["Traditional hymns", "Contemporary favourites", "Personal selections"],
   },
   {
     title: "Musical Arrangements",
@@ -34,16 +34,16 @@ const movements = [
     title: "Score Transcription",
     marking: "Allegro", mood: "con precisione",
     text: "Handwritten scores turned into clean, digital sheet music.",
-    features: ["Handwritten to digital", "Professional notation", "PDF and MusicXML", "Free revisions after completion"],
+    features: ["Handwritten to digital", "Professional notation", "PDF and MusicXML", "Mistakes corrected free of charge"],
   },
 ];
 
 const included = ["Pre-event consultation", "Custom playlist", "Professional attire", "Flexible timing on the day"];
 
 const bars = [
-  { title: "Consultation", text: "Your event, your wishes, your music." },
-  { title: "Proposal", text: "A detailed proposal and performance agreement." },
-  { title: "Preparation", text: "Final details and your custom repertoire." },
+  { title: "Get in touch", text: "A short message with the date and what you have in mind is enough." },
+  { title: "Can I play it?", text: "Show me your ideas. It depends on how difficult they are and how much time there is." },
+  { title: "Choose", text: "I suggest pieces that could fit, and you pick." },
   { title: "Performance", text: "Punctual, prepared, and quietly in the background." },
 ];
 const roman = ["I", "II", "III", "IV"];
@@ -82,7 +82,7 @@ const roman = ["I", "II", "III", "IV"];
       </div>
 
       <p class="dedication">
-        <em>for the moments that matter:</em> weddings, memorials and private celebrations.
+        <em>for weddings, memorials and private celebrations.</em>
       </p>
       <div class="cover-cta">
         <a href="/contact" class="btn btn-ink">Book a performance</a>
@@ -123,14 +123,14 @@ const roman = ["I", "II", "III", "IV"];
       <article class="programme reveal">
         <p class="pg-kicker">Felix Grüb · Piano &amp; Trumpet</p>
         <h2>Programme</h2>
-        <p class="pg-sub">a selection from the repertoire</p>
+        <p class="pg-sub">a selection, all of it pieces I can actually play</p>
         {repertoire.map((r, i) => (
           <section class="pg-part">
             <h3><span>Part {roman[i]}</span>{r.part}</h3>
             <ProgrammeList items={r.pieces} stackOnPhones />
           </section>
         ))}
-        <p class="pg-note"><em>Can't find your piece?</em> I'm happy to learn new music for your event.</p>
+        <p class="pg-note"><em>Can't find your piece?</em> Whether I can learn it depends on how difficult it is and how much time there is. Just ask.</p>
         <a href="/contact" class="btn btn-ink">Request a piece</a>
       </article>
     </section>
@@ -138,7 +138,7 @@ const roman = ["I", "II", "III", "IV"];
     <!-- Booking -->
     <section class="booking">
       <div class="booking-head reveal">
-        <p class="marking">Da capo, <em>step by step</em></p>
+        <p class="marking">Poco a poco, <em>step by step</em></p>
         <h2>How a booking works</h2>
       </div>
       <div class="system reveal" role="list">
@@ -253,7 +253,7 @@ const roman = ["I", "II", "III", "IV"];
   .measure strong { display: block; font: 600 1.3rem/1.2 var(--serif); margin-bottom: .35rem; }
   .measure span:not(.m-no) { font-size: .92rem; color: var(--score-dim); }
   @media (max-width: 760px) { .system { grid-template-columns: 1fr 1fr; } .measure:nth-child(2) { border-right: 0; } .measure:nth-child(-n+2) { border-bottom: 1.5px solid var(--score-ink); } }
-  /* "Consultation" no longer fits two columns on the narrowest phones */
+  /* "Performance" no longer fits two columns on the narrowest phones */
   @media (max-width: 23rem) {
     .system { grid-template-columns: 1fr; }
     .measure, .measure:nth-child(2) { border-right: 0; }
