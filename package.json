@@ -19,7 +19,7 @@
     "astro": "7.4.7",
     "chokidar": "6.0.0",
     "exifreader": "4.54.0",
-    "nodemailer": "10.3.1",
+    "nodemailer": "10.4.0",
     "sharp": "0.35.5"
   },
   "devDependencies": {
